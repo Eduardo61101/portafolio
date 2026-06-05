@@ -456,21 +456,213 @@ ESTA PÁGINA WEB FUE CREADA POR EDUARDO ARAUJO QUIROZ Y SE USARON LOS LENGUAJES 
 
 <script>
 // --------------------------------------------------------------------------
-// GENERADOR AUTOMÁTICO DE CÓDIGO EN TIEMPO REAL (TRUCO BLOB)
+// GENERADOR AUTOMÁTICO DE PLANTILLA LIMPIA CON AYUDAS
 // --------------------------------------------------------------------------
 document.getElementById('botonDescarga').addEventListener('click', function(evento) {
     evento.preventDefault(); 
     
-    // Captura todo el código vivo de esta misma página
-    const codigoCompleto = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    // Aquí guardamos TODO tu diseño vivo y estilos idénticos, pero quitando tus datos
+    const codigoPlantilla = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- AYUDA: Cambia el título por tu nombre -->
+<title>Mi Portafolio Personal</title>
+
+<style>
+${document.querySelector('style').innerHTML}
+</style>
+</head>
+<body>
+
+<header>
+<div id="barraSuperior">
+    <div class="contenedor-temas">
+        <button id="btnNeon" class="btn-paleta" title="Tema Neón"></button>
+        <button id="btnHacker" class="btn-paleta" title="Tema Hacker"></button>
+        <button id="btnCyber" class="btn-paleta" title="Tema Cyberpunk"></button>
+    </div>
+    <div id="visitas">👀 Visitas: 0</div>
+</div>
+
+<!-- AYUDA: Cambia 'imagenes/p5.png' por la ruta de tu propia foto de perfil -->
+<img class="perfil" src="imagenes/tu-foto.png" alt="Foto de Perfil">
+
+<p id="reloj" style="margin-top: 10px; font-weight: bold; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);"></p>
+
+<!-- AYUDA: Pon tu nombre aquí -->
+<h1 class="nombre">[Tu Nombre Aquí]</h1>
+
+<p class="subtitulo">
+<!-- AYUDA: Cambia tu país/ciudad e intereses principales aquí -->
+📍 Ciudad, País | 💻 Tu Enfoque | 🎨 Tus Habilidades | 🎮 Más gustos
+</p>
+</header>
+
+<section>
+<h2 class="titulo">Sobre mí</h2>
+<div class="sobre-mi">
+<!-- AYUDA: Edita este texto con tu información sobre ti -->
+<p>Hola, soy [Tu Nombre].</p>
+<p>Edad: <span id="edad"></span> años</p>
+<p>
+Escribe aquí una descripción detallada sobre ti, tus metas, tus estudios, qué te gusta crear y lo que estás aprendiendo actualmente en la tecnología.
+</p>
+</div>
+</section>
+
+<section>
+<h2 class="titulo">Habilidades</h2>
+<!-- AYUDA: Ajusta los porcentajes en el style="width: %" para reflejar tus niveles reales -->
+<div class="skills">
+<div class="skill">HTML<div class="barra"><div class="progreso" style="width:90%"></div></div></div>
+<div class="skill">CSS<div class="barra"><div class="progreso" style="width:85%"></div></div></div>
+<div class="skill">JavaScript<div class="barra"><div class="progreso" style="width:50%"></div></div></div>
+<div class="skill">Python<div class="barra"><div class="progreso" style="width:40%"></div></div></div>
+</div>
+</section>
+
+<section>
+<h2 class="titulo">Intereses</h2>
+<div class="sobre-mi">
+<p>
+<!-- AYUDA: Haz una lista con las tecnologías o pasatiempos que más te gusten -->
+💻 Programación<br><br>
+🎮 Videojuegos<br><br>
+🎨 Diseño
+</p>
+</div>
+</section>
+
+<section>
+<h2 class="titulo">Mis Proyectos</h2>
+<div class="proyectos">
+<!-- AYUDA: Copia y duplica esta tarjeta para añadir todos los proyectos que quieras -->
+<div class="tarjeta">
+<h3>Título del Proyecto</h3>
+<p>Describe de qué trata tu juego, software o página web aquí.</p>
+</div>
+</div>
+</section>
+
+<section>
+<h2 class="titulo">Mis Renders / Galería</h2>
+<div class="galeria">
+<!-- AYUDA: Reemplaza las rutas src con tus propias imágenes o renders -->
+<img src="renders/imagen1.png" alt="render1">
+<img src="renders/imagen2.png" alt="render2">
+</div>
+</section>
+
+<div id="mensajeAgradecimiento" class="parpadeo" style="text-align: center; display: none; margin-top: 15px; font-weight: bold;">
+    ¡Gracias por descargar la plantilla! Personalízala a tu gusto.
+</div>
+
+<section>
+<h2 class="titulo">Redes Sociales</h2>
+<div class="redes">
+<!-- AYUDA: Coloca los enlaces reales a tus redes sociales en los href -->
+<a href="#" target="_blank">📸 Instagram</a>
+<a href="#" target="_blank">🎵 TikTok</a>
+<a href="#" target="_blank">▶️ YouTube</a>
+</div>
+</section>
+
+<footer>
+&copy; 2026 [Tu Nombre u Organizacion]<br><br>
+Portafolio Personal Desarrollado Base<br><br>
+<h6>Puedes tener el código fuente de esta página web simplemente descargando el archivo .txt...</h6>
+
+<a href="#" id="botonDescarga" style="color: var(--primario); text-decoration: none; font-weight: bold; background: rgba(255,255,255,0.05); padding: 12px 22px; border-radius: 8px; border: 1px dashed var(--primario); display: inline-block;">
+    Descargar Archivo .txt
+</a>
+
+<div id="visor" onclick="cerrarVisor()">
+    <button id="btnCerrarVisor">✕</button>
+    <img id="imagenGrande" alt="Visualizador">
+    <div class="contenedor-likes" onclick="event.stopPropagation()">
+        <button id="btnLike">❤️</button>
+        <span id="contadorLikes">Likes: 0</span>
+    </div>
+</div>
+</footer>
+
+<script>
+// --- CODIGO DE LOGICA INTEGRADO AUTOMATICAMENTE ---
+let visitas = localStorage.getItem("visitas") || 0;
+visitas++;
+localStorage.setItem("visitas", visitas);
+document.getElementById("visitas").textContent = "👀 Visitas: " + visitas;
+
+const temas = {
+    neon: { fondo: "#0d0221", texto: "#ffffff", primario: "#a124db", secundario: "#7B1FA2", tarjetas: "#160f29", textoBarra: "#ffffff", bordeVisitas: "#a124db", gradiente: "linear-gradient(135deg, #8a2be2, #4a00e0)" },
+    hacker: { fondo: "#000000", texto: "#00FF00", primario: "#008F11", secundario: "#005f0c", tarjetas: "#0a0a0a", textoBarra: "#00FF00", bordeVisitas: "#00FF00", gradiente: "linear-gradient(135deg, #000000, #111111)" },
+    cyberpunk: { fondo: "#0b0e14", texto: "#00f7ff", primario: "#ff0055", secundario: "#b3003b", tarjetas: "#181d26", textoBarra: "#ff0055", bordeVisitas: "#00f7ff", gradiente: "linear-gradient(135deg, #ff0055, #00f7ff)" }
+};
+
+function cambiarTema(nombreTema) {
+    const t = temas[nombreTema];
+    document.documentElement.style.setProperty('--fondo', t.fondo);
+    document.documentElement.style.setProperty('--texto', t.texto);
+    document.documentElement.style.setProperty('--primario', t.primario);
+    document.documentElement.style.setProperty('--secundario', t.secundario);
+    document.documentElement.style.setProperty('--tarjetas', t.tarjetas);
+    document.documentElement.style.setProperty('--texto-barra', t.textoBarra);
+    document.documentElement.style.setProperty('--borde-visitas', t.bordeVisitas);
+    document.documentElement.style.setProperty('--gradiente', t.gradiente);
+    localStorage.setItem("tema_elegido", nombreTema);
+}
+
+document.getElementById("btnNeon").addEventListener("click", () => cambiarTema("neon"));
+document.getElementById("btnHacker").addEventListener("click", () => cambiarTema("hacker"));
+document.getElementById("btnCyber").addEventListener("click", () => cambiarTema("cyberpunk"));
+cambiarTema(localStorage.getItem("tema_elegido") || "neon");
+
+// AYUDA: Cambia la fecha de nacimiento abajo por la tuya para automatizar tu edad
+const edadElemento = document.getElementById("edad");
+if(edadElemento){
+    const nacimiento = new Date("2005-01-01"); 
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    if(hoy.getMonth() < nacimiento.getMonth() || (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() < nacimiento.getDate())){ edad--; }
+    edadElemento.textContent = edad;
+}
+
+setInterval(() => { document.getElementById("reloj").textContent = "🕒 " + new Date().toLocaleTimeString(); }, 1000);
+
+let idImagenActual = "";
+let baseDatosLikes = JSON.parse(localStorage.getItem("renders_likes")) || {};
+document.querySelectorAll(".galeria img").forEach(img => {
+    img.addEventListener("click", (e) => {
+        e.stopPropagation();
+        idImagenActual = img.getAttribute("alt"); 
+        document.getElementById("visor").style.display = "flex";
+        document.getElementById("imagenGrande").src = img.src;
+        document.getElementById("contadorLikes").textContent = "Likes: " + (baseDatosLikes[idImagenActual] || 0);
+    });
+});
+document.getElementById("btnLike").addEventListener("click", (e) => {
+    e.stopPropagation(); 
+    if (idImagenActual) {
+        if(!baseDatosLikes[idImagenActual]) baseDatosLikes[idImagenActual] = 0;
+        baseDatosLikes[idImagenActual]++;
+        localStorage.setItem("renders_likes", JSON.stringify(baseDatosLikes));
+        document.getElementById("contadorLikes").textContent = "Likes: " + baseDatosLikes[idImagenActual];
+    }
+});
+function cerrarVisor(){ document.getElementById("visor").style.display = "none"; }
+<\/script>
+</body>
+</html>`;
     
-    // Lo empaqueta en un objeto de texto plano
-    const blob = new Blob([codigoCompleto], { type: "text/plain;charset=utf-8" });
+    // Lo empaqueta en un objeto de texto plano libre de info personal
+    const blob = new Blob([codigoPlantilla], { type: "text/plain;charset=utf-8" });
     
     // Crea la descarga instantánea en el aire sin requerir archivos en la carpeta
     const enlace = document.createElement("a");
     enlace.href = URL.createObjectURL(blob);
-    enlace.download = "HTML(cambialo a .html).txt";
+    enlace.download = "Plantilla_Portafolio_Ayuda.txt";
     
     document.body.appendChild(enlace);
     enlace.click();
