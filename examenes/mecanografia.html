@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mecanografía Master - Estudio Sermiteop</title>
+    <style>
+        :root {
+            --bg: #f0fdf4;
+            --container: #ffffff;
+            --primary: #16a34a;
+            --text-main: #166534;
+            --text-faded: #94a3b8;
+            --error: #dc2626;
+            --combo-color: #b45309;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Consolas', 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-box {
+            background: #dcfce7;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #bbf7d0;
+            text-align: center;
+            min-width: 110px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-box span {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        #texto-guia {
+            font-size: 26px;
+            line-height: 1.6;
+            background: var(--container);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 850px;
+            height: 180px;
+            border: 3px solid #86efac;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(22, 101, 52, 0.1);
+            scroll-behavior: smooth;
+        }
+
+        #texto-guia::-webkit-scrollbar {
+            width: 8px;
+        }
+        #texto-guia::-webkit-scrollbar-thumb {
+            background: #bbf7d0;
+            border-radius: 10px;
+        }
+
+        .letra { color: var(--text-faded); }
+        .correcta { color: var(--primary); }
+        .incorrecta { color: var(--error); background: #fee2e2; border-radius: 4px; }
+        .actual { border-bottom: 3px solid var(--primary); color: #000; background: #f0fdf4; }
+
+        .shake { animation: shake 0.2s ease-in-out; border-color: var(--error) !important; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        #combo-info {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--combo-color);
+            height: 35px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        #aviso-mayus { color: #b45309; font-weight: bold; visibility: hidden; margin-bottom: 10px; }
+
+        .historial { width: 100%; max-width: 850px; margin-top: 30px; }
+        .hist-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #86efac; padding-bottom: 10px; }
+        
+        .registro-item {
+            background: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        button:hover { background: #15803d; }
+
+        .btn-regresar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #ffffff;
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #a5d6a7;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .btn-regresar:hover {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            transform: translateX(-3px);
+            box-shadow: 0 6px 12px rgba(46, 125, 50, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón Flotante para Regresar al Menú Principal -->
+    <a href="inicio.html" class="btn-regresar">⬅ Regresar</a>
+
+    <div class="stats-container" style="margin-top: 50px;">
+        <div class="stat-box">Tiempo<span id="cronometro">0.0s</span></div>
+        <div class="stat-box">Palabras<span id="puntos">0</span></div>
+        <div class="stat-box">Errores<span id="errores">0</span></div>
+        <div class="stat-box">Racha Máx<span id="max-racha">0</span></div>
+    </div>
+
+    <div id="combo-info"></div>
+
+    <div id="texto-guia"></div>
+    
+    <div id="aviso-mayus">⚠️ BLOQ MAYÚS ACTIVADO</div>
+
+    <div class="historial">
+        <div class="hist-header">
+            <h3>Historial - Estudio Sermiteop</h3>
+            <button onclick="reiniciarHistorial()" onfocus="this.blur()">Limpiar Récords</button>
+        </div>
+        <div id="lista-historial"></div>
+    </div>
+
+    <audio id="snd-key" src="soundjay.com"></audio>
+    <audio id="snd-error" src="soundjay.com"></audio>
+
+    <script>
+        // Bloquear comportamiento de espacio en el navegador
+        window.addEventListener('keydown', function(e) {
+            if(e.keyCode === 32 && e.target === document.body) {
+                e.preventDefault();
+            }
+        });
+
+        const frases = [
+            "El sol comenzaba a ocultarse tras las montañas, tiñendo el horizonte de un naranja intenso que parecia incendiar las nubes. Era ese momento exacto del dia en que el ruido de la ciudad disminuye y la naturaleza toma un respiro antes de la noche.",
+            "Sentado frente a su viejo escritorio de madera, recordo todas las historias que habia intentado escribir sin exito durante años. Las manchas de tinta y los rayones en la superficie eran testigos silenciosos de sus batallas contra la pagina en blanco.",
+            "El mercado local estaba repleto de colores y olores que despertaban los sentidos de cualquiera que se atreviera a entrar. Los vendedores gritaban sus ofertas mientras la gente caminaba con prisa, cargando bolsas llenas de frutas frescas y especias exoticas.",
+            "Caminar por el bosque bajo la lluvia fina resulto ser una experiencia mucho mas relajante de lo que el habia imaginado al principio. El aroma a tierra mojada y el sonido de las gotas chocando contra las hojas creaban una melodia natural perfecta.",
+            "La vieja estacion de tren conservaba ese aire de nostalgia que solo los lugares con mucha historia pueden transmitir a los viajeros. Aunque las paredes estaban descascaradas, el reloj central seguia marcando la hora con una puntualidad inglesa envidiable.",
+            "La tecnologia ha cambiado la forma en que nos comunicamos, pero la esencia de una buena charla cara a cara sigue siendo irremplazable. A veces, un simple gesto o una mirada dicen mucho mas que mil palabras enviadas a traves de una pantalla digital.",
+            "Finalmente, cerro los ojos y se dejo llevar por la musica suave que sonaba de fondo, permitiendo que su mente descansara. Sabia que el camino por delante seria largo, pero en ese instante, la paz era lo unico que realmente importaba."
+        ];
+
+        let indiceActual = 0;
+        let puntos = 0;
+        let errores = 0;
+        let rachaActual = 0;
+        let maxRacha = 0;
+        let textoActual = "";
+        let tiempoInicio;
+        let intervaloReloj;
+        let corriendo = false;
+
+        // Variables de la técnica del profesor
+        let porcentajeProfesor = 100; 
+        let frasesCompletadas = 0;
+        const totalFrasesExamen = 7; // El examen termina tras escribir las 7 frases consecutivas
+
+        const contenedor = document.getElementById('texto-guia');
+        const listaHistorial = document.getElementById('lista-historial');
+
+        function iniciarRonda() {
+            contenedor.innerHTML = "";
+            indiceActual = 0;
+            corriendo = false;
+            clearInterval(intervaloReloj);
+            document.getElementById('cronometro').innerText = "0.0s";
+            document.getElementById('combo-info').innerText = "";
+            contenedor.scrollTop = 0;
+
+            // Cambiamos a orden consecutivo para simular la estructura de un examen formal
+            textoActual = frases[frasesCompletadas];
+
+            textoActual.split('').forEach((char, i) => {
+                const span = document.createElement('span');
+                span.innerText = char;
+                span.className = 'letra' + (i === 0 ? ' actual' : '');
+                contenedor.appendChild(span);
+            });
+        }
+
+        function reproducirSonido(id) {
+            const audio = document.getElementById(id);
+            audio.currentTime = 0;
+            audio.play().catch(()=>{});
+        }
+
+        window.addEventListener('keydown', (e) => {
+            // Si ya terminó el examen, bloquear pulsaciones extras
+            if (frasesCompletadas >= totalFrasesExamen) return;
+
+            const tecla = e.key;
+            if (tecla.length > 1 && tecla !== 'Dead') return;
+
+            if (!corriendo) {
+                corriendo = true;
+                tiempoInicio = Date.now();
+                intervaloReloj = setInterval(() => {
+                    document.getElementById('cronometro').innerText = ((Date.now() - tiempoInicio)/1000).toFixed(1) + "s";
+                }, 100);
+            }
+
+            document.getElementById('aviso-mayus').style.visibility = e.getModifierState("CapsLock") ? "visible" : "hidden";
+
+            const spans = document.querySelectorAll('.letra');
+            const objetivo = textoActual[indiceActual];
+
+            if (tecla === objetivo) {
+                reproducirSonido('snd-key');
+                spans[indiceActual].className = 'letra correcta';
+                
+                if (objetivo === " ") {
+                    puntos++;
+                    porcentajeProfesor += 10; // Suma +10% de forma interna por palabra correcta
+                }
+                rachaActual++;
+                
+                if (rachaActual > maxRacha) {
+                    maxRacha = rachaActual;
+                    document.getElementById('max-racha').innerText = maxRacha;
+                }
+
+                if (rachaActual >= 10) {
+                    document.getElementById('combo-info').innerText = `🔥 ¡COMBO X${rachaActual}! 🔥`;
+                }
+
+                document.getElementById('puntos').innerText = puntos;
+                indiceActual++;
+
+                if (indiceActual < spans.length) {
+                    spans[indiceActual].classList.add('actual');
+                    spans[indiceActual].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    // Contar la última palabra de la frase al terminarla
+                    puntos++;
+                    porcentajeProfesor += 10;
+                    document.getElementById('puntos').innerText = puntos;
+                    
+                    frasesCompletadas++;
+                    
+                    if (frasesCompletadas >= totalFrasesExamen) {
+                        finalizarExamenProfesor();
+                    } else {
+                        clearInterval(intervaloReloj);
+                        // Breve pausa antes de cargar la siguiente frase del examen
+                        setTimeout(iniciarRonda, 500);
+                    }
+                }
+            } else if (tecla !== "Shift" && tecla !== "Control" && tecla !== "Alt") {
+                reproducirSonido('snd-error');
+                errores++;
+                rachaActual = 0;
+                
+                porcentajeProfesor -= 5; // Resta -5% directo por letra incorrecta (sin tope de 0)
+                
+                document.getElementById('combo-info').innerText = "💥 COMBO PERDIDO";
+                document.getElementById('errores').innerText = errores;
+                
+                contenedor.classList.add('shake');
+                spans[indiceActual].classList.add('incorrecta');
+                setTimeout(() => {
+                    contenedor.classList.remove('shake');
+                }, 200);
+            }
+        });
+
+        function finalizarExamenProfesor() {
+            clearInterval(intervaloReloj);
+            corriendo = false;
+            const tiempo = document.getElementById('cronometro').innerText;
+            
+            let palabraRango = "";
+            let colorFinal = "#16a34a"; 
+
+            // Evaluación de los mismos rangos que pediste para los Easter Eggs
+            if (porcentajeProfesor >= 80) {
+                palabraRango = "Excelente";
+                colorFinal = "#166534"; 
+            } else if (porcentajeProfesor >= 51 && porcentajeProfesor <= 79) {
+                palabraRango = "Aprobado";
+                colorFinal = "#b45309"; 
+            } else if (porcentajeProfesor >= 40 && porcentajeProfesor <= 50) {
+                palabraRango = "Regular";
+                colorFinal = "#d97706"; 
+            } else { 
+                palabraRango = "Reprobado";
+                colorFinal = "#dc2626"; 
+            }
+
+            // Ocultamos elementos de juego para proyectar la nota final
+            document.getElementById('combo-info').style.display = "none";
+            document.getElementById('aviso-mayus').style.display = "none";
+            
+            // Reemplazamos el cuadro de texto con la pantalla de calificación final
+            contenedor.style.height = "auto";
+            contenedor.innerHTML = `
+                <div style="text-align: center; font-family: sans-serif; padding: 10px;">
+                    <h2 style="color: #166534; margin: 0 0 15px 0;">¿Cuál elemento es "${palabraRango}"?</h2>
+                    <p style="color: #475569; margin: 0 0 10px 0;">Examen de Mecanografía concluido bajo el método del profesor.</p>
+                    <p style="color: #475569; margin: 0;">Porcentaje total obtenido:</p>
+                    <strong style="color: ${colorFinal}; font-size: 36px; display: block; margin-top: 15px;">${porcentajeProfesor}%</strong>
+                </div>
+            `;
+
+            // Guardar en la tabla inferior de historial
+            const item = document.createElement('div');
+            item.className = 'registro-item';
+            item.innerHTML = `
+                <span>⏱️ ${tiempo}</span>
+                <span>💯 Nota: ${porcentajeProfesor}%</span>
+                <span>❌ ${errores} Err.</span>
+                <span>🔥 Rango: ${palabraRango}</span>
+            `;
+            listaHistorial.prepend(item);
+        }
+
+        function reiniciarHistorial() {
+            if(confirm("¿Borrar todo, Eduardo?")) {
+                listaHistorial.innerHTML = "";
+                maxRacha = 0;
+                document.getElementById('max-racha').innerText = "0";
+                
+                // Si el juego ya había terminado, permite volver a jugar reiniciando variables
+                if (frasesCompletadas >= totalFrasesExamen) {
+                    frasesCompletadas = 0;
+                    puntos = 0;
+                    errores = 0;
+                    porcentajeProfesor = 100;
+                    document.getElementById('combo-info').style.display = "block";
+                    contenedor.style.height = "180px";
+                    iniciarRonda();
+                }
+            }
+        }
+
+        // Arrancar el examen por primera vez
+        iniciarRonda();
+    </script>
+</body>
+</html>

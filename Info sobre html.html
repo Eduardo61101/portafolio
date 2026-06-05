@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- 2. ESTRUCTURA BASE Y CONFIGURACIÓN INVISIBLE -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enciclopedia total de HTML - Parte 1">
+    <title>La Enciclopedia Total de HTML, CSS Y JS </title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://w3.org viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
+    
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; background-color: #f8f9fa; color: #212529; }
+        h1 { color: #0d6efd; border-bottom: 4px solid #0d6efd; padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: #198754; border-bottom: 2px solid #dee2e6; padding-bottom: 5px; margin-top: 40px; }
+        h3 { color: #6c757d; font-size: 1.1rem; margin-top: 20px; margin-bottom: 5px; }
+        section { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .demo-box { border: 1px dashed #ced4da; padding: 15px; border-radius: 6px; background-color: #fdfdfd; margin-top: 10px; }
+
+/* Estilos generales del contenedor del menú */
+nav {
+    display: flex;
+    gap: 12px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+}
+
+/* Estilo base para los botones de las pestañas */
+.btn-tab {
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+    background-color: #edf2f7;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efecto cuando el usuario pasa el mouse por encima */
+.btn-tab:hover {
+    background-color: #e2e8f0;
+    color: #1a202c;
+}
+
+/* Estilo para el botón de la pestaña que está activa en ese momento */
+.btn-tab.activo {
+    background-color: #0d6efd;
+    color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(13, 110, 253, 0.2);
+}
+
+    </style>
+</head>
+<body>
+
+<!-- Menú de pestañas -->
+<nav style="display: flex; gap: 10px; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px;">
+    <button class="btn-tab activo" onclick="irA('html', this)" style="padding: 10px 20px; font-weight: bold; cursor: pointer;">HTML (En vivo)</button>
+    <button class="btn-tab" onclick="irA('info', this)" style="padding: 10px 20px; font-weight: bold; cursor: pointer;">Info (Enciclopedia)</button>
+</nav>
+
+    <header>
+        <h1>La Enciclopedia Total de HTML, CSS Y JS</h1>
+        <p>Documento oficial que renderiza la primera tanda de etiquetas históricas del estándar web.</p>
+    </header>
+
+<div id="tab-html" class="bloque-tab" style="display: block;">
+    <main>
+        <!-- === SECCIÓN 1: LAS GRACIOSAS Y OBSOLETAS === -->
+        <section>
+            <h2>1. Las Graciosas, Raras, Nostálgicas u Obsoletas</h2>
+            
+            <h3>&lt;marquee&gt; (Texto en movimiento)</h3>
+            <div class="demo-box">
+                <marquee behavior="scroll" direction="left">¡Hola del pasado! Viajo por tu pantalla en pleno siglo XXI. 🚀</marquee>
+            </div>
+
+            <h3>&lt;blink&gt; (Parpadeo nostálgico emulado con CSS)</h3>
+            <div class="demo-box">
+                <p style="animation: blinker 1s linear infinite; color: red; font-weight: bold;">¡Alerta! Texto parpadeante de los 90.</p>
+                <style>@keyframes blinker { 50% { opacity: 0; } }</style>
+            </div>
+
+            <h3>&lt;bdo&gt; (Dirección invertida)</h3>
+            <div class="demo-box">
+                <p><bdo dir="rtl">Este mensaje secreto se lee al revés de forma exacta.</bdo></p>
+            </div>
+
+            <h3>&lt;bdi&gt; (Aislamiento de texto bidireccional)</h3>
+            <div class="demo-box">
+                <p>Usuario: <bdi>إياد</bdi> ha ganado 90 puntos.</p>
+            </div>
+
+            <h3>&lt;wbr&gt; (Sugerencia invisible de salto de línea)</h3>
+            <div class="demo-box">
+                <p>Super<wbr>califragilistico<wbr>espialidoso</p>
+            </div>
+
+            <h3>&lt;ruby&gt;, &lt;rt&gt; y &lt;rp&gt; (Texto flotante oriental)</h3>
+            <div class="demo-box">
+                <p>Pronunciación: <ruby>漢 <rp>(</rp><rt>hàn</rt><rp>)</rp> 字 <rp>(</rp><rt>zì</rt><rp>)</rp></ruby></p>
+            </div>
+
+            <h3>&lt;center&gt; (Alineación central obsoleta)</h3>
+            <div class="demo-box">
+                <center>Esta etiqueta forzaba el centrado antes de que existiera CSS.</center>
+            </div>
+
+            <h3>&lt;font&gt;, &lt;big&gt; y &lt;strike&gt; (Formatos visuales antiguos)</h3>
+            <div class="demo-box">
+                <font color="blue" size="4">Texto azul.</font> | 
+                <big>Texto grande.</big> | 
+                <strike>Texto tachado obsoleto.</strike>
+            </div>
+
+            <h3>&lt;tt&gt; y &lt;acronym&gt; (Herencias del pasado)</h3>
+            <div class="demo-box">
+                <tt>Texto estilo teletipo mecánico.</tt> | 
+                <p>El <acronym title="HyperText Markup Language">HTML</acronym> original.</p>
+            </div>
+
+            <h3>&lt;frame&gt; y &lt;frameset&gt; (Ventanas rotas registradas)</h3>
+            <div class="demo-box">
+                <p><em>Las etiquetas frame y frameset obsoletas no se pueden ejecutar en vivo porque romperían tu navegador actual.</em></p>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 2: TEXTOS, TÍTULOS Y PÁRRAFOS === -->
+        <section>
+            <h2>2. Textos, Títulos y Párrafos</h2>
+            
+            <h3>&lt;h1&gt; a &lt;h6&gt; (Encabezados jerárquicos)</h3>
+            <div class="demo-box">
+                <h1>Título H1</h1><h2>Título H2</h2><h3>Título H3</h3><h4>Título H4</h4><h5>Título H5</h5><h6>Título H6</h6>
+            </div>
+
+            <h3>&lt;p&gt;, &lt;br&gt; y &lt;hr&gt; (Estructuras de lectura)</h3>
+            <div class="demo-box">
+                <p>Este es un párrafo básico.<br>Aquí metimos un salto de línea obligatorio (br).</p>
+                <hr>
+                <p>Y arriba puedes ver una línea divisoria horizontal (hr).</p>
+            </div>
+
+            <h3>&lt;strong&gt;, &lt;b&gt;, &lt;em&gt; e &lt;i&gt; (Estilos de letras)</h3>
+            <div class="demo-box">
+                <p>Texto en <strong>strong (importante)</strong>, texto en <b>b (negrita)</b>, texto en <em>em (énfasis)</em> y texto en <i>i (cursiva)</i>.</p>
+            </div>
+
+            <h3>&lt;small&gt;, &lt;s&gt;, &lt;del&gt; e &lt;ins&gt; (Edición de textos)</h3>
+            <div class="demo-box">
+                <p><small>Letra pequeña legal.</small> | <s>Dato ya no válido.</s> | Rebajado de <del>$100</del> a <ins>$80</ins>.</p>
+            </div>
+
+            <h3>&lt;sub&gt;, &lt;sup&gt; y &lt;mark&gt; (Anotaciones)</h3>
+            <div class="demo-box">
+                <p>Agua: H<sub>2</sub>O | Energía: E=mc<sup>2</sup> | Texto <mark>resaltado brillante</mark>.</p>
+            </div>
+
+            <h3>&lt;abbr&gt;, &lt;q&gt;, &lt;blockquote&gt; y &lt;cite&gt; (Referencias)</h3>
+            <div class="demo-box">
+                <p>Pasa el cursor: <abbr title="Organización de las Naciones Unidas">ONU</abbr>.</p>
+                <p>Él dijo: <q>El código funciona</q>.</p>
+                <blockquote cite="https://wikipedia.org">Esta es una cita textual masiva separada en su propio bloque.</blockquote>
+                <p>Extraído del libro <cite>Don Quijote de la Mancha</cite>.</p>
+            </div>
+
+            <h3>&lt;dfn&gt; y &lt;time&gt; (Definiciones y tiempo)</h3>
+            <div class="demo-box">
+                <p>El <dfn>HTML</dfn> es el lenguaje de la web.</p>
+                <p>Publicado el <time datetime="2026-05-27">27 de mayo de 2026</time>.</p>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 3: ORGANIZACIÓN Y MAQUETACIÓN === -->
+        <section>
+            <h2>3. Organización y Maquetación Semántica</h2>
+            <div class="demo-box">
+                <hgroup>
+                    <h2>Título Semántico</h2>
+                    <p>Subtítulo agrupado dentro de un hgroup</p>
+                </hgroup>
+                <section style="background:#f1f3f5; padding:5px; margin-top:5px;"><p>Bloque de sección.</p></section>
+                <article style="background:#e9ecef; padding:5px; margin-top:5px;"><p>Bloque de artículo independiente.</p></article>
+                <aside style="background:#e2e3e5; padding:5px; margin-top:5px;"><p>Bloque lateral secundario.</p></aside>
+                <address>Contacto: Calle Falsa 123, Internet.</address>
+                <div style="background:#dee2e6; padding:5px;">Caja genérica div. <span style="color:blue;">Microcaja span.</span></div>
+                <search style="margin-top:5px; display:block;"><input type="text" placeholder="Buscador global (search)..."></search>
+            </div>
+        </section>
+    </main>
+
+
+        <!-- === SECCIÓN 4: LISTAS Y VIÑETAS === -->
+        <section>
+            <h2>4. Listas y Viñetas</h2>
+            <div class="demo-box">
+                <h3>Lista Desordenada (&lt;ul&gt; y &lt;li&gt;)</h3>
+                <ul>
+                    <li>Elemento de viñeta A</li>
+                    <li>Elemento de viñeta B</li>
+                </ul>
+
+                <h3>Lista Ordenada (&lt;ol&gt; y &lt;li&gt;)</h3>
+                <ol>
+                    <li>Primer puesto numérico</li>
+                    <li>Segundo puesto numérico</li>
+                </ol>
+
+                <h3>Lista de Definiciones (&lt;dl&gt;, &lt;dt&gt; y &lt;dd&gt;)</h3>
+                <dl>
+                    <dt>Café</dt>
+                    <dd>Bebida energética oscura.</dd>
+                </dl>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 5: ENLACES E IMÁGENES === -->
+        <section>
+            <h2>5. Enlaces e Imágenes</h2>
+            <div class="demo-box">
+                <h3>&lt;a&gt; (Hipervínculo a la red)</h3>
+                <p><a href="https://example.com" target="_blank">Haz clic para abrir un enlace externo</a></p>
+
+                <h3>&lt;img&gt;, &lt;picture&gt;, &lt;source&gt;, &lt;figure&gt; y &lt;figcaption&gt;</h3>
+                <figure>
+                    <picture>
+                        <source srcset="https://picsum.photos" media="(min-width: 600px)">
+                        <img src="https://picsum.photos" alt="Imagen aleatoria de prueba">
+                    </picture>
+                    <figcaption>Fig 1. Contenedores avanzados de imagen y descripción.</figcaption>
+                </figure>
+
+                <h3>&lt;map&gt; y &lt;area&gt; (Mapa de coordenadas interactivas)</h3>
+                <img src="https://picsum.photos" alt="Mapa interactivo" usemap="#mapatest">
+                <map name="mapatest">
+                    <area shape="rect" coords="0,0,100,80" alt="Google" href="https://google.com">
+                </map>
+
+                <h3>&lt;svg&gt; (Dibujo directo por vectores numéricos)</h3>
+                <svg width="40" height="40"><circle cx="20" cy="20" r="18" fill="green" /></svg>
+
+                <h3>&lt;canvas&gt; (Lienzo para dibujar con programación)</h3>
+                <canvas id="lienzoWeb" width="120" height="30" style="border:1px solid #aaa; background:#eee;"></canvas>
+                <script>
+                    const canvas = document.getElementById("lienzoWeb");
+                    const ctx = canvas.getContext("2d");
+                    ctx.fillStyle = "purple";
+                    ctx.fillRect(10, 5, 100, 20);
+                </script>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 6: TABLAS DE DATOS === -->
+        <section>
+            <h2>6. Tablas de Datos Estructuradas</h2>
+            <div class="demo-box">
+                <table border="1" style="border-collapse: collapse; width: 100%;">
+                    <caption>Estructura Suprema de Tabla (&lt;table&gt; y &lt;caption&gt;)</caption>
+                    <colgroup>
+                        <col style="background-color: #f8f9fa;">
+                        <col style="background-color: #ffffff;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Cabecera A (&lt;th&gt;)</th>
+                            <th>Cabecera B (&lt;th&gt;)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Celda Normal A (&lt;td&gt;)</td>
+                            <td>Celda Normal B (&lt;td&gt;)</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Cierre Tabla (&lt;tfoot&gt;)</td>
+                            <td>Totales finales</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 7: FORMULARIOS Y CASILLAS === -->
+        <section>
+            <h2>7. Formularios y Botones de Entrada</h2>
+            <div class="demo-box">
+                <form action="#" method="get">
+                    <fieldset>
+                        <legend>Contenedor de seguridad (&lt;fieldset&gt; y &lt;legend&gt;)</legend>
+                        
+                        <p><label>Etiqueta (&lt;label&gt;): <input type="text" placeholder="Escribe aquí (&lt;input&gt;)"></label></p>
+                        
+                        <p><label>Menú de selección rígido: 
+                            <select>
+                                <optgroup label="Categoría Alfa (&lt;optgroup&gt;)">
+                                    <option>Opción Única (&lt;option&gt;)</option>
+                                </optgroup>
+                            </select>
+                        </label></p>
+
+                        <p>
+                            <label>Casilla inteligente con autocompletado: <input list="opcionesSugeridas"></label>
+                            <datalist id="opcionesSugeridas">
+                                <option value="HTML Increíble">
+                                <option value="JavaScript Avanzado">
+                            </datalist>
+                        </p>
+
+                        <p><label>Área de comentarios extensos:<br><textarea placeholder="Caja de texto gigante multilínea... (&lt;textarea&gt;)"></textarea></label></p>
+                        
+                        <p>Resultado del cálculo en vivo: <output>Operación Lista (&lt;output&gt;)</output></p>
+
+                        <button type="button">Ejecutar Acción (&lt;button&gt;)</button>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 8: MULTIMEDIA, AUDIO Y VIDEO === -->
+        <section>
+            <h2>8. Multimedia, Audio y Video</h2>
+            <div class="demo-box">
+                <h3>&lt;audio&gt; (Controles de sonido integrados)</h3>
+                <audio controls><source src="https://w3schools.com" type="audio/mpeg"></audio>
+
+                <h3>&lt;video&gt; y &lt;track&gt; (Controles de video)</h3>
+                <video width="200" height="120" controls>
+                    <source src="https://w3schools.com" type="video/mp4">
+                    <track src="sub.vtt" kind="subtitles" srclang="es" label="Español">
+                </video>
+
+                <h3>&lt;object&gt;, &lt;embed&gt; y &lt;param&gt; (Archivos e incrustaciones complejas)</h3>
+                <object data="https://picsum.photos" width="80" height="80">
+                    <param name="quality" value="high">
+                    <embed src="https://picsum.photos" width="80" height="80">
+                </object>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 9: CÓDIGO Y COMPUTACIÓN === -->
+        <section>
+            <h2>9. Código y Computación</h2>
+            <div class="demo-box">
+<pre>
+Línea 1 de preformateado (pre)
+Línea 2    respetando   los   espacios   físicos.
+</pre>
+                <p>Código en línea: <code>var web = true;</code>.</p>
+                <p>Consola del sistema: <samp>Error 502 Bad Gateway</samp>.</p>
+                <p>Comando físico: Presiona <kbd>Alt</kbd> + <kbd>F4</kbd>.</p>
+                <p>Ecuación matemática: Despeja la variable <var>n</var>.</p>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 10: INTERACTIVIDAD AVANZADA NATIVA === -->
+        <section>
+            <h2>10. Interactividad Avanzada Nativa</h2>
+            
+            <h3>&lt;details&gt; y &lt;summary&gt;</h3>
+            <div class="demo-box">
+                <details>
+                    <summary>Ver menú oculto</summary>
+                    <p>¡Contenido desplegado de forma nativa!</p>
+                </details>
+            </div>
+
+            <h3>&lt;dialog&gt; (Ventanas flotantes bloqueantes)</h3>
+            <div class="demo-box">
+                <button onclick="document.getElementById('ventanaPopUp').showModal()">Abrir Ventana Flotante</button>
+                <dialog id="ventanaPopUp">
+                    <h3>Ventana de Alerta</h3>
+                    <button onclick="document.getElementById('ventanaPopUp').close()">Cerrar Ventana</button>
+                </dialog>
+            </div>
+
+            <h3>&lt;meter&gt; y &lt;progress&gt; (Gráficas de estados)</h3>
+            <div class="demo-box">
+                <p>Medidor estático: <meter value="0.4">40%</meter></p>
+                <p>Carga animada infinita: <progress></progress></p>
+            </div>
+            
+            <h3>Atributo Especial: contenteditable="true"</h3>
+            <div class="demo-box">
+                <div contenteditable="true" style="border:2px dashed #0dcaf0; padding:10px; background:#f4fbfd;">
+                    Haz clic aquí adentro, borra este texto y escribe lo que quieras en caliente.
+                </div>
+            </div>
+        </section>
+
+        <!-- === SECCIÓN 11: INCRUSTACIÓN Y CONEXIÓN EXTERNA === -->
+        <section>
+            <h2>11. Incrustación y Conexión Externa</h2>
+            <div class="demo-box">
+                <iframe src="about:blank" title="Iframe de prueba" style="width:100%; height:40px; border:1px solid #ccc;"></iframe>
+                <p><em>Etiqueta experimental avanzada registrada: &lt;portal&gt;</em></p>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align:center; padding:30px; color:#aaa; font-size:0.8rem;">
+        Fin absoluto del Catálogo Real de las Etiquetas HTML.
+    </footer>
+
+    <!-- Elementos estructurales invisibles finales requeridos -->
+    <template id="plantilla"><p>Oculto.</p></template>
+    <noscript><p>Tu sistema no ejecuta JavaScript.</p></noscript>
+</div>
+
+
+<!-- PESTAÑA 2: LA TEORÍA Y EXPLICACIÓN DE LAS ~142 ETIQUETAS -->
+<div id="tab-info" class="bloque-tab" style="display: none; font-family: sans-serif; max-width: 800px; line-height: 1.6;">
+    <h2>Enciclopedia Completa de Etiquetas HTML</h2>
+    <p>Lista oficial de las propiedades y estructuras del lenguaje web:</p>
+
+    <h3>1. Las Graciosas, Raras y Obsoletas</h3>
+    <ul>
+        <li><strong>&lt;marquee&gt;:</strong> Desplaza texto o imágenes por la pantalla automáticamente.</li>
+        <li><strong>&lt;blink&gt;:</strong> Hacía parpadear el texto (obsoleta, los navegadores ya no la corren).</li>
+        <li><strong>&lt;bdo&gt;:</strong> Voltea el orden de las letras para escribir al revés de forma exacta.</li>
+        <li><strong>&lt;bdi&gt;:</strong> Aísla un texto para que idiomas que se leen al revés no desordenen la frase.</li>
+        <li><strong>&lt;wbr&gt;:</strong> Marca invisible para sugerirle al navegador dónde cortar una palabra muy larga.</li>
+        <li><strong>&lt;ruby&gt; y &lt;rt&gt;:</strong> Colocan anotaciones o subtítulos diminutos flotando arriba del texto.</li>
+        <li><strong>&lt;rp&gt;:</strong> Define qué mostrar si el navegador antiguo no soporta las etiquetas ruby.</li>
+        <li><strong>&lt;center&gt;, &lt;font&gt;, &lt;big&gt;, &lt;strike&gt;, &lt;tt&gt;:</strong> Estilos visuales antiguos hoy obsoletos (reemplazados por CSS).</li>
+        <li><strong>&lt;acronym&gt;:</strong> Marcador antiguo de acrónimos (reemplazado por &lt;abbr&gt;).</li>
+        <li><strong>&lt;frame&gt; y &lt;frameset&gt;:</strong> Dividían la pantalla en ventanas independientes para cargar webs distintas (obsoletas).</li>
+    </ul>
+
+    <h3>2. Estructura Base y Configuración Invisible</h3>
+    <ul>
+        <li><strong>&lt;!DOCTYPE html&gt;:</strong> Declaración obligatoria que avisa que el archivo es HTML5.</li>
+        <li><strong>&lt;html&gt;:</strong> El contenedor supremo que encierra todo el documento.</li>
+        <li><strong>&lt;head&gt;:</strong> El cerebro invisible de la página; guarda configuraciones, estilos y títulos internos.</li>
+        <li><strong>&lt;body&gt;:</strong> El cuerpo de la página; contiene todo lo que el usuario final ve en pantalla.</li>
+        <li><strong>&lt;meta&gt;:</strong> Datos ocultos para los buscadores (idioma, palabras clave, descripción).</li>
+        <li><strong>&lt;title&gt;:</strong> El texto exacto que aparece escrito en la pestaña superior de tu navegador.</li>
+        <li><strong>&lt;link&gt; y &lt;style&gt;:</strong> Conectan o integran el diseño visual de la página (CSS).</li>
+        <li><strong>&lt;script&gt; y &lt;noscript&gt;:</strong> Añaden lógica de programación (JavaScript) o avisos por si está desactivada.</li>
+        <li><strong>&lt;template&gt; y &lt;slot&gt;:</strong> Guardan fragmentos de código ocultos listos para clonarse con programación.</li>
+    </ul>
+
+    <h3>3. Textos, Títulos y Párrafos</h3>
+    <ul>
+        <li><strong>&lt;h1&gt; a &lt;h6&gt;:</strong> Títulos jerárquicos. H1 es el principal y grande; H6 es el más pequeño.</li>
+        <li><strong>&lt;p&gt;, &lt;br&gt;, &lt;hr&gt;:</strong> Párrafos, saltos de línea obligatorios y líneas divisorias horizontales.</li>
+        <li><strong>&lt;strong&gt; y &lt;b&gt;:</strong> Resaltan el texto en <strong>negrita</strong> (strong aporta importancia real, b es solo estética).</li>
+        <li><strong>&lt;em&gt; e &lt;i&gt;:</strong> Aplican letra <em>cursiva</em> (em aporta énfasis hablado, i es solo visual).</li>
+        <li><strong>&lt;small&gt;, &lt;s&gt;, &lt;del&gt;, &lt;ins&gt;:</strong> Modificadores de texto (letra chica, datos obsoletos, borrados o añadidos).</li>
+        <li><strong>&lt;sub&gt; y &lt;sup&gt;:</strong> Letras chiquitas abajo (subíndice, ej: H<sub>2</sub>O) o arriba (superíndice, ej: E=mc<sup>2</sup>).</li>
+        <li><strong>&lt;mark&gt;:</strong> Resalta el texto con un fondo de color amarillo brillante (como un marcador físico).</li>
+        <li><strong>&lt;abbr&gt;, &lt;q&gt;, &lt;blockquote&gt;, &lt;cite&gt;:</strong> Herramientas para abreviaturas con descripción, citas cortas, citas largas y títulos de obras artísticas.</li>
+        <li><strong>&lt;dfn&gt; y &lt;time&gt;:</strong> Marcan la definición de un término o fechas traducidas para computadoras.</li>
+    </ul>
+
+    <h3>4. Organización, Maquetación y Listas</h3>
+    <ul>
+        <li><strong>&lt;div&gt; y &lt;span&gt;:</strong> Cajas contenedoras genéricas (div para bloques enteros, span para fragmentos dentro de un renglón).</li>
+        <li><strong>&lt;header&gt;, &lt;nav&gt;, &lt;main&gt;, &lt;footer&gt;:</strong> Zonas principales de la página (cabecera, menús, contenido central y pie de página).</li>
+        <li><strong>&lt;article&gt;, &lt;section&gt;, &lt;aside&gt;:</strong> Bloques independientes de contenido, secciones temáticas o barras laterales secundarias.</li>
+        <li><strong>&lt;address&gt;, &lt;hgroup&gt;, &lt;search&gt;:</strong> Datos de contacto del autor, agrupador de subtítulos y cajas para buscadores.</li>
+        <li><strong>&lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;:</strong> Listas con viñetas de puntitos, listas numeradas y sus respectivos elementos internos.</li>
+        <li><strong>&lt;dl&gt;, &lt;dt&gt;, &lt;dd&gt;:</strong> Listas de términos con sus definiciones (estilo formato diccionario).</li>
+    </ul>
+
+    <h3>5. Enlaces, Multimedia, Tablas y Formularios</h3>
+    <ul>
+        <li><strong>&lt;a&gt;:</strong> Crea hipervínculos clickables hacia cualquier otra página de internet.</li>
+        <li><strong>&lt;img&gt;, &lt;picture&gt;, &lt;source&gt;, &lt;figure&gt;, &lt;figcaption&gt;:</strong> Etiquetas para meter imágenes normales, adaptables a móviles y descripciones al pie de la foto.</li>
+        <li><strong>&lt;map&gt; y &lt;area&gt;:</strong> Permiten dibujar zonas de clic invisibles encima de una foto.</li>
+        <li><strong>&lt;svg&gt; y &lt;canvas&gt;:</strong> Dibujos vectoriales directos por código matemático y lienzos interactivos para programar juegos.</li>
+        <li><strong>&lt;table&gt;, &lt;tr&gt;, &lt;th&gt;, &lt;td&gt;, &lt;thead&gt;, &lt;tbody&gt;, &lt;tfoot&gt;, &lt;colgroup&gt;, &lt;col&gt;, &lt;caption&gt;:</strong> La familia completa para armar tablas estructuradas de datos, filas, celdas y resúmenes.</li>
+        <li><strong>&lt;form&gt;, &lt;input&gt;, &lt;textarea&gt;, &lt;button&gt;, &lt;select&gt;, &lt;option&gt;, &lt;optgroup&gt;, &lt;datalist&gt;, &lt;label&gt;, &lt;fieldset&gt;, &lt;legend&gt;, &lt;output&gt;:</strong> Toda la maquinaria para recolectar datos de usuarios (casillas de texto, contraseñas, menús desplegables y botones de envío).</li>
+        <li><strong>&lt;video&gt;, &lt;audio&gt;, &lt;track&gt;, &lt;object&gt;, &lt;embed&gt;, &lt;param&gt;:</strong> Reproductores nativos de cine, sonido, subtítulos cronometrados e incrustación de archivos externos como PDFs.</li>
+    </ul>
+
+    <h3>6. Código, Interactividad Avanzada y Conexiones</h3>
+    <ul>
+        <li><strong>&lt;code&gt;, &lt;pre&gt;, &lt;samp&gt;, &lt;kbd&gt;, &lt;var&gt;:</strong> Formatos especiales para textos informáticos (bloques que respetan espacios, ejemplos del sistema, simulación de teclas físicas y variables matemáticas).</li>
+        <li><strong>&lt;details&gt; y &lt;summary&gt;:</strong> Menús desplegables interactivos nativos sin usar programación.</li>
+        <li><strong>&lt;dialog&gt;:</strong> Ventanas emergentes flotantes (pop-ups) que bloquean la pantalla y se cierran con la tecla 'Esc'.</li>
+        <li><strong>&lt;meter&gt; y &lt;progress&gt;:</strong> Indicadores gráficos estáticos o barras animadas de procesos de carga en curso.</li>
+        <li><strong>&lt;iframe&gt; y &lt;portal&gt;:</strong> Ventanas para meter páginas webs externas completas dentro de tu propio sitio.</li>
+    </ul>
+</div>
+
+<script>
+function irA(seccion, botonPresionado) {
+    // 1. Ocultar los dos bloques usando su ID exacto
+    document.getElementById('tab-html').style.display = 'none';
+    document.getElementById('tab-info').style.display = 'none';
+    
+    // 2. Mostrar solo el bloque que se pidió
+    document.getElementById('tab-' + seccion).style.display = 'block';
+    
+    // 3. Limpiar el color de todos los botones de la barra
+    document.querySelectorAll('.btn-tab').forEach(btn => {
+        btn.style.backgroundColor = '#edf2f7';
+        btn.style.color = '#4a5568';
+    });
+    
+    // 4. Pintar de azul el botón que tocaste
+    botonPresionado.style.backgroundColor = '#0d6efd';
+    botonPresionado.style.color = '#ffffff';
+}
+
+// Esto hace que el primer botón sea azul apenas abre la página
+window.onload = function() {
+    const botonInicial = document.querySelector('.btn-tab.activo');
+    if (botonInicial) {
+        botonInicial.style.backgroundColor = '#0d6efd';
+        botonInicial.style.color = '#ffffff';
+    }
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Exámenes Interactivos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #cfd8dc 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .header-text {
+            color: #1b5e20;
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .subtitle-text {
+            color: #558b2f;
+            font-size: 16px;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .grid-examenes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .tarjeta-examen {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(46, 125, 50, 0.05);
+            border: 1px solid #c8e6c9;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .tarjeta-examen:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(46, 125, 50, 0.15);
+            border-color: #81c784;
+        }
+
+        .icono-materia {
+            font-size: 45px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .nombre-examen {
+            color: #1b5e20;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+        }
+
+        .descripcion-examen {
+            color: #607d8b;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+            flex-grow: 1;
+        }
+
+        .btn-entrar {
+            display: block;
+            background-color: #2e7d32;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-entrar:hover {
+            background-color: #1b5e20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-text">Exámenes</div>
+    <div class="subtitle-text">Selecciona una materia para iniciar tu prueba de conocimiento</div>
+
+    <div class="grid-examenes">
+
+        <!-- Tarjeta 1: Tabla Periódica -->
+        <div class="tarjeta-examen">
+            <div>
+                <span class="icono-materia">🧪</span>
+                <div class="nombre-examen">Tabla Periódica</div>
+                <div class="descripcion-examen">Estudia los 118 elementos químicos en orden consecutivo. Memoriza sus símbolos y pon a prueba tu rendimiento bajo el estricto método de evaluación del profesor.</div>
+            </div>
+            <a href="tabla periodica.html" class="btn-entrar">Iniciar Prueba</a>
+        </div>
+
+        <!-- Tarjeta 2: Geografía Mundial -->
+        <div class="tarjeta-examen">
+            <div>
+                <span class="icono-materia">🌍</span>
+                <div class="nombre-examen">Geografía Mundial</div>
+                <div class="descripcion-examen">Domina el mapa global identificando países y capitales de manera consecutiva. Sube tu porcentaje con respuestas correctas o arriésgate a reprobar con el sistema del profesor.</div>
+            </div>
+            <a href="geografia.html" class="btn-entrar">Iniciar Prueba</a>
+        </div>
+
+        <!-- Tarjeta 3: Mecanografía -->
+        <div class="tarjeta-examen">
+            <div>
+                <span class="icono-materia">⌨️</span>
+                <div class="nombre-examen">Mecanografía Master</div>
+                <div class="descripcion-examen">Pon a prueba tu agilidad mental y la velocidad de tus dedos en el teclado escribiendo textos complejos sin cometer errores bajo el método de evaluación del profesor.</div>
+            </div>
+            <a href="mecanografia.html" class="btn-entrar">Iniciar Prueba</a>
+        </div>
+
+        <!-- Tarjeta 4: Desafío Contrarreloj -->
+        <div class="tarjeta-examen">
+            <div>
+                <span class="icono-materia">⏱️</span>
+                <div class="nombre-examen">Contrarreloj Extremo</div>
+                <div class="descripcion-examen">Elige entre Logos, Videojuegos, Cine o Anime. Responde rápido para sumar +3 segundos a tu reloj, pero ten cuidado, porque cada fallo te restará -5 segundos de inmediato.</div>
+            </div>
+            <a href="contrarreloj.html" class="btn-entrar">Iniciar Prueba</a>
+        </div>
+
+        <!-- Tarjeta 5: Trivia de Deportes -->
+        <div class="tarjeta-examen">
+            <div>
+                <span class="icono-materia">💖</span>
+                <div class="nombre-examen">Deportes Arcade</div>
+                <div class="descripcion-examen">Demuestra lo que sabes de Fútbol, Básquetbol, Tenis, Boxeo, Atletismo o Voleibol. Cuentas con solo 3 vidas para llegar lo más lejos posible en este desafío definitivo.</div>
+            </div>
+            <a href="deportes.html" class="btn-entrar">Iniciar Prueba</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Geografía Mundial</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #e8f5e9 0%, #cfd8dc 100%);
+            color: #2e7d32;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-sizing: border-box;
+            border: 1px solid #c8e6c9;
+        }
+
+        h2 {
+            color: #1b5e20;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            color: #558b2f;
+            font-size: 15px;
+        }
+
+        .lista-scroll {
+            max-height: 350px;
+            overflow-y: auto;
+            text-align: left;
+            background: #f1f8e9;
+            padding: 20px;
+            border: 2px solid #a5d6a7;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .elemento-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .elemento-item:hover {
+            background-color: #e8f5e9;
+            border-radius: 6px;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        #btn-siguiente, #btn-verificar {
+            background-color: #2e7d32;
+            color: white;
+        }
+
+        #btn-siguiente:hover, #btn-verificar:hover {
+            background-color: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(27, 94, 32, 0.2);
+        }
+
+        #btn-saltar {
+            background-color: #78909c;
+            color: white;
+        }
+
+        #btn-saltar:hover {
+            background-color: #607d8b;
+            transform: translateY(-2px);
+        }
+
+        #btn-otro {
+            background-color: #43a047;
+            color: white;
+            margin-top: 15px;
+        }
+
+        #btn-otro:hover {
+            background-color: #2e7d32;
+            transform: translateY(-2px);
+        }
+
+        .input-group {
+            margin: 25px 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        input {
+            padding: 14px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 2px solid #a5d6a7;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #fafafa;
+            color: #1b5e20;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #2e7d32;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(46, 125, 50, 0.2);
+            outline: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .resultado {
+            margin-top: 25px;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        .correcto { 
+            color: #1b5e20; 
+            background-color: #e8f5e9;
+            border: 1px solid #a5d6a7;
+        }
+
+        .incorrecto { 
+            color: #c62828; 
+            background-color: #ffebee;
+            border: 1px solid #ffcdd2;
+        }
+
+        .btn-regresar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #ffffff;
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #a5d6a7;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .btn-regresar:hover {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            transform: translateX(-3px);
+            box-shadow: 0 6px 12px rgba(46, 125, 50, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<a href="inicio.html" class="btn-regresar">⬅ Regresar</a>
+
+<div class="container">
+    <div id="pantalla-inicio">
+        <h2>Lista de Países y Capitales</h2>
+        <p>Estudia la lista completa de los 195 países antes de iniciar la evaluación.</p>
+        <div id="lista-elementos" class="lista-scroll"></div>
+        <button id="btn-siguiente">Empezar Examen</button>
+    </div>
+
+    <div id="pantalla-pregunta" class="hidden">
+        <h2 id="titulo-pregunta">¿Cuál es la capital de "<span id="simbolo-pregunta">?</span>"?</h2>
+        
+        <div class="quiz-box">
+            <div class="input-group">
+                <input type="text" id="input-nombre" placeholder="Escribe el nombre de la capital">
+                <input type="text" id="input-numero" placeholder="Número" disabled style="background-color: #e8f5e9; cursor: not-allowed; font-weight: bold; text-align: center;">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <button id="btn-verificar">Verificar Respuesta</button>
+                <button id="btn-saltar">No me la sé (Saltar)</button>
+            </div>
+            
+            <button id="btn-otro" class="hidden">Siguiente País</button>
+            <div id="resultado" class="resultado"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const pantallaInicio = document.getElementById('pantalla-inicio');
+    const pantallaPregunta = document.getElementById('pantalla-pregunta');
+    const btnVerificar = document.getElementById('btn-verificar');
+    const btnSaltar = document.getElementById('btn-saltar');
+    const btnOtro = document.getElementById('btn-otro');
+    const btnSiguiente = document.getElementById('btn-siguiente');
+    const listaContenedor = document.getElementById('lista-elementos');
+
+    const tituloPregunta = document.getElementById('titulo-pregunta');
+    const simboloPregunta = document.getElementById('simbolo-pregunta');
+    const inputNombre = document.getElementById('input-nombre');
+    const inputNumero = document.getElementById('input-numero');
+    const resultado = document.getElementById('resultado');
+
+    const datosGeo = [
+        { numero: 1, pais: "Afganistán", capital: "kabul" }, { numero: 2, pais: "Albania", capital: "tirana" },
+        { numero: 3, pais: "Alemania", capital: "berlin" }, { numero: 4, pais: "Andorra", capital: "andorra la vieja" },
+        { numero: 5, pais: "Angola", capital: "luanda" }, { numero: 6, pais: "Antigua y Barbuda", capital: "saint john" },
+        { numero: 7, pais: "Arabia Saudita", capital: "riad" }, { numero: 8, pais: "Argelia", capital: "argel" },
+        { numero: 9, pais: "Argentina", capital: "buenos aires" }, { numero: 10, pais: "Armenia", capital: "erevan" },
+        { numero: 11, pais: "Australia", capital: "canberra" }, { numero: 12, pais: "Austria", capital: "viena" },
+        { numero: 13, pais: "Azerbaiyán", capital: "baku" }, { numero: 14, pais: "Bahamas", capital: "nasau" },
+        { numero: 15, pais: "Bangladés", capital: "daca" }, { numero: 16, pais: "Barbados", capital: "bridgetown" },
+        { numero: 17, pais: "Baréin", capital: "manama" }, { numero: 18, pais: "Bélgica", capital: "bruselas" },
+        { numero: 19, pais: "Belice", capital: "belmopan" }, { numero: 20, pais: "Benín", capital: "porto novo" },
+        { numero: 21, pais: "Bielorrusia", capital: "minsk" }, { numero: 22, pais: "Birmania", capital: "naipyido" },
+        { numero: 23, pais: "Bolivia", capital: "sucre" }, { numero: 24, pais: "Bosnia y Herzegovina", capital: "sarajevo" },
+        { numero: 25, pais: "Botsuana", capital: "gaborone" }, { numero: 26, pais: "Brasil", capital: "brasilia" },
+        { numero: 27, pais: "Brunéi", capital: "bandar seri begawan" }, { numero: 28, pais: "Bulgaria", capital: "sofia" },
+        { numero: 29, pais: "Burkina Faso", capital: "uagadugu" }, { numero: 30, pais: "Burundi", capital: "gitega" },
+        { numero: 31, pais: "Bután", capital: "timbu" }, { numero: 32, pais: "Cabo Verde", capital: "praia" },
+        { numero: 33, pais: "Camboya", capital: "nom pen" }, { numero: 34, pais: "Camerún", capital: "yaunde" },
+        { numero: 35, pais: "Canadá", capital: "ottawa" }, { numero: 36, pais: "Catar", capital: "doha" },
+        { numero: 37, pais: "Chad", capital: "yamena" }, { numero: 38, pais: "Chile", capital: "santiago" },
+        { numero: 39, pais: "China", capital: "pekin" }, { numero: 40, pais: "Chipre", capital: "nicosia" },
+        { numero: 41, pais: "Colombia", capital: "bogota" }, { numero: 42, pais: "Comoras", capital: "moroni" },
+        { numero: 43, pais: "Corea del Norte", capital: "pionyang" }, { numero: 44, pais: "Corea del Sur", capital: "seul" },
+        { numero: 45, pais: "Costa de Marfil", capital: "yamusukro" }, { numero: 46, pais: "Costa Rica", capital: "san jose" },
+        { numero: 47, pais: "Croacia", capital: "zagreb" }, { numero: 48, pais: "Cuba", capital: "la habana" },
+        { numero: 49, pais: "Dinamarca", capital: "copenhague" }, { numero: 50, pais: "Dominica", capital: "roseau" },
+        { numero: 51, pais: "Ecuador", capital: "quito" }, { numero: 52, pais: "Egipto", capital: "el cairo" },
+        { numero: 53, pais: "El Salvador", capital: "san salvador" }, { numero: 54, pais: "Emiratos Árabes Unidos", capital: "abu dabi" },
+        { numero: 55, pais: "Eritrea", capital: "asmara" }, { numero: 56, pais: "Eslovaquia", capital: "bratislava" },
+        { numero: 57, pais: "Eslovenia", capital: "liubliana" }, { numero: 58, pais: "España", capital: "madrid" },
+        { numero: 59, pais: "Estados Unidos", capital: "washington" }, { numero: 60, pais: "Estonia", capital: "tallin" },
+        { numero: 61, pais: "Etiopía", capital: "adis abeba" }, { numero: 62, pais: "Filipinas", capital: "manila" },
+        { numero: 63, pais: "Finlandia", capital: "helsinki" }, { numero: 64, pais: "Fiyi", capital: "suva" },
+        { numero: 65, pais: "Francia", capital: "paris" }, { numero: 66, pais: "Gabón", capital: "libreville" },
+        { numero: 67, pais: "Gambia", capital: "banjul" }, { numero: 68, pais: "Georgia", capital: "tbilisi" },
+        { numero: 69, pais: "Ghana", capital: "acra" }, { numero: 70, pais: "Granada", capital: "saint george" },
+        { numero: 71, pais: "Grecia", capital: "atenas" }, { numero: 72, pais: "Guatemala", capital: "ciudad de guatemala" },
+        { numero: 73, pais: "Guyana", capital: "georgetown" }, { numero: 74, pais: "Guinea", capital: "conakri" },
+        { numero: 75, pais: "Guinea-Bisáu", capital: "bisau" }, { numero: 76, pais: "Guinea Ecuatorial", capital: "malabo" },
+        { numero: 77, pais: "Haití", capital: "puerto principe" }, { numero: 78, pais: "Honduras", capital: "tegucigalpa" },
+        { numero: 79, pais: "Hungría", capital: "budapest" }, { numero: 80, pais: "India", capital: "nueva delhi" },
+        { numero: 81, pais: "Indonesia", capital: "yakarta" }, { numero: 82, pais: "Irak", capital: "bagdad" },
+        { numero: 83, pais: "Irán", capital: "teheran" }, { numero: 84, pais: "Irlanda", capital: "dublin" },
+        { numero: 85, pais: "Islandia", capital: "reykiavik" }, { numero: 86, pais: "Islas Marshall", capital: "majuro" },
+        { numero: 87, pais: "Islas Salomón", capital: "honiara" }, { numero: 88, pais: "Israel", capital: "jerusalen" },
+        { numero: 89, pais: "Italia", capital: "roma" }, { numero: 90, pais: "Jamaica", capital: "kingston" },
+        { numero: 91, pais: "Japón", capital: "tokio" }, { numero: 92, pais: "Jordania", capital: "aman" },
+        { numero: 93, pais: "Kazajistán", capital: "astana" }, { numero: 94, pais: "Kenia", capital: "nairobi" },
+        { numero: 95, pais: "Kirguistán", capital: "biskek" }, { numero: 96, pais: "Kiribati", capital: "tarawa" },
+        { numero: 97, pais: "Kuwait", capital: "kuwait" }, { numero: 98, pais: "Laos", capital: "vientian" },
+        { numero: 99, pais: "Lesoto", capital: "maseru" }, { numero: 100, pais: "Letonia", capital: "riga" },
+        { numero: 101, pais: "Líbano", capital: "beirut" }, { numero: 102, pais: "Liberia", capital: "monrovia" },
+        { numero: 103, pais: "Libia", capital: "tripoli" }, { numero: 104, pais: "Liechtenstein", capital: "vaduz" },
+        { numero: 105, pais: "Lituania", capital: "vilna" }, { numero: 106, pais: "Luxemburgo", capital: "luxemburgo" },
+        { numero: 107, pais: "Madagascar", capital: "antananarivo" }, { numero: 108, pais: "Malasia", capital: "kuala lumpur" },
+        { numero: 109, pais: "Malaui", capital: "lilongue" }, { numero: 110, pais: "Maldivas", capital: "male" },
+        { numero: 111, pais: "Malí", capital: "bamako" }, { numero: 112, pais: "Malta", capital: "valeta" },
+        { numero: 113, pais: "Marruecos", capital: "rabat" }, { numero: 114, pais: "Mauricio", capital: "port louis" },
+        { numero: 115, pais: "Mauritania", capital: "nuakchot" }, { numero: 116, pais: "México", capital: "ciudad de mexico" },
+        { numero: 117, pais: "Micronesia", capital: "palikir" }, { numero: 118, pais: "Moldavia", capital: "chisinau" },
+        { numero: 119, pais: "Mónaco", capital: "monaco" }, { numero: 120, pais: "Mongolia", capital: "ulan bator" },
+        { numero: 121, pais: "Montenegro", capital: "podgorica" }, { numero: 122, pais: "Mozambique", capital: "maputo" },
+        { numero: 123, pais: "Namibia", capital: "windhoek" }, { numero: 124, pais: "Nauru", capital: "yaren" },
+        { numero: 125, pais: "Nepal", capital: "katmandu" }, { numero: 126, pais: "Nicaragua", capital: "managua" },
+        { numero: 127, pais: "Níger", capital: "niamey" }, { numero: 128, pais: "Nigeria", capital: "abuya" },
+        { numero: 129, pais: "Noruega", capital: "oslo" }, { numero: 130, pais: "Nueva Zelanda", capital: "wellington" },
+        { numero: 131, pais: "Omán", capital: "mascate" }, { numero: 132, pais: "Países Bajos", capital: "amsterdam" },
+        { numero: 133, pais: "Pakistán", capital: "islamabad" }, { numero: 134, pais: "Palaos", capital: "ngerulmud" },
+        { numero: 135, pais: "Panamá", capital: "panama" }, { numero: 136, pais: "Papúa Nueva Guinea", capital: "puerto moresby" },
+        { numero: 137, pais: "Paraguay", capital: "asuncion" }, { numero: 138, pais: "Perú", capital: "lima" },
+        { numero: 139, pais: "Polonia", capital: "varsovia" }, { numero: 140, pais: "Portugal", capital: "lisboa" },
+        { numero: 141, pais: "Reino Unido", capital: "londres" }, { numero: 142, pais: "República Centroafricana", capital: "bangui" },
+        { numero: 143, pais: "República Checa", capital: "praga" }, { numero: 144, pais: "República del Congo", capital: "brazzaville" },
+        { numero: 145, pais: "República Democrática del Congo", capital: "kinsasa" }, { numero: 146, pais: "República Dominicana", capital: "santo domingo" },
+        { numero: 147, pais: "Ruanda", capital: "kigali" }, { numero: 148, pais: "Rumania", capital: "bucarest" },
+        { numero: 149, pais: "Rusia", capital: "moscu" }, { numero: 150, pais: "Samoa", capital: "apia" },
+        { numero: 151, pais: "San Cristóbal y Nieves", capital: "basseterre" }, { numero: 152, pais: "San Marino", capital: "san marino" },
+        { numero: 153, pais: "San Vicente y las Granadinas", capital: "kingstown" }, { numero: 154, pais: "Santa Lucía", capital: "castries" },
+        { numero: 155, pais: "Santo Tomé y Príncipe", capital: "santo tome" }, { numero: 156, pais: "Senegal", capital: "dakar" },
+        { numero: 157, pais: "Serbia", capital: "belgrado" }, { numero: 158, pais: "Seychelles", capital: "victoria" },
+        { numero: 159, pais: "Sierra Leona", capital: "freetown" }, { numero: 160, simbolo: "Singapur", pais: "Singapur", capital: "singapur" },
+        { numero: 161, pais: "Siria", capital: "damasco" }, { numero: 162, pais: "Somalia", capital: "mogadiscio" },
+        { numero: 163, pais: "Sri Lanka", capital: "sri jayawardenepura kotte" }, { numero: 164, pais: "Suazilandia", capital: "mhabane" },
+        { numero: 165, pais: "Sudáfrica", capital: "pretoria" }, { numero: 166, pais: "Sudán", capital: "jartum" },
+        { numero: 167, pais: "Sudán del Sur", capital: "juba" }, { numero: 168, pais: "Suecia", capital: "estocolmo" },
+        { numero: 169, pais: "Suiza", capital: "berna" }, { numero: 170, pais: "Surinam", capital: "paramaribo" },
+        { numero: 171, pais: "Tailandia", capital: "bangkok" }, { numero: 172, pais: "Tanzania", capital: "dodoma" },
+        { numero: 173, pais: "Tayikistán", capital: "dusambé" }, { numero: 174, pais: "Timor Oriental", capital: "dili" },
+        { numero: 175, pais: "Togo", capital: "lomé" }, { numero: 176, pais: "Tonga", capital: "nuku'alofa" },
+        { numero: 177, pais: "Trinidad y Tobago", capital: "puerto espana" }, { numero: 178, pais: "Túnez", capital: "tunez" },
+        { numero: 179, pais: "Turkmenistán", capital: "asgabat" }, { numero: 180, pais: "Turquía", capital: "ankara" },
+        { numero: 181, pais: "Tuvalu", capital: "funafuti" }, { numero: 182, pais: "Ucrania", capital: "kiev" },
+        { numero: 183, pais: "Uganda", capital: "kampala" }, { numero: 184, pais: "Uruguay", capital: "montevideo" },
+        { numero: 185, pais: "Uzbekistán", capital: "taskent" }, { numero: 186, pais: "Vanuatu", capital: "port vila" },
+        { numero: 187, pais: "Venezuela", capital: "caracas" }, { numero: 188, pais: "Vietnam", capital: "hanoi" },
+        { numero: 189, pais: "Yemen", capital: "sana" }, { numero: 190, pais: "Yibuti", capital: "yibuti" },
+        { numero: 191, pais: "Zambia", capital: "lusaka" }, { numero: 192, pais: "Zimbabue", capital: "harare" },
+        { numero: 193, pais: "Palestina", capital: "jerusalen este" }, { numero: 194, pais: "Vaticano", capital: "ciudad del vaticano" },
+        { numero: 195, pais: "Taiwán", capital: "taipei" }
+    ];
+
+    let indiceActual = 0;
+    let fallosActuales = 0;
+    let porcentajeAprendizaje = 100;
+
+    function normalizarTexto(texto) {
+        return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, "").trim();
+    }
+
+    function inicializarListaEstudio() {
+        listaContenedor.innerHTML = "";
+        datosGeo.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'elemento-item';
+            const capBonita = item.capital.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+            div.textContent = `${item.numero}. ${item.pais} ➔ ${capBonita}`;
+            listaContenedor.appendChild(div);
+        });
+    }
+
+    function cargarPreguntaConsecutiva() {
+        inputNombre.value = "";
+        resultado.textContent = "";
+        btnOtro.classList.add('hidden');
+        btnVerificar.style.display = "inline-block";
+        btnSaltar.style.display = "inline-block";
+        fallosActuales = 0;
+
+        if (indiceActual >= datosGeo.length) {
+            let palabraRango = porcentajeAprendizaje >= 80 ? "Excelente" : 
+                               porcentajeAprendizaje >= 51 ? "Aprobado" : 
+                               porcentajeAprendizaje >= 40 ? "Regular" : "Reprobado";
+            let colorFinal = porcentajeAprendizaje >= 80 ? "#2e7d32" : 
+                             porcentajeAprendizaje >= 51 ? "#ffc107" : 
+                             porcentajeAprendizaje >= 40 ? "#ef6c00" : "#dc3545";
+
+            tituloPregunta.textContent = `¿Qué capital es de "${palabraRango}"?`;
+            inputNumero.value = ""; 
+            resultado.innerHTML = `<h3>¡Examen Terminado!</h3><p>Tu porcentaje final evaluado es del:</p><strong style="color: ${colorFinal}; font-size: 32px; display: block; margin-top: 10px;">${porcentajeAprendizaje}%</strong>`;
+            resultado.className = "resultado";
+            btnVerificar.style.display = "none";
+            btnSaltar.style.display = "none";
+            return;
+        }
+
+        const itemActual = datosGeo[indiceActual];
+        tituloPregunta.innerHTML = '¿Cuál es la capital de "<span id="simbolo-pregunta">?</span>"?';
+        document.getElementById('simbolo-pregunta').textContent = itemActual.pais;
+        inputNumero.value = `País Nº: ${itemActual.numero}`;
+    }
+
+    inicializarListaEstudio();
+
+    btnSiguiente.addEventListener('click', () => {
+        pantallaInicio.classList.add('hidden');
+        pantallaPregunta.classList.remove('hidden');
+        indiceActual = 0;
+        porcentajeAprendizaje = 100; 
+        cargarPreguntaConsecutiva();
+    });
+
+    btnVerificar.addEventListener('click', () => {
+        const itemActual = datosGeo[indiceActual];
+        const respuestaUsuario = normalizarTexto(inputNombre.value);
+
+        if (!respuestaUsuario) {
+            resultado.textContent = "Por favor, escribe el nombre de la capital.";
+            resultado.className = "resultado incorrecto";
+            return;
+        }
+
+        if (respuestaUsuario === itemActual.capital) {
+            const capBonita = itemActual.capital.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+            resultado.textContent = `¡Correcto! La capital de ${itemActual.pais} es ${capBonita}.`;
+            resultado.className = "resultado correcto";
+            porcentajeAprendizaje += 10;
+            btnVerificar.style.display = "none";
+            btnSaltar.style.display = "none";
+            btnOtro.classList.remove('hidden');
+            indiceActual++;
+        } else {
+            fallosActuales++;
+            porcentajeAprendizaje -= 5;
+            if (fallosActuales >= 3) {
+                porcentajeAprendizaje -= 10;
+                const capBonita = itemActual.capital.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+                resultado.textContent = `Fallaste 3 veces. La respuesta correcta era: ${capBonita}.`;
+                resultado.className = "resultado incorrecto";
+                btnVerificar.style.display = "none";
+                btnSaltar.style.display = "none";
+                btnOtro.classList.remove('hidden');
+                indiceActual++;
+            } else {
+                resultado.textContent = `Respuesta incorrecta. Intento ${fallosActuales} de 3.`;
+                resultado.className = "resultado incorrecto";
+            }
+        }
+    });
+
+    btnSaltar.addEventListener('click', () => {
+        const itemActual = datosGeo[indiceActual];
+        porcentajeAprendizaje -= 5;
+        const capBonita = itemActual.capital.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+        resultado.textContent = `Te saltaste la pregunta. La capital de ${itemActual.pais} es ${capBonita}.`;
+        resultado.className = "resultado incorrecto";
+        btnVerificar.style.display = "none";
+        btnSaltar.style.display = "none";
+        btnOtro.classList.remove('hidden');
+        indiceActual++;
+    });
+
+    btnOtro.addEventListener('click', cargarPreguntaConsecutiva);
+</script>
+</body>
+</html>

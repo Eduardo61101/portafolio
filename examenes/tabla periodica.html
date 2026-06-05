@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memoriza la Tabla Periódica</title>
+    <style>
+        /* CSS Integrado: Temática Verde Científica */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #e8f5e9 0%, #cfd8dc 100%);
+            color: #2e7d32;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-sizing: border-box;
+            border: 1px solid #c8e6c9;
+        }
+
+        h2 {
+            color: #1b5e20;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            color: #558b2f;
+            font-size: 15px;
+        }
+
+        .lista-scroll {
+            max-height: 350px;
+            overflow-y: auto;
+            text-align: left;
+            background: #f1f8e9;
+            padding: 20px;
+            border: 2px solid #a5d6a7;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .elemento-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .elemento-item:hover {
+            background-color: #e8f5e9;
+            border-radius: 6px;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        #btn-siguiente, #btn-verificar {
+            background-color: #2e7d32;
+            color: white;
+        }
+
+        #btn-siguiente:hover, #btn-verificar:hover {
+            background-color: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(27, 94, 32, 0.2);
+        }
+
+        #btn-saltar {
+            background-color: #78909c;
+            color: white;
+        }
+
+        #btn-saltar:hover {
+            background-color: #607d8b;
+            transform: translateY(-2px);
+        }
+
+        #btn-otro {
+            background-color: #43a047;
+            color: white;
+            margin-top: 15px;
+        }
+
+        #btn-otro:hover {
+            background-color: #2e7d32;
+            transform: translateY(-2px);
+        }
+
+        .input-group {
+            margin: 25px 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        input {
+            padding: 14px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 2px solid #a5d6a7;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #fafafa;
+            color: #1b5e20;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: #2e7d32;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(46, 125, 50, 0.2);
+            outline: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .resultado {
+            margin-top: 25px;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        .correcto { 
+            color: #1b5e20; 
+            background-color: #e8f5e9;
+            border: 1px solid #a5d6a7;
+        }
+
+        .incorrecto { 
+            color: #c62828; 
+            background-color: #ffebee;
+            border: 1px solid #ffcdd2;
+        }
+
+.btn-regresar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #ffffff;
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid #a5d6a7;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    z-index: 1000; /* Asegura que siempre quede por encima de otros elementos */
+}
+
+.btn-regresar:hover {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+    transform: translateX(-3px); /* Pequeño efecto de empuje hacia la izquierda */
+    box-shadow: 0 6px 12px rgba(46, 125, 50, 0.1);
+}
+
+    </style>
+</head>
+<body>
+
+
+    <button id="btn-puntos">TUS PUNTOS:</button>
+
+<!-- Botón Flotante para Regresar al Menú Principal -->
+<a href="inicio.html" class="btn-regresar">⬅ Regresar</a>
+
+
+<div class="container">
+    <!-- Pantalla Inicial: Lista de estudio -->
+    <div id="pantalla-inicio">
+        <h2>Lista para Memorizar la Tabla Periódica</h2>
+        <p>Estudia la lista y presiona el botón cuando estés listo para el examen.</p>
+        <div id="lista-elementos" class="lista-scroll"></div>
+        <button id="btn-siguiente">Empezar Examen</button>
+    </div>
+
+    <!-- Pantalla de Pregunta -->
+    <div id="pantalla-pregunta" class="hidden">
+        <h2 id="titulo-pregunta">¿Qué elemento es "<span id="simbolo-pregunta">?</span>"?</h2>
+        
+        <div class="quiz-box">
+            <div class="input-group">
+                <input type="text" id="input-nombre" placeholder="Escribe el nombre del elemento">
+                <input type="text" id="input-numero" placeholder="Número Atómico" disabled style="background-color: #e8f5e9; cursor: not-allowed; font-weight: bold; text-align: center;">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <button id="btn-verificar">Verificar Respuesta</button>
+                <button id="btn-saltar">No me la sé (Saltar)</button>
+            </div>
+            
+            <button id="btn-otro" class="hidden">Siguiente Elemento</button>
+            <div id="resultado" class="resultado"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript Integrado: Base de datos y lógica del examen
+    const pantallaInicio = document.getElementById('pantalla-inicio');
+    const pantallaPregunta = document.getElementById('pantalla-pregunta');
+    const btnVerificar = document.getElementById('btn-verificar');
+    const btnSaltar = document.getElementById('btn-saltar');
+    const btnOtro = document.getElementById('btn-otro');
+    const btnSiguiente = document.getElementById('btn-siguiente');
+    const listaContenedor = document.getElementById('lista-elementos');
+
+    const tituloPregunta = document.getElementById('titulo-pregunta');
+    const simboloPregunta = document.getElementById('simbolo-pregunta');
+    const inputNombre = document.getElementById('input-nombre');
+    const inputNumero = document.getElementById('input-numero');
+    const resultado = document.getElementById('resultado');
+
+    const elementos = [
+        { numero: 1, simbolo: "H", nombre: "hidrogeno" }, { numero: 2, simbolo: "He", nombre: "helio" },
+        { numero: 3, simbolo: "Li", nombre: "litio" }, { numero: 4, simbolo: "Be", nombre: "berilio" },
+        { numero: 5, simbolo: "B", nombre: "boro" }, { numero: 6, simbolo: "C", nombre: "carbono" },
+        { numero: 7, simbolo: "N", nombre: "nitrogeno" }, { numero: 8, simbolo: "O", nombre: "oxigeno" },
+        { numero: 9, simbolo: "F", nombre: "fluor" }, { numero: 10, simbolo: "Ne", nombre: "neon" },
+        { numero: 11, simbolo: "Na", nombre: "sodio" }, { numero: 12, simbolo: "Mg", nombre: "magnesio" },
+        { numero: 13, simbolo: "Al", nombre: "aluminio" }, { numero: 14, simbolo: "Si", nombre: "silicio" },
+        { numero: 15, simbolo: "P", nombre: "fosforo" }, { numero: 16, simbolo: "S", nombre: "azufre" },
+        { numero: 17, simbolo: "Cl", nombre: "cloro" }, { numero: 18, simbolo: "Ar", nombre: "argon" },
+        { numero: 19, simbolo: "K", nombre: "potasio" }, { numero: 20, simbolo: "Ca", nombre: "calcio" },
+        { numero: 21, simbolo: "Sc", nombre: "escandio" }, { numero: 22, simbolo: "Ti", nombre: "titanio" },
+        { numero: 23, simbolo: "V", nombre: "vanadio" }, { numero: 24, simbolo: "Cr", nombre: "cromo" },
+        { numero: 25, simbolo: "Mn", nombre: "manganeso" }, { numero: 26, simbolo: "Fe", nombre: "hierro" },
+        { numero: 27, simbolo: "Co", nombre: "cobalto" }, { numero: 28, simbolo: "Ni", nombre: "niquel" },
+        { numero: 29, simbolo: "Cu", nombre: "cobre" }, { numero: 30, simbolo: "Zn", nombre: "zinc" },
+        { numero: 31, simbolo: "Ga", nombre: "galio" }, { numero: 32, simbolo: "Ge", nombre: "germanio" },
+        { numero: 33, simbolo: "As", nombre: "arsenico" }, { numero: 34, simbolo: "Se", nombre: "selenio" },
+        { numero: 35, simbolo: "Br", nombre: "bromo" }, { numero: 36, simbolo: "Kr", nombre: "kripton" },
+        { numero: 37, simbolo: "Rb", nombre: "rubidio" }, { numero: 38, simbolo: "Sr", nombre: "estroncio" },
+        { numero: 39, simbolo: "Y", nombre: "itrio" }, { numero: 40, simbolo: "Zr", nombre: "circonio" },
+        { numero: 41, simbolo: "Nb", nombre: "niobio" }, { numero: 42, simbolo: "Mo", nombre: "molibdeno" },
+        { numero: 43, simbolo: "Tc", nombre: "tecnecio" }, { numero: 44, simbolo: "Ru", nombre: "rutenio" },
+        { numero: 45, simbolo: "Rh", nombre: "rodio" }, { numero: 46, simbolo: "Pd", nombre: "paladio" },
+        { numero: 47, simbolo: "Ag", nombre: "plata" }, { numero: 48, simbolo: "Cd", nombre: "cadmio" },
+        { numero: 49, simbolo: "In", nombre: "indio" }, { numero: 50, simbolo: "Sn", nombre: "estanio" },
+        { numero: 51, simbolo: "Sb", nombre: "antimonio" }, { numero: 52, simbolo: "Te", nombre: "telurio" },
+        { numero: 53, simbolo: "I", nombre: "yodo" }, { numero: 54, simbolo: "Xe", nombre: "xenon" },
+        { numero: 55, simbolo: "Cs", nombre: "cesio" }, { numero: 56, simbolo: "Ba", nombre: "bario" },
+        { numero: 57, simbolo: "La", nombre: "lantano" }, { numero: 58, simbolo: "Ce", nombre: "cerio" },
+        { numero: 59, simbolo: "Pr", nombre: "praseodimio" }, { numero: 60, simbolo: "Nd", nombre: "neodimio" },
+        { numero: 61, simbolo: "Pm", nombre: "prometio" }, { numero: 62, simbolo: "Sm", nombre: "samario" },
+        { numero: 63, simbolo: "Eu", nombre: "europio" }, { numero: 64, simbolo: "Gd", nombre: "gadolinio" },
+        { numero: 65, simbolo: "Tb", nombre: "terbio" }, { numero: 66, simbolo: "Dy", nombre: "disprosio" },
+        { numero: 67, simbolo: "Ho", nombre: "holmio" }, { numero: 68, simbolo: "Er", nombre: "erbio" },
+        { numero: 69, simbolo: "Tm", nombre: "tulio" }, { numero: 70, simbolo: "Yb", nombre: "iterbio" },
+        { numero: 71, simbolo: "Lu", nombre: "lutecio" }, { numero: 72, simbolo: "Hf", nombre: "hafnio" },
+        { numero: 73, simbolo: "Ta", nombre: "tantalio" }, { numero: 74, simbolo: "W", nombre: "tungsteno" },
+        { numero: 75, simbolo: "Re", nombre: "renio" }, { numero: 76, simbolo: "Os", nombre: "osmio" },
+        { numero: 77, simbolo: "Ir", nombre: "iridio" }, { numero: 78, simbolo: "Pt", nombre: "platino" },
+        { numero: 79, simbolo: "Au", nombre: "oro" }, { numero: 80, simbolo: "Hg", nombre: "mercurio" },
+        { numero: 81, simbolo: "Tl", nombre: "talio" }, { numero: 82, simbolo: "Pb", nombre: "plomo" },
+        { numero: 83, simbolo: "Bi", nombre: "bismuto" }, { numero: 84, simbolo: "Po", nombre: "polonio" },
+        { numero: 85, simbolo: "At", nombre: "astato" }, { numero: 86, simbolo: "Rn", nombre: "radon" },
+        { numero: 87, simbolo: "Fr", nombre: "francio" }, { numero: 88, simbolo: "Ra", nombre: "radio" },
+        { numero: 89, simbolo: "Ac", nombre: "actinio" }, { numero: 90, simbolo: "Th", nombre: "torio" },
+        { numero: 91, simbolo: "Pa", nombre: "protactinio" }, { numero: 92, simbolo: "U", nombre: "uranio" },
+        { numero: 93, simbolo: "Np", nombre: "neptunio" }, { numero: 94, simbolo: "Pu", nombre: "plutonio" },
+        { numero: 95, simbolo: "Am", nombre: "americio" }, { numero: 96, simbolo: "Cm", nombre: "curio" },
+        { numero: 97, simbolo: "Bk", nombre: "berkelio" }, { numero: 98, simbolo: "Cf", nombre: "californio" },
+        { numero: 99, simbolo: "Es", nombre: "einstenio" }, { numero: 100, simbolo: "Fm", nombre: "fermio" },
+        { numero: 101, simbolo: "Md", nombre: "mendelevio" }, { numero: 102, simbolo: "No", nombre: "nobelio" },
+        { numero: 103, simbolo: "Lr", nombre: "laurencio" }, { numero: 104, simbolo: "Rf", nombre: "rutherfordio" },
+        { numero: 105, simbolo: "Db", nombre: "dubnio" }, { numero: 106, simbolo: "Sg", nombre: "seaborgio" },
+        { numero: 107, simbolo: "Bh", nombre: "bohrio" }, { numero: 108, simbolo: "Hs", nombre: "hasio" },
+        { numero: 109, simbolo: "Mt", nombre: "meitnerio" }, { numero: 110, simbolo: "Ds", nombre: "darmstadio" },
+        { numero: 111, simbolo: "Rg", nombre: "roentgenio" }, { numero: 112, simbolo: "Cn", nombre: "copernicio" },
+        { numero: 113, simbolo: "Nh", nombre: "nihonio" }, { numero: 114, simbolo: "Fl", nombre: "flerovio" },
+        { numero: 115, simbolo: "Mc", nombre: "moscovio" }, { numero: 116, simbolo: "Lv", nombre: "livermorio" },
+        { numero: 117, simbolo: "Ts", nombre: "teneso" }, { numero: 118, simbolo: "Og", nombre: "oganeson" }
+    ];
+
+    let indiceActual = 0;
+    let fallosActuales = 0;
+    let porcentajeAprendizaje = 100; 
+
+    function inicializarListaEstudio() {
+        listaContenedor.innerHTML = "";
+        elementos.forEach(el => {
+            const item = document.createElement('div');
+            item.className = 'elemento-item';
+            const nombreBonito = el.nombre.charAt(0).toUpperCase() + el.nombre.slice(1);
+            item.textContent = `${el.numero} ${el.simbolo} ${nombreBonito}`;
+            listaContenedor.appendChild(item);
+        });
+    }
+
+    function cargarPreguntaConsecutiva() {
+        inputNombre.value = "";
+        resultado.textContent = "";
+        btnOtro.classList.add('hidden');
+        btnVerificar.style.display = "inline-block";
+        btnSaltar.style.display = "inline-block";
+        fallosActuales = 0;
+
+        if (indiceActual >= elementos.length) {
+            let palabraRango = porcentajeAprendizaje >= 80 ? "Excelente" : 
+                               porcentajeAprendizaje >= 51 ? "Aprobado" : 
+                               porcentajeAprendizaje >= 40 ? "Regular" : "Reprobado";
+            let colorFinal = porcentajeAprendizaje >= 80 ? "#2e7d32" : 
+                             porcentajeAprendizaje >= 51 ? "#ffc107" : 
+                             porcentajeAprendizaje >= 40 ? "#ef6c00" : "#dc3545";
+
+            tituloPregunta.textContent = `¿Cuál elemento es "${palabraRango}"?`;
+            inputNumero.value = ""; 
+            resultado.innerHTML = `<h3>¡Examen Terminado!</h3><p>Tu porcentaje final es:</p><strong style="color: ${colorFinal}; font-size: 32px; display: block; margin-top: 10px;">${porcentajeAprendizaje}%</strong>`;
+            resultado.className = "resultado";
+            btnVerificar.style.display = "none";
+            btnSaltar.style.display = "none";
+            return;
+        }
+
+        const elementoActual = elementos[indiceActual];
+        tituloPregunta.innerHTML = '¿Qué elemento es "<span id="simbolo-pregunta">?</span>"?';
+        document.getElementById('simbolo-pregunta').textContent = elementoActual.simbolo;
+        inputNumero.value = `Nº Atómico: ${elementoActual.numero}`;
+    }
+
+    inicializarListaEstudio();
+
+    btnSiguiente.addEventListener('click', () => {
+        pantallaInicio.classList.add('hidden');
+        pantallaPregunta.classList.remove('hidden');
+        indiceActual = 0;
+        porcentajeAprendizaje = 100; 
+        cargarPreguntaConsecutiva();
+    });
+
+    btnVerificar.addEventListener('click', () => {
+        const elementoActual = elementos[indiceActual];
+        const nombreUsuario = inputNombre.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+        if (!nombreUsuario) {
+            resultado.textContent = "Por favor, escribe el nombre del elemento.";
+            resultado.className = "resultado incorrecto";
+            return;
+        }
+
+        if (nombreUsuario === elementoActual.nombre) {
+            resultado.textContent = `¡Correcto! El símbolo "${elementoActual.simbolo}" es ${elementoActual.nombre.charAt(0).toUpperCase() + elementoActual.nombre.slice(1)}.`;
+            resultado.className = "resultado correcto";
+            porcentajeAprendizaje += 10;
+            btnVerificar.style.display = "none";
+            btnSaltar.style.display = "none";
+            btnOtro.classList.remove('hidden');
+            indiceActual++;
+        } else {
+            fallosActuales++;
+            porcentajeAprendizaje -= 5;
+            if (fallosActuales >= 3) {
+                porcentajeAprendizaje -= 10;
+                resultado.textContent = `Fallaste 3 veces. La respuesta era: ${elementoActual.nombre.charAt(0).toUpperCase() + elementoActual.nombre.slice(1)}.`;
+                resultado.className = "resultado incorrecto";
+                btnVerificar.style.display = "none";
+                btnSaltar.style.display = "none";
+                btnOtro.classList.remove('hidden');
+                indiceActual++;
+            } else {
+                resultado.textContent = `Respuesta incorrecta. Intento ${fallosActuales} de 3.`;
+                resultado.className = "resultado incorrecto";
+            }
+        }
+    });
+
+    btnSaltar.addEventListener('click', () => {
+        const elementoActual = elementos[indiceActual];
+        porcentajeAprendizaje -= 5;
+        resultado.textContent = `Te saltaste el elemento. Era: ${elementoActual.nombre.charAt(0).toUpperCase() + elementoActual.nombre.slice(1)}.`;
+        resultado.className = "resultado incorrecto";
+        btnVerificar.style.display = "none";
+        btnSaltar.style.display = "none";
+        btnOtro.classList.remove('hidden');
+        indiceActual++;
+    });
+
+    btnOtro.addEventListener('click', cargarPreguntaConsecutiva);
+</script>
+</body>
+</html>

@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AnimalBox</title>
+
+<style>
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(to bottom,#2e8b57,#14532d);
+    font-family:Arial,sans-serif;
+    overflow-x:hidden;
+}
+
+ul{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    list-style:none;
+    background-color:#14532d;
+    padding:20px;
+    margin:0;
+}
+
+ul button{
+    background:none;
+    border:none;
+    color:white;
+    font-size:25px;
+    cursor:pointer;
+}
+
+ul button:hover{
+    color:orange;
+}
+
+h1{
+    text-align:center;
+    color:white;
+    margin-top:30px;
+    font-size:40px;
+}
+
+.seccion{
+    display:none;
+}
+
+.activa{
+    display:block;
+}
+
+.monedas-box{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background-color:rgba(0,0,0,0.4);
+    backdrop-filter:blur(10px);
+    color:white;
+    padding:15px 20px;
+    border-radius:15px;
+    font-size:22px;
+    z-index:100;
+}
+
+.caja-principal{
+    width:350px;
+    margin:auto;
+    margin-top:30px;
+    background-color:rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+    border-radius:25px;
+    padding:25px;
+    text-align:center;
+    color:white;
+}
+
+.animal-img{
+    width:240px;
+    height:240px;
+    object-fit:cover;
+    border-radius:20px;
+    margin-top:10px;
+    border:4px solid white;
+}
+
+.btn-abrir{
+    margin-top:20px;
+    padding:15px 30px;
+    border:none;
+    border-radius:15px;
+    background-color:orange;
+    font-size:22px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.btn-abrir:hover{
+    transform:scale(1.05);
+}
+
+.info{
+    margin-top:25px;
+    font-size:24px;
+}
+
+.btn-recompensa{
+    margin-top:20px;
+    padding:12px 25px;
+    border:none;
+    border-radius:12px;
+    background-color:gold;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.coleccion-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+    padding:20px;
+}
+
+.coleccion-grid img{
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border-radius:15px;
+    border:3px solid white;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.coleccion-grid img:hover{
+    transform:scale(1.05);
+}
+
+.favorita{
+    border:4px solid gold !important;
+    box-shadow:0 0 20px gold;
+}
+
+#menuImagen{
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    z-index:999;
+    text-align:center;
+}
+
+#imagenGrande{
+    width:300px;
+    height:300px;
+    object-fit:cover;
+    border-radius:20px;
+}
+
+#menuImagen button{
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    margin:5px;
+}
+
+.tienda-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
+}
+
+.card-oferta{
+    background-color:rgba(255,255,255,0.1);
+    width:230px;
+    color:white;
+    padding:20px;
+    border-radius:20px;
+    text-align:center;
+}
+
+.card-oferta button{
+    margin-top:10px;
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:orange;
+    cursor:pointer;
+}
+
+.filtros{
+    text-align:center;
+    margin-top:20px;
+}
+
+.filtros button{
+    margin:5px;
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.animacion-caja{
+    animation:shake 0.4s infinite;
+}
+
+@keyframes shake{
+    0%{transform:translateX(0px);}
+    25%{transform:translateX(5px);}
+    50%{transform:translateX(-5px);}
+    75%{transform:translateX(5px);}
+    100%{transform:translateX(0px);}
+}
+
+.musica-box{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+}
+
+.musica-box button{
+    padding:12px 20px;
+    border:none;
+    border-radius:15px;
+    cursor:pointer;
+    background:white;
+}
+
+</style>
+</head>
+<body>
+
+<div class="monedas-box" id="monedas">
+🪙 0
+</div>
+
+<div class="musica-box">
+<button onclick="toggleMusica()">
+🎵 Música
+</button>
+</div>
+
+<ul>
+<li><button onclick="mostrarSeccion('inicio')">Inicio</button></li>
+<li><button onclick="mostrarSeccion('coleccion')">Colección</button></li>
+<li><button onclick="mostrarSeccion('tienda')">Tienda</button></li>
+</ul>
+
+<div id="inicio" class="seccion activa">
+
+<h1>AnimalBox</h1>
+
+<div class="caja-principal">
+
+<button class="btn-recompensa" onclick="recompensaDiaria()">
+🎁 Recompensa Diaria
+</button>
+
+<br>
+
+<img id="animalImg" class="animal-img" src="https://placehold.co/240x240">
+
+<br>
+
+<button class="btn-abrir" onclick="abrirCaja()">
+📦 ABRIR CAJA
+</button>
+
+<div class="info">
+<p id="tiempo">⏳ Listo</p>
+</div>
+
+</div>
+
+</div>
+
+<div id="coleccion" class="seccion">
+
+<h1>Tu Colección</h1>
+
+<div class="filtros">
+<button onclick="filtrarCategoria('Todos')">Todos</button>
+<button onclick="filtrarCategoria('Mascotas')">Mascotas</button>
+<button onclick="filtrarCategoria('Salvajes')">Salvajes</button>
+<button onclick="filtrarCategoria('Marinos')">Marinos</button>
+<button onclick="filtrarCategoria('Aves')">Aves</button>
+</div>
+
+<div class="coleccion-grid" id="coleccionGrid"></div>
+
+</div>
+
+<div id="tienda" class="seccion">
+
+<h1>Tienda</h1>
+
+<div class="tienda-grid" id="tiendaOfertas"></div>
+
+</div>
+
+<div id="menuImagen">
+
+<img id="imagenGrande">
+
+<br><br>
+
+<button onclick="verCompleta()">
+👁️ Ver Completa
+</button>
+
+<button onclick="toggleFavorito()">
+⭐ Favorito
+</button>
+
+<button onclick="venderActual()">
+💸 Vender
+</button>
+
+<br><br>
+
+<button onclick="cerrarMenu()">
+❌ Cerrar
+</button>
+
+</div>
+
+<audio id="musica" loop>
+<source src="https://cdn.pixabay.com/audio/2022/10/25/audio_946482d24f.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+const animales = [
+
+{
+url:"https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=500",
+categoria:"Mascotas"
+},
+
+{
+url:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=500",
+categoria:"Mascotas"
+},
+
+{
+url:"https://images.unsplash.com/photo-1518717758536-85ae29035b6d?q=80&w=500",
+categoria:"Mascotas"
+},
+
+{
+url:"https://images.unsplash.com/photo-1450778869180-41d0601e046e?q=80&w=500",
+categoria:"Salvajes"
+},
+
+{
+url:"https://images.unsplash.com/photo-1501706362039-c6e80948f11f?q=80&w=500",
+categoria:"Salvajes"
+},
+
+{
+url:"https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=500",
+categoria:"Salvajes"
+},
+
+{
+url:"https://images.unsplash.com/photo-1520315342629-6ea920342047?q=80&w=500",
+categoria:"Marinos"
+},
+
+{
+url:"https://images.unsplash.com/photo-1504593811423-6dd665756598?q=80&w=500",
+categoria:"Marinos"
+},
+
+{
+url:"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?q=80&w=500",
+categoria:"Aves"
+},
+
+{
+url:"https://images.unsplash.com/photo-1516934024742-b461fba47600?q=80&w=500",
+categoria:"Aves"
+}
+
+];
+
+let monedas = 0;
+let tiempoCaja = 86400;
+let puedeAbrir = true;
+let tiempoFinal = null;
+let imagenSeleccionada = null;
+let elementoSeleccionado = null;
+let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+
+let coleccionGuardada =
+JSON.parse(localStorage.getItem("coleccion")) || [];
+
+const monedasTexto = document.getElementById("monedas");
+const tiempoTexto = document.getElementById("tiempo");
+const animalImg = document.getElementById("animalImg");
+const coleccionGrid = document.getElementById("coleccionGrid");
+const tiendaOfertas = document.getElementById("tiendaOfertas");
+const musica = document.getElementById("musica");
+
+const ofertas = [
+
+{precio:100,reduccion:2400},
+{precio:150,reduccion:4800},
+{precio:250,reduccion:7200},
+{precio:400,reduccion:10800},
+{precio:600,reduccion:14400},
+{precio:800,reduccion:18000},
+{precio:1000,reduccion:21600},
+{precio:1300,reduccion:25200},
+{precio:1600,reduccion:28800},
+{precio:2000,reduccion:32400},
+{precio:2400,reduccion:36000},
+{precio:2800,reduccion:39600},
+{precio:3200,reduccion:43200},
+{precio:3700,reduccion:46800},
+{precio:4200,reduccion:50400},
+{precio:4700,reduccion:54000},
+{precio:5300,reduccion:57600},
+{precio:6000,reduccion:61200},
+{precio:7000,reduccion:70000},
+{precio:8500,reduccion:80000}
+
+];
+
+function mostrarSeccion(id){
+
+    const secciones =
+    document.querySelectorAll(".seccion");
+
+    secciones.forEach(seccion => {
+
+        seccion.classList.remove("activa");
+
+    });
+
+    document.getElementById(id)
+    .classList.add("activa");
+
+}
+
+function abrirCaja(){
+
+    if(!puedeAbrir){
+
+        alert("Todavía no puedes abrir 😭");
+
+        return;
+    }
+
+    animalImg.classList.add("animacion-caja");
+
+    setTimeout(() => {
+
+        animalImg.classList.remove("animacion-caja");
+
+        const random =
+        animales[Math.floor(Math.random()*animales.length)];
+
+        animalImg.src = random.url;
+
+        monedas += 50;
+
+        actualizarMonedas();
+
+        const nuevaImg =
+        document.createElement("img");
+
+        nuevaImg.src = random.url;
+
+        nuevaImg.dataset.categoria = random.categoria;
+
+        if(favoritos.includes(random.url)){
+            nuevaImg.classList.add("favorita");
+        }
+
+        nuevaImg.onclick = function(){
+
+            abrirMenuImagen(random.url,nuevaImg);
+
+        };
+
+        coleccionGrid.prepend(nuevaImg);
+
+        coleccionGuardada.push({
+            url:random.url,
+            categoria:random.categoria
+        });
+
+        guardarDatos();
+
+        puedeAbrir = false;
+
+        iniciarTiempo();
+
+    },1500);
+
+}
+
+function iniciarTiempo(){
+
+    tiempoFinal =
+    Date.now() + (tiempoCaja * 1000);
+
+    localStorage.setItem(
+    "tiempoFinal",
+    tiempoFinal
+    );
+
+    actualizarTemporizador();
+
+}
+
+function actualizarTemporizador(){
+
+    const intervalo = setInterval(() => {
+
+        const ahora = Date.now();
+
+        let tiempoRestante =
+        Math.floor(
+        (tiempoFinal - ahora) / 1000
+        );
+
+        if(tiempoRestante <= 0){
+
+            clearInterval(intervalo);
+
+            puedeAbrir = true;
+
+            tiempoTexto.textContent =
+            "⏳ Listo";
+
+            localStorage.removeItem(
+            "tiempoFinal"
+            );
+
+            return;
+        }
+
+        actualizarTextoTiempo(
+        tiempoRestante
+        );
+
+    },1000);
+
+}
+
+function actualizarTextoTiempo(segundos){
+
+    const horas =
+    Math.floor(segundos / 3600);
+
+    const minutos =
+    Math.floor((segundos % 3600) / 60);
+
+    const secs =
+    segundos % 60;
+
+    tiempoTexto.textContent =
+    `⏳ ${horas}h ${minutos}m ${secs}s`;
+
+}
+
+function actualizarMonedas(){
+
+    monedasTexto.textContent =
+    `🪙 ${monedas}`;
+
+}
+
+function recompensaDiaria(){
+
+    const ultima =
+    localStorage.getItem("ultimaRecompensa");
+
+    const ahora = Date.now();
+
+    if(ultima){
+
+        const diferencia =
+        ahora - Number(ultima);
+
+        if(diferencia < 86400000){
+
+            alert("Ya reclamaste tu recompensa 😭");
+
+            return;
+        }
+
+    }
+
+    monedas += 100;
+
+    actualizarMonedas();
+
+    guardarDatos();
+
+    localStorage.setItem(
+    "ultimaRecompensa",
+    ahora
+    );
+
+    alert("Ganaste 100 monedas 😎");
+
+}
+
+function guardarDatos(){
+
+    localStorage.setItem(
+    "monedas",
+    monedas
+    );
+
+    localStorage.setItem(
+    "coleccion",
+    JSON.stringify(coleccionGuardada)
+    );
+
+    localStorage.setItem(
+    "tiempoCaja",
+    tiempoCaja
+    );
+
+    localStorage.setItem(
+    "favoritos",
+    JSON.stringify(favoritos)
+    );
+
+}
+
+function abrirMenuImagen(src,elemento){
+
+    imagenSeleccionada = src;
+
+    elementoSeleccionado = elemento;
+
+    document.getElementById(
+    "menuImagen"
+    ).style.display = "block";
+
+    document.getElementById(
+    "imagenGrande"
+    ).src = src;
+
+}
+
+function cerrarMenu(){
+
+    document.getElementById(
+    "menuImagen"
+    ).style.display = "none";
+
+}
+
+function verCompleta(){
+
+    window.open(imagenSeleccionada);
+
+}
+
+function toggleFavorito(){
+
+    if(favoritos.includes(imagenSeleccionada)){
+
+        favoritos = favoritos.filter(
+        fav => fav !== imagenSeleccionada
+        );
+
+        elementoSeleccionado.classList.remove(
+        "favorita"
+        );
+
+    }
+
+    else{
+
+        favoritos.push(imagenSeleccionada);
+
+        elementoSeleccionado.classList.add(
+        "favorita"
+        );
+
+    }
+
+    guardarDatos();
+
+}
+
+function venderActual(){
+
+    if(elementoSeleccionado){
+
+        elementoSeleccionado.remove();
+
+        monedas += 25;
+
+        actualizarMonedas();
+
+        coleccionGuardada =
+        coleccionGuardada.filter(
+        item => item.url !== imagenSeleccionada
+        );
+
+        favoritos = favoritos.filter(
+        fav => fav !== imagenSeleccionada
+        );
+
+        guardarDatos();
+
+        cerrarMenu();
+
+        alert("Imagen vendida 😎");
+
+    }
+
+}
+
+function crearOfertas(){
+
+    ofertas.forEach((oferta,index) => {
+
+        const card =
+        document.createElement("div");
+
+        card.classList.add("card-oferta");
+
+        const horas =
+        Math.floor(oferta.reduccion / 3600);
+
+        const mins =
+        Math.floor(
+        (oferta.reduccion % 3600)/60
+        );
+
+        card.innerHTML = `
+
+        <h2>Oferta ${index+1}</h2>
+
+        <p>
+        💰 ${oferta.precio} monedas
+        </p>
+
+        <p>
+        ⏳ -${horas}h ${mins}m
+        </p>
+
+        <button onclick="comprarOferta(${index})">
+        Comprar
+        </button>
+
+        `;
+
+        tiendaOfertas.appendChild(card);
+
+    });
+
+}
+
+function comprarOferta(index){
+
+    const oferta = ofertas[index];
+
+    if(monedas < oferta.precio){
+
+        alert("No tienes suficientes monedas 😭");
+
+        return;
+    }
+
+    monedas -= oferta.precio;
+
+    actualizarMonedas();
+
+    tiempoCaja -= oferta.reduccion;
+
+    if(tiempoCaja < 60){
+
+        tiempoCaja = 60;
+
+    }
+
+    guardarDatos();
+
+    alert("Tiempo reducido 😎");
+
+}
+
+function filtrarCategoria(categoria){
+
+    const imagenes =
+    coleccionGrid.querySelectorAll("img");
+
+    imagenes.forEach(img => {
+
+        if(categoria === "Todos"){
+
+            img.style.display = "block";
+
+        }
+
+        else if(img.dataset.categoria === categoria){
+
+            img.style.display = "block";
+
+        }
+
+        else{
+
+            img.style.display = "none";
+
+        }
+
+    });
+
+}
+
+function toggleMusica(){
+
+    if(musica.paused){
+
+        musica.play();
+
+    }
+
+    else{
+
+        musica.pause();
+
+    }
+
+}
+
+function cargarDatos(){
+
+    const monedasGuardadas =
+    localStorage.getItem("monedas");
+
+    const tiempoGuardado =
+    localStorage.getItem("tiempoCaja");
+
+    if(monedasGuardadas){
+
+        monedas =
+        Number(monedasGuardadas);
+
+    }
+
+    if(tiempoGuardado){
+
+        tiempoCaja =
+        Number(tiempoGuardado);
+
+    }
+
+    actualizarMonedas();
+
+    coleccionGuardada.forEach(item => {
+
+        const img =
+        document.createElement("img");
+
+        img.src = item.url;
+
+        img.dataset.categoria = item.categoria;
+
+        if(favoritos.includes(item.url)){
+            img.classList.add("favorita");
+        }
+
+        img.onclick = function(){
+
+            abrirMenuImagen(item.url,img);
+
+        };
+
+        if(favoritos.includes(item.url)){
+            coleccionGrid.prepend(img);
+        }
+
+        else{
+            coleccionGrid.appendChild(img);
+        }
+
+    });
+
+    const tiempoFinalGuardado =
+    localStorage.getItem("tiempoFinal");
+
+    if(tiempoFinalGuardado){
+
+        tiempoFinal =
+        Number(tiempoFinalGuardado);
+
+        const ahora = Date.now();
+
+        if(ahora < tiempoFinal){
+
+            puedeAbrir = false;
+
+            actualizarTemporizador();
+
+        }
+
+    }
+
+}
+
+crearOfertas();
+
+cargarDatos();
+
+</script>
+</body>
+</html>

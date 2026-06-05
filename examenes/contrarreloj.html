@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío Contrarreloj Extremo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #e8f5e9 0%, #cfd8dc 100%);
+            color: #2e7d32;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-sizing: border-box;
+            border: 1px solid #c8e6c9;
+            position: relative;
+        }
+
+        h2 {
+            color: #1b5e20;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        p {
+            color: #558b2f;
+            font-size: 16px;
+        }
+
+        /* Estilos del Menú de Selección */
+        .menu-categorias {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-categoria {
+            background-color: #f1f8e9;
+            color: #2e7d32;
+            border: 2px solid #a5d6a7;
+        }
+
+        .btn-categoria:hover {
+            background-color: #2e7d32;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Botones del Juego */
+        #btn-verificar {
+            background-color: #2e7d32;
+            color: white;
+            width: 100%;
+        }
+
+        #btn-verificar:hover {
+            background-color: #1b5e20;
+            transform: translateY(-2px);
+        }
+
+        #btn-saltar {
+            background-color: #78909c;
+            color: white;
+            width: 100%;
+        }
+
+        #btn-saltar:hover {
+            background-color: #607d8b;
+            transform: translateY(-2px);
+        }
+
+        /* Indicador de Tiempo Especial */
+        .reloj-container {
+            font-size: 24px;
+            font-weight: bold;
+            color: #c62828;
+            background-color: #ffebee;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 2px solid #ffcdd2;
+        }
+
+        .puntos-reloj {
+            font-size: 18px;
+            color: #1b5e20;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin: 25px 0;
+        }
+
+        input {
+            padding: 14px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 2px solid #a5d6a7;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #fafafa;
+            color: #1b5e20;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: #2e7d32;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(46, 125, 50, 0.2);
+            outline: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .resultado {
+            margin-top: 25px;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .correcto { 
+            color: #1b5e20; 
+            background-color: #e8f5e9;
+            border: 1px solid #a5d6a7;
+        }
+
+        .incorrecto { 
+            color: #c62828; 
+            background-color: #ffebee;
+            border: 1px solid #ffcdd2;
+        }
+
+        .btn-regresar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #ffffff;
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #a5d6a7;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .btn-regresar:hover {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            transform: translateX(-3px);
+            box-shadow: 0 6px 12px rgba(46, 125, 50, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Botón para regresar al menú principal -->
+<a href="inicio.html" class="btn-regresar">⬅ Regresar</a>
+
+<div class="container">
+    
+    <!-- Pantalla de Selección de Categoría -->
+    <div id="pantalla-menu">
+        <h2>⏱️ Desafío Contrarreloj Extremo</h2>
+        <p>Tienes 200 segundos base. <br>Cada acierto te da <strong>+3s</strong>. Cada fallo o salto te quita <strong>-5s</strong>.</p>
+        <p>Elige una categoría para empezar a jugar rápido:</p>
+        
+        <div class="menu-categorias">
+            <button class="btn-categoria" onclick="comenzarJuego('marcas')">🏷️ Logos y Marcas</button>
+            <button class="btn-categoria" onclick="comenzarJuego('videojuegos')">🎮 Videojuegos</button>
+            <button class="btn-categoria" onclick="comenzarJuego('cine')">🎬 Cine y Películas</button>
+            <button class="btn-categoria" onclick="comenzarJuego('anime')">⛩️ Anime y Manga</button>
+        </div>
+    </div>
+
+    <!-- Pantalla del Examen Activo -->
+    <div id="pantalla-juego" class="hidden">
+        <div class="reloj-container">⏱️ <span id="tiempo-reloj">200</span>s</div>
+        <div class="puntos-reloj">Aciertos: <span id="marcador-aciertos">0</span></div>
+        
+        <h2 id="pregunta-texto">Pregunta</h2>
+        
+        <div class="quiz-box">
+            <div class="input-group">
+                <input type="text" id="input-respuesta" placeholder="Escribe tu respuesta aquí y presiona Enter" autocomplete="off">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button id="btn-verificar" onclick="evaluarRespuesta()">Responder</button>
+                <button id="btn-saltar" onclick="saltarPregunta()">Saltar (-5s)</button>
+            </div>
+            <div id="resultado-feedback" class="resultado hidden"></div>
+        </div>
+    </div>
+
+    <!-- Pantalla de Fin de Juego -->
+    <div id="pantalla-fin" class="hidden">
+        <h2>⏱️ ¡Tiempo Agotado!</h2>
+        <p>El reloj llegó a cero de forma implacable.</p>
+        <div class="resultado correcto" style="font-size: 22px; margin-bottom: 25px;">
+            Respuestas Correctas Totales: <strong id="total-aciertos" style="font-size: 28px;">0</strong>
+        </div>
+        <button id="btn-verificar" onclick="regresarAlMenu()">Volver a Jugar</button>
+    </div>
+
+</div>
+
+<script>
+    // Base de datos integrada con las 4 categorías solicitadas
+    const basePreguntas = {
+        marcas: [
+            { pista: 'Eslogan: "Just Do It"', respuesta: "nike" },
+            { pista: 'Su logotipo es una manzana mordida', respuesta: "apple" },
+            { pista: 'Famosa marca de papas con el eslogan: "A que no puedes comer solo una"', respuesta: "sabritas" },
+            { pista: 'Marca de refresco de cola negra más famosa del mundo', respuesta: "coca cola" },
+            { pista: 'Eslogan gastronómico: "Me encanta"', respuesta: "mcdonalds" }
+        ],
+        videojuegos: [
+            { pista: '¿A qué saga pertenece el personaje "Master Chief"?', respuesta: "halo" },
+            { pista: '¿Cuál es la empresa dueña del erizo azul "Sonic"?', respuesta: "sega" },
+            { pista: '¿A qué saga de Nintendo pertenece el héroe "Link"?', respuesta: "zelda" },
+            { pista: '¿Cómo se llama el fontanero bigotudo mascota de Nintendo?', respuesta: "mario bros" },
+            { pista: '¿Qué consola exclusiva tiene al héroe "Kratos" de God of War?', respuesta: "playstation" }
+        ],
+        cine: [
+            { pista: 'Actor que interpreta a "Tony Stark / Iron Man"', respuesta: "robert downey jr" },
+            { pista: 'Actor que da vida al capitán "Jack Sparrow"', respuesta: "johnny depp" },
+            { pista: '¿Qué actor interpreta a "Wolverine" en X-Men?', respuesta: "hugh jackman" },
+            { pista: '¿Cómo se llama el mago protagonista de la saga de Hogwarts?', respuesta: "harry potter" },
+            { pista: 'Actor protagonista de Misión Imposible famoso por hacer sus propias acrobacias', respuesta: "tom cruise" }
+        ],
+        anime: [
+            { pista: '¿En qué anime se usa la técnica del "Rasengan"?', respuesta: "naruto" },
+            { pista: '¿A qué legendario anime pertenece la transformación "Super Saiyajin"?', respuesta: "dragon ball" },
+            { pista: '¿En qué serie el protagonista estira su cuerpo gracias a la "Gomu Gomu no Mi"?', respuesta: "one piece" },
+            { pista: 'Anime donde usan una libreta negra para escribir nombres y eliminar personas', respuesta: "death note" },
+            { pista: '¿Cómo se llama el anime donde cazan demonios usando espadas con respiraciones?', respuesta: "demon slayer" }
+        ]
+    };
+
+    let preguntasActuales = [];
+    let indicePregunta = 0;
+    let aciertos = 0;
+    let tiempoRestante = 200;
+    let intervaloTiempo = null;
+
+    const elInput = document.getElementById('input-respuesta');
+    const elFeedback = document.getElementById('resultado-feedback');
+
+    // Escuchar la tecla Enter para responder velozmente
+    elInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') evaluarRespuesta();
+    });
+
+    function normalizarTexto(texto) {
+        return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, "").trim();
+    }
+
+    function comenzarJuego(categoria) {
+        // Clonar y mezclar preguntas de la categoría para que no salgan siempre igual
+        preguntasActuales = [...basePreguntas[categoria]].sort(() => Math.random() - 0.5);
+        
+        indicePregunta = 0;
+        aciertos = 0;
+        tiempoRestante = 200;
+        
+        document.getElementById('marcador-aciertos').textContent = aciertos;
+        document.getElementById('tiempo-reloj').textContent = tiempoRestante;
+        elFeedback.classList.add('hidden');
+
+        document.getElementById('pantalla-menu').classList.add('hidden');
+        document.getElementById('pantalla-juego').classList.remove('hidden');
+        
+        desplegarPregunta();
+        
+        // Arrancar el cronómetro implacable
+        intervaloTiempo = setInterval(() => {
+            tiempoRestante--;
+            if (tiempoRestante <= 0) {
+                tiempoRestante = 0;
+                finalizarJuego();
+            }
+            document.getElementById('tiempo-reloj').textContent = tiempoRestante;
+        }, 100); // Actualización veloz cada décima para dar fluidez
+    }
+
+    function desplegarPregunta() {
+        elInput.value = "";
+        elInput.focus();
+        
+        // Si se acaban las preguntas de la lista, volvemos a mezclarlas para bucle infinito
+        if (indicePregunta >= preguntasActuales.length) {
+            preguntasActuales.sort(() => Math.random() - 0.5);
+            indicePregunta = 0;
+        }
+
+        document.getElementById('pregunta-texto').textContent = preguntasActuales[indicePregunta].pista;
+    }
+
+    function evaluarRespuesta() {
+        const respuestaUsuario = normalizarTexto(elInput.value);
+        const respuestaCorrecta = preguntasActuales[indicePregunta].respuesta;
+
+        if (!respuestaUsuario) return;
+
+        if (respuestaUsuario === respuestaCorrecta) {
+            aciertos++;
+            tiempoRestante += 3; // Bonificación de tiempo del contrarreloj
+            document.getElementById('marcador-aciertos').textContent = aciertos;
+            
+            mostrarFeedback("¡Correcto! +3s", "correcto");
+            indicePregunta++;
+            setTimeout(desplegarPregunta, 600);
+        } else {
+            tiempoRestante -= 5; // Penalización del contrarreloj
+            if (tiempoRestante < 0) tiempoRestante = 0;
+            document.getElementById('tiempo-reloj').textContent = tiempoRestante;
+            
+            mostrarFeedback("Incorrecto -5s", "incorrecto");
+            elInput.value = "";
+            elInput.focus();
+        }
+    }
+
+    function saltarPregunta() {
+        tiempoRestante -= 5; // Penalización por usar el escape
+        if (tiempoRestante < 0) tiempoRestante = 0;
+        document.getElementById('tiempo-reloj').textContent = tiempoRestante;
+
+        mostrarFeedback(`Te la saltaste. Era: ${preguntasActuales[indicePregunta].respuesta.toUpperCase()}`, "incorrecto");
+        indicePregunta++;
+        setTimeout(desplegarPregunta, 1000);
+    }
+
+    function mostrarFeedback(texto, clase) {
+        elFeedback.textContent = texto;
+        elFeedback.className = `resultado ${clase}`;
+        elFeedback.classList.remove('hidden');
+        if (clase === "correcto") {
+            // Ocultar rápido si es correcto para no estorbar
+            setTimeout(() => elFeedback.classList.add('hidden'), 600);
+        }
+    }
+
+    function finalizarJuego() {
+        clearInterval(intervaloTiempo);
+        document.getElementById('total-aciertos').textContent = aciertos;
+        document.getElementById('pantalla-juego').classList.add('hidden');
+        document.getElementById('pantalla-fin').classList.remove('hidden');
+    }
+
+    function regresarAlMenu() {
+        document.getElementById('pantalla-fin').classList.add('hidden');
+        document.getElementById('pantalla-menu').classList.remove('hidden');
+    }
+</script>
+</body>
+</html>

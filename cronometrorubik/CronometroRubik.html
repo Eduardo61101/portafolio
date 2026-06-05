@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cube Timer Pro - Estudio Sermiteop</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0f0f0f;
+            color: white;
+            user-select: none; /* Evita que seleccionen y copien el texto */
+        }
+
+        .timer-box { text-align: center; margin-bottom: 20px; }
+        #display-seconds { font-size: 8rem; font-weight: bold; font-family: 'Courier New', monospace; line-height: 1; }
+        #display-minutes { font-size: 2.5rem; color: #888; font-family: monospace; margin-top: 10px; }
+
+        .ready { color: #ff4d4d !important; } 
+        .go { color: #2ecc71 !important; }    
+        .running { color: #00ffcc !important; }
+        .paused { color: #f1c40f !important; }
+
+        #btn-reset {
+            display: none;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .records-list {
+            width: 100%;
+            max-width: 450px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #252525;
+            border-radius: 8px;
+            border-left: 4px solid #00ffcc;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .hint { color: #444; margin-bottom: 10px; font-size: 0.9rem; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="hint">ESTUDIO SERMITEOP | PROTEGIDO</div>
+    
+    <div class="timer-box">
+        <div id="display-seconds">0.00</div>
+        <div id="display-minutes">00:00.00</div>
+    </div>
+
+    <button id="btn-reset" onclick="saveAndReset()">GUARDAR Y REINICIAR</button>
+    <div class="records-list" id="recordsList"></div>
+
+    <script>
+        // --- PROTECCIÓN ANTICUBRE ---
+        document.onkeydown = function(e) {
+            // Bloquear F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S
+            if(e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && e.keyCode == 73) || e.keyCode == 85 || e.keyCode == 83)) {
+                return false;
+            }
+        };
+
+        // --- LÓGICA DEL CRONÓMETRO ---
+        let startTime, elapsedTime = 0, timerInterval;
+        let isRunning = false, isReady = false, holdTimeout;
+        let savedRecords = JSON.parse(localStorage.getItem('cubeRecords')) || [];
+
+        const displaySec = document.getElementById("display-seconds");
+        const displayMin = document.getElementById("display-minutes");
+        const btnReset = document.getElementById("btn-reset");
+        const list = document.getElementById("recordsList");
+
+        window.onload = renderRecords;
+
+        function formatTime(ms) {
+            let totalSeconds = (ms / 1000).toFixed(2);
+            let minutes = Math.floor(ms / 60000);
+            let secondsStr = ((ms % 60000) / 1000).toFixed(2);
+            let minStr = minutes.toString().padStart(2, '0');
+            return { min: minutes, secRest: secondsStr, onlySec: totalSeconds, fullTime: `${minStr}:${secondsStr.padStart(5, '0')}` };
+        }
+
+        window.addEventListener("keydown", function(e) {
+            if (e.code !== "Space") return;
+            e.preventDefault();
+            if (isRunning) pauseTimer();
+            else if (!isReady) {
+                isReady = true;
+                displaySec.className = "ready";
+                holdTimeout = setTimeout(() => { displaySec.className = "go"; }, 350);
+            }
+        });
+
+        window.addEventListener("keyup", function(e) {
+            if (e.code !== "Space") return;
+            if (isReady && !isRunning) {
+                if (displaySec.className === "go") startTimer();
+                else displaySec.className = elapsedTime > 0 ? "paused" : "";
+                clearTimeout(holdTimeout);
+                isReady = false;
+            }
+        });
+
+        function startTimer() {
+            isRunning = true;
+            btnReset.style.display = "none";
+            displaySec.className = "running";
+            startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(() => {
+                elapsedTime = Date.now() - startTime;
+                const data = formatTime(elapsedTime);
+                displaySec.innerText = data.onlySec;
+                displayMin.innerText = data.fullTime;
+            }, 10);
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            displaySec.className = "paused";
+            btnReset.style.display = "block";
+        }
+
+        function saveAndReset() {
+            const data = formatTime(elapsedTime);
+            let mensaje = data.min > 0 ? `tardaste <b>${data.min}min</b> con <b>${data.secRest}seg</b>` : `tardaste <b>${data.secRest}seg</b>`;
+            savedRecords.unshift(mensaje);
+            localStorage.setItem('cubeRecords', JSON.stringify(savedRecords));
+            renderRecords();
+            elapsedTime = 0;
+            displaySec.innerText = "0.00";
+            displayMin.innerText = "00:00.00";
+            displaySec.className = "";
+            btnReset.style.display = "none";
+        }
+
+        function renderRecords() {
+            list.innerHTML = "";
+            savedRecords.forEach((rec, index) => {
+                const item = document.createElement("div");
+                item.className = "record-item";
+                item.innerHTML = `<div>${rec}</div><button class="btn-delete" onclick="deleteRecord(${index})">Borrar</button>`;
+                list.appendChild(item);
+            });
+        }
+
+        function deleteRecord(index) {
+            savedRecords.splice(index, 1);
+            localStorage.setItem('cubeRecords', JSON.stringify(savedRecords));
+            renderRecords();
+        }
+    </script>
+</body>
+</html>
