@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafolio de Eduardo Araujo Quiroz</title>
+
+<style>
+/* --- VARIABLES DE COLORES INTERACTIVAS (TEMA POR DEFECTO: NEÓN) --- */
+:root {
+    --fondo: #0d0221;
+    --texto: #ffffff;
+    --primario: #a124db;
+    --secundario: #7B1FA2;
+    --tarjetas: #160f29;
+    --gradiente: linear-gradient(135deg, #8a2be2, #4a00e0);
+    --texto-barra: #ffffff;
+    --borde-visitas: #a124db;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background: var(--fondo);
+    color: var(--texto);
+    transition: background 0.4s, color 0.4s;
+}
+
+header{
+    background: var(--gradiente);
+    color:white;
+    text-align:center;
+    padding:220px 20px 80px;
+    position: relative;
+    transition: background 0.4s;
+}
+
+.perfil{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    object-fit:cover;
+    border:6px solid white;
+    box-shadow:0 0 20px rgba(0,0,0,.25);
+    margin-bottom:20px;
+}
+
+.nombre{
+    font-size:2.5rem;
+    margin-bottom:10px;
+}
+
+.subtitulo{
+    font-size:1.1rem;
+}
+
+section{
+    max-width:1000px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+.titulo{
+    text-align:center;
+    font-size:2rem;
+    margin-bottom:30px;
+}
+
+.sobre-mi{
+    background: var(--tarjetas);
+    color: var(--texto);
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 0 15px rgba(0,0,0,.3);
+    line-height:1.8;
+    transition: background 0.4s, color 0.4s;
+}
+
+.skills{
+    display:grid;
+    gap:20px;
+}
+
+.skill{
+    background: var(--tarjetas);
+    color: var(--texto);
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.2);
+    transition: background 0.4s, color 0.4s;
+}
+
+.barra{
+    width:100%;
+    height:20px;
+    background:#444;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:8px;
+}
+
+.progreso{
+    height:100%;
+    background: var(--primario);
+    transition: background 0.4s, width 0.5s;
+}
+
+.proyectos{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.tarjeta{
+    background: var(--tarjetas);
+    color: var(--texto);
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 0 10px rgba(0,0,0,.2);
+    transition:.3s;
+}
+
+.tarjeta:hover{
+    transform:translateY(-5px);
+}
+
+.tarjeta h3{
+    margin-bottom:10px;
+}
+
+.redes{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.redes a{
+    text-decoration:none;
+    background: var(--primario);
+    color: white;
+    padding:12px 20px;
+    border-radius:10px;
+    transition:.3s;
+    font-weight: bold;
+}
+
+.redes a:hover{
+    background: var(--secundario);
+}
+
+footer{
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:40px 20px;
+    margin-top:40px;
+}
+
+.parpadeo {
+    animation: efecto-blink 1s infinite;
+}
+
+@keyframes efecto-blink {
+    0% { opacity: 1; }
+    49% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+h6{
+    color: yellow;
+    margin-bottom: 15px;
+}
+
+.advertencia-codigo {
+    color: #ffcc00;
+    font-size: 13px;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+/* --- BARRA SUPERIOR Y SELECTOR DE TEMAS --- */
+#barraSuperior{
+    position:absolute;
+    top:20px;
+    left:0;
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.contenedor-temas {
+    display: flex;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--borde-visitas);
+}
+
+.btn-paleta {
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-paleta:hover {
+    transform: scale(1.2);
+}
+
+#btnNeon { background: #a124db; border: 2px solid white; }
+#btnHacker { background: #00FF00; border: 2px solid white; }
+#btnCyber { background: #ff0055; border: 2px solid #00f7ff; }
+
+#visitas{
+    color: var(--texto-barra);
+    background: var(--tarjetas);
+    padding:10px 15px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.5);
+    border: 1px solid var(--borde-visitas);
+    font-weight: bold;
+}
+
+/* --- GALERÍA Y VISOR CON LIKES --- */
+.galeria{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.galeria img{
+    width:100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,.3);
+    transition:0.3s;
+    cursor:pointer;
+}
+
+.galeria img:hover{
+    transform:scale(1.03);
+}
+
+#visor{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.92);
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+}
+
+#visor img{
+    max-width:85%;
+    max-height:75%;
+    border-radius:15px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.1);
+}
+
+.contenedor-likes {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #111;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 2px solid var(--primario);
+}
+
+#btnLike {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#btnLike:active {
+    transform: scale(1.3);
+}
+
+#contadorLikes {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#btnCerrarVisor {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: none;
+    font-size: 20px;
+    padding: 5px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<header>
+<div id="barraSuperior">
+    <!-- SELECTOR DE TRES TEMAS -->
+    <div class="contenedor-temas">
+        <button id="btnNeon" class="btn-paleta" title="Tema Neón"></button>
+        <button id="btnHacker" class="btn-paleta" title="Tema Hacker"></button>
+        <button id="btnCyber" class="btn-paleta" title="Tema Cyberpunk"></button>
+    </div>
+
+    <div id="visitas">👀 Visitas: 0</div>
+</div>
+
+<img class="perfil" src="imagenes/p5.png" alt="Foto de Perfil">
+
+<p id="reloj" style="margin-top: 10px; font-weight: bold; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);"></p>
+
+<h1 class="nombre">Eduardo Araujo Quiroz</h1>
+
+<p class="subtitulo">
+🇲🇽 Nuevo Laredo, Tamaulipas | 💻 Programación | 🎨 Blender | 🎮 Roblox Studio | ➕ Y MÁS
+</p>
+</header>
+
+<section>
+<h2 class="titulo">Sobre mí</h2>
+<div class="sobre-mi">
+<p>Hola, soy Eduardo.</p>
+<p>Edad: <span id="edad"></span> años</p>
+<p>
+Soy estudiante y me gusta aprender cosas nuevas relacionadas con la tecnología, la programación y la creatividad.
+Me gusta crear páginas web, desarrollar proyectos en Roblox Studio, usar Blender para modelado 3D, escribir historias, diseñar personajes y experimentar con nuevas ideas.
+También disfruto leer libros, mangas y cómics, además de crear y escuchar música.
+Siempre estoy buscando aprender algo nuevo y mejorar mis habilidades mediante proyectos personales.
+</p>
+</div>
+</section>
+
+<section>
+<h2 class="titulo">Habilidades</h2>
+<div class="skills">
+<div class="skill">HTML<div class="barra"><div class="progreso" style="width:90%"></div></div></div>
+<div class="skill">CSS<div class="barra"><div class="progreso" style="width:85%"></div></div></div>
+<div class="skill">JavaScript<div class="barra"><div class="progreso" style="width:5%"></div></div></div>
+<div class="skill">Python<div class="barra"><div class="progreso" style="width:15%"></div></div></div>
+<div class="skill">Blender<div class="barra"><div class="progreso" style="width:77%"></div></div></div>
+<div class="skill">Roblox Studio<div class="barra"><div class="progreso" style="width:85%"></div></div></div>
+<div class="skill">Firebase<div class="barra"><div class="progreso" style="width:78%"></div></div></div>
+<div class="skill">GitHub<div class="barra"><div class="progreso" style="width:75%"></div></div></div>
+<div class="skill">Diseño de Interfaces<div class="barra"><div class="progreso" style="width:70%"></div></div></div>
+<div class="skill">Escritura de Historias<div class="barra"><div class="progreso" style="width:100%"></div></div></div>
+<div class="skill">Creación de Personajes<div class="barra"><div class="progreso" style="width:98%"></div></div></div>
+<div class="skill">Modelado 3D<div class="barra"><div class="progreso" style="width:48%"></div></div></div>
+<div class="skill">Composición Musical<div class="barra"><div class="progreso" style="width:68%"></div></div></div>
+</div>
+</section>
+
+<section>
+<h2 class="titulo">Intereses</h2>
+<div class="sobre-mi">
+<p>
+💻 Programación Web<br><br>
+🎮 Desarrollo de Juegos<br><br>
+🎨 Blender y Modelado 3D<br><br>
+🤖 Inteligencia Artificial<br><br>
+🎵 Crear y Escuchar Música<br><br>
+📚 Lectura de Libros<br><br>
+📖 Manga<br><br>
+🦸 Cómics<br><br>
+🌐 Tecnología<br><br>
+✍️ Escritura de Historias<br><br>
+🎭 Diseño de Personajes<br><br>
+🚀 Creación de Proyectos
+</p>
+</div>
+</section>
+
+<section>
+<h2 class="titulo">Mis Proyectos</h2>
+<div class="proyectos">
+<div class="tarjeta">
+<h3>...</h3>
+<p>PRÓXIMAMENTE SE MOSTRARÁN LOS PROYECTOS</p>
+</div>
+</div>
+</section>
+
+<section>
+<h2 class="titulo">Mis Renders de Blender</h2>
+<div class="galeria">
+<img src="Renders/render1.png" alt="render1">
+<img src="Renders/render2.png" alt="render2">
+<img src="Renders/render3.png" alt="render3">
+<img src="Renders/render4.png" alt="render4">
+</div>
+</section>
+
+<div id="mensajeAgradecimiento" class="parpadeo" style="text-align: center; display: none; margin-top: 15px; font-weight: bold;">
+    Se descargó el archivo. Si gustas, puedes apoyarme siguiéndome en mis redes sociales.
+</div>
+
+<section>
+<h2 class="titulo">Redes Sociales</h2>
+<div class="redes">
+<a href="https://instagram.com/eduardo_araujo_q" target="_blank">📸 Instagram</a>
+<a href="https://tiktok.com/@soloesunnombree" target="_blank">🎵 TikTok</a>
+<a href="https://www.youtube.com/@Jelpro776" target="_blank">▶️ YouTube</a>
+<a href="https://twitch.tv/jelpro_77" target="_blank">🎥 Twitch</a>
+</div>
+</section>
+
+<footer>
+2026 Eduardo Araujo Quiroz<br><br>
+Portafolio Personal Estudio Sermiteop<br><br>
+ESTA PÁGINA WEB FUE CREADA POR EDUARDO ARAUJO QUIROZ Y SE USARON LOS LENGUAJES DE PROGRAMACIÓN: <br> "HTML, CSS Y JavaScript"
+<br><br>
+<h6>Puedes tener el código fuente de esta página web simplemente descargando el archivo .txt...</h6>
+
+<!-- BOTÓN INTELIGENTE CON AUTOGENERADOR BLOB -->
+<a href="#" id="botonDescarga" style="color: var(--primario); text-decoration: none; font-weight: bold; background: rgba(255,255,255,0.05); padding: 12px 22px; border-radius: 8px; border: 1px dashed var(--primario); display: inline-block;">
+    Descargar Archivo .txt
+</a>
+
+
+<!-- VISOR DINÁMICO DE IMÁGENES CON BOTÓN DE ME GUSTA INDIVIDUAL -->
+<div id="visor" onclick="cerrarVisor()">
+    <button id="btnCerrarVisor">✕</button>
+    <img id="imagenGrande" alt="Visualizador">
+    <div class="contenedor-likes" onclick="event.stopPropagation()">
+        <button id="btnLike">❤️</button>
+        <span id="contadorLikes">Likes: 0</span>
+    </div>
+</div>
+</footer>
+
+<script>
+// --------------------------------------------------------------------------
+// GENERADOR AUTOMÁTICO DE CÓDIGO EN TIEMPO REAL (TRUCO BLOB)
+// --------------------------------------------------------------------------
+document.getElementById('botonDescarga').addEventListener('click', function(evento) {
+    evento.preventDefault(); 
+    
+    // Captura todo el código vivo de esta misma página
+    const codigoCompleto = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    
+    // Lo empaqueta en un objeto de texto plano
+    const blob = new Blob([codigoCompleto], { type: "text/plain;charset=utf-8" });
+    
+    // Crea la descarga instantánea en el aire sin requerir archivos en la carpeta
+    const enlace = document.createElement("a");
+    enlace.href = URL.createObjectURL(blob);
+    enlace.download = "HTML(cambialo a .html).txt";
+    
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+
+    // Muestra el mensaje de agradecimiento parpadeante
+    setTimeout(function() {
+        document.getElementById('mensajeAgradecimiento').style.display = 'block';
+    }, 500);
+});
+
+// --------------------
+// CONTADOR DE VISITAS
+// --------------------
+let visitas = localStorage.getItem("visitas") || 0;
+visitas++;
+localStorage.setItem("visitas", visitas);
+document.getElementById("visitas").textContent = "👀 Visitas: " + visitas;
+
+// --------------------
+// SISTEMA DE 3 TEMAS AVANZADOS
+// --------------------
+const temas = {
+    neon: {
+        fondo: "#0d0221", texto: "#ffffff", primario: "#a124db", 
+        secundario: "#7B1FA2", tarjetas: "#160f29", textoBarra: "#ffffff",
+        bordeVisitas: "#a124db", gradiente: "linear-gradient(135deg, #8a2be2, #4a00e0)"
+    },
+    hacker: {
+        fondo: "#000000", texto: "#00FF00", primario: "#008F11", 
+        secundario: "#005f0c", tarjetas: "#0a0a0a", textoBarra: "#00FF00",
+        bordeVisitas: "#00FF00", gradiente: "linear-gradient(135deg, #000000, #111111)"
+    },
+    cyberpunk: {
+        fondo: "#0b0e14", texto: "#00f7ff", primario: "#ff0055", 
+        secundario: "#b3003b", tarjetas: "#181d26", textoBarra: "#ff0055",
+        bordeVisitas: "#00f7ff", gradiente: "linear-gradient(135deg, #ff0055, #00f7ff)"
+    }
+};
+
+function cambiarTema(nombreTema) {
+    const t = temas[nombreTema];
+    document.documentElement.style.setProperty('--fondo', t.fondo);
+    document.documentElement.style.setProperty('--texto', t.texto);
+    document.documentElement.style.setProperty('--primario', t.primario);
+    document.documentElement.style.setProperty('--secundario', t.secundario);
+    document.documentElement.style.setProperty('--tarjetas', t.tarjetas);
+    document.documentElement.style.setProperty('--texto-barra', t.textoBarra);
+    document.documentElement.style.setProperty('--borde-visitas', t.bordeVisitas);
+    document.documentElement.style.setProperty('--gradiente', t.gradiente);
+    localStorage.setItem("tema_elegido", nombreTema);
+}
+
+document.getElementById("btnNeon").addEventListener("click", () => cambiarTema("neon"));
+document.getElementById("btnHacker").addEventListener("click", () => cambiarTema("hacker"));
+document.getElementById("btnCyber").addEventListener("click", () => cambiarTema("cyberpunk"));
+
+const temaGuardado = localStorage.getItem("tema_elegido") || "neon";
+cambiarTema(temaGuardado);
+
+// --------------------
+// EDAD AUTOMÁTICA
+// --------------------
+const edadElemento = document.getElementById("edad");
+if(edadElemento){
+    const nacimiento = new Date("2012-04-12");
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    if(hoy.getMonth() < nacimiento.getMonth() || (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() < nacimiento.getDate())){
+        edad--;
+    }
+    edadElemento.textContent = edad;
+}
+
+// RELOJ EN TIEMPO REAL
+setInterval(() => {
+    document.getElementById("reloj").textContent = "🕒 " + new Date().toLocaleTimeString("es-MX");
+}, 1000);
+
+// --------------------
+// GALERÍA, VISOR Y SISTEMA DE LIKES INDIVIDUALES
+// --------------------
+let idImagenActual = "";
+let baseDatosLikes = JSON.parse(localStorage.getItem("renders_likes")) || {};
+
+document.querySelectorAll(".galeria img").forEach(img => {
+    img.addEventListener("click", (e) => {
+        e.stopPropagation();
+        idImagenActual = img.getAttribute("alt"); 
+        
+        document.getElementById("visor").style.display = "flex";
+        document.getElementById("imagenGrande").src = img.src;
+        
+        let likesActuales = baseDatosLikes[idImagenActual] || 0;
+        document.getElementById("contadorLikes").textContent = "Likes: " + likesActuales;
+    });
+});
+
+document.getElementById("btnLike").addEventListener("click", (e) => {
+    e.stopPropagation(); 
+    if (idImagenActual) {
+        if(!baseDatosLikes[idImagenActual]) {
+            baseDatosLikes[idImagenActual] = 0;
+        }
+        baseDatosLikes[idImagenActual]++;
+        
+        localStorage.setItem("renders_likes", JSON.stringify(baseDatosLikes));
+        document.getElementById("contadorLikes").textContent = "Likes: " + baseDatosLikes[idImagenActual];
+    }
+});
+
+function cerrarVisor(){
+    document.getElementById("visor").style.display = "none";
+}
+</script>
+
+</body>
+</html>
