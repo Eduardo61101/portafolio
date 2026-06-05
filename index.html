@@ -478,8 +478,8 @@ Siempre estoy buscando aprender algo nuevo y mejorar mis habilidades mediante pr
 
 <footer>
 2026 Eduardo Araujo Quiroz<br><br>
-Portafolio Personal Estudio Sermiteop Version 47.59 Ultima version <br><br>
-ESTA PÁGINA WEB FUE CREADA POR EDUARDO ARAUJO QUIROZ Y SE USARON LOS LENGUAJES DE PROGRAMACIÓN: <br> "HTML, CSS Y JavaScript" Este proyecto se inició el 15/04/2025 y finaliza el 04/06/2026 en su Última versión 47.59
+Portafolio Personal Estudio Sermiteop Version 47.63 Ultima version <br><br>
+ESTA PÁGINA WEB FUE CREADA POR EDUARDO ARAUJO QUIROZ Y SE USARON LOS LENGUAJES DE PROGRAMACIÓN: <br> "HTML, CSS Y JavaScript" Este proyecto se inició el 15/04/2025 y finaliza el 04/06/2026 en su Última versión 47.63
 <br><br>
     
 <h6>Puedes tener el código fuente de esta página web simplemente descargando el archivo .txt...</h6>
@@ -606,6 +606,15 @@ document.querySelectorAll(".galeria img").forEach(img => {
 document.getElementById("btnLike").addEventListener("click", (e) => {
     e.stopPropagation(); 
     if (idImagenActual) {
+        // Creamos una clave única para saber si ya le dio like a ESTA imagen en este dispositivo
+        let registroLikes = JSON.parse(localStorage.getItem("mis_likes_dados")) || {};
+        
+        if (registroLikes[idImagenActual]) {
+            alert("¡Ya le diste Me Gusta a este render! 😉");
+            return; // Detiene el código para que no envíe nada a Python
+        }
+
+        // Si no le ha dado like, enviamos la petición a Python
         fetch(`${SERVIDOR_URL}/api/like`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -617,15 +626,13 @@ document.getElementById("btnLike").addEventListener("click", (e) => {
                 if (!window.likesGlobales) window.likesGlobales = {};
                 window.likesGlobales[idImagenActual] = datos.likes_actuales;
                 document.getElementById("contadorLikes").textContent = "Likes: " + datos.likes_actuales;
+                
+                // Guardamos en la memoria local que a este usuario ya le gustó esta imagen
+                registroLikes[idImagenActual] = true;
+                localStorage.setItem("mis_likes_dados", JSON.stringify(registroLikes));
             }
         })
-        .catch(err => {
-            console.log("No se pudo enviar el like al servidor. Guardando en local.");
-            let respaldos = JSON.parse(localStorage.getItem("likes_respaldo")) || {};
-            respaldos[idImagenActual] = (respaldos[idImagenActual] || 0) + 1;
-            localStorage.setItem("likes_respaldo", JSON.stringify(respaldos));
-            document.getElementById("contadorLikes").textContent = "Likes: " + respaldos[idImagenActual];
-        });
+        .catch(err => console.error("Error:", err));
     }
 });
 
