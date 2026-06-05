@@ -721,13 +721,70 @@ function cerrarVisor(){ document.getElementById("visor").style.display = "none";
     }, 500);
 });
 
+// URL de tu servidor local de Python
+const SERVIDOR_URL = "http://127.0.0.1:5000";
+
 // --------------------
-// CONTADOR DE VISITAS
+// CONTADOR DE VISITAS GLOBAL CON PYTHON
 // --------------------
-let visitas = localStorage.getItem("visitas") || 0;
-visitas++;
-localStorage.setItem("visitas", visitas);
-document.getElementById("visitas").textContent = "👀 Visitas: " + visitas;
+// Al cargar la página, le avisamos al servidor de Python para que sume la visita
+fetch(`${SERVIDOR_URL}/api/visita`, { method: "POST" })
+    .then(respuesta => respuesta.json())
+    .then(datos => {
+        // Mostramos las visitas globales reales que mandó Python
+        document.getElementById("visitas").textContent = "👀 Visitas: " + datos.visitas;
+        // Guardamos los likes globales en una variable para cuando abran el visor
+        window.likesGlobales = datos.likes;
+    })
+    .catch(error => {
+        console.log("El servidor de Python está apagado. Usando modo desconectado.");
+        document.getElementById("visitas").textContent = "👀 Visitas: Modo Local";
+    });
+
+// --------------------
+// GALERÍA, VISOR Y LIKES GLOBALES
+// --------------------
+let idImagenActual = "";
+
+document.querySelectorAll(".galeria img").forEach(img => {
+    img.addEventListener("click", (e) => {
+        e.stopPropagation();
+        idImagenActual = img.getAttribute("alt"); 
+        
+        document.getElementById("visor").style.display = "flex";
+        document.getElementById("imagenGrande").src = img.src;
+        
+        // Buscamos los likes de esta imagen en los datos globales que nos dio Python
+        let likesActuales = (window.likesGlobales && window.likesGlobales[idImagenActual]) || 0;
+        document.getElementById("contadorLikes").textContent = "Likes: " + likesActuales;
+    });
+});
+
+document.getElementById("btnLike").addEventListener("click", (e) => {
+    e.stopPropagation(); 
+    if (idImagenActual) {
+        // Enviamos el Like a Python mediante internet
+        fetch(`${SERVIDOR_URL}/api/like`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id_imagen: idImagenActual })
+        })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            if(datos.status === "success") {
+                // Actualizamos nuestra variable local y la pantalla al instante
+                if (!window.likesGlobales) window.likesGlobales = {};
+                window.likesGlobales[idImagenActual] = datos.likes_actuales;
+                document.getElementById("contadorLikes").textContent = "Likes: " + datos.likes_actuales;
+            }
+        })
+        .catch(err => console.error("Error al enviar like:", err));
+    }
+});
+
+function cerrarVisor(){
+    document.getElementById("visor").style.display = "none";
+}
 
 // --------------------
 // SISTEMA DE 3 TEMAS AVANZADOS
@@ -789,41 +846,7 @@ setInterval(() => {
     document.getElementById("reloj").textContent = "🕒 " + new Date().toLocaleTimeString("es-MX");
 }, 1000);
 
-// --------------------
-// GALERÍA, VISOR Y SISTEMA DE LIKES INDIVIDUALES
-// --------------------
-let idImagenActual = "";
-let baseDatosLikes = JSON.parse(localStorage.getItem("renders_likes")) || {};
 
-document.querySelectorAll(".galeria img").forEach(img => {
-    img.addEventListener("click", (e) => {
-        e.stopPropagation();
-        idImagenActual = img.getAttribute("alt"); 
-        
-        document.getElementById("visor").style.display = "flex";
-        document.getElementById("imagenGrande").src = img.src;
-        
-        let likesActuales = baseDatosLikes[idImagenActual] || 0;
-        document.getElementById("contadorLikes").textContent = "Likes: " + likesActuales;
-    });
-});
-
-document.getElementById("btnLike").addEventListener("click", (e) => {
-    e.stopPropagation(); 
-    if (idImagenActual) {
-        if(!baseDatosLikes[idImagenActual]) {
-            baseDatosLikes[idImagenActual] = 0;
-        }
-        baseDatosLikes[idImagenActual]++;
-        
-        localStorage.setItem("renders_likes", JSON.stringify(baseDatosLikes));
-        document.getElementById("contadorLikes").textContent = "Likes: " + baseDatosLikes[idImagenActual];
-    }
-});
-
-function cerrarVisor(){
-    document.getElementById("visor").style.display = "none";
-}
 </script>
 
 </body>
