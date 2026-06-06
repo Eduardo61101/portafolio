@@ -389,22 +389,22 @@ h1 {
 
 <script>
 // ==========================================
-// POOL REORGANIZADO, LIMPIO Y CORREGIDO
+// POOL DE ANIMALES
 // ==========================================
 const animales = [
-    // MASCOTAS (¡Los gatitos movidos aquí!)
+    // MASCOTAS
     {url:"https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500", categoria:"Mascotas", color:"#e74c3c"}, 
     {url:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=500", categoria:"Mascotas", color:"#3498db"}, 
     {url:"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?q=80&w=500", categoria:"Mascotas", color:"#9b59b6"}, 
     {url:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=500", categoria:"Mascotas", color:"#e67e22"}, 
-    {url:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?q=80&w=500", categoria:"Mascotas", color:"#ff4757"}, // Gatito tierno corregido a Mascota
-    {url:"https://images.unsplash.com/photo-1472491235688-bdc81a63246e?q=80&w=500", categoria:"Mascotas", color:"#747d8c"}, // Gato nieve corregido a Mascota
+    {url:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?q=80&w=500", categoria:"Mascotas", color:"#ff4757"}, 
+    {url:"https://images.unsplash.com/photo-1472491235688-bdc81a63246e?q=80&w=500", categoria:"Mascotas", color:"#747d8c"}, 
 
     // SALVAJES
     {url:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=500", categoria:"Salvajes", color:"#2c3e50"}, 
     {url:"https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd?q=80&w=500", categoria:"Salvajes", color:"#d35400"}, 
     {url:"https://images.unsplash.com/photo-1574063413132-355dbfd83e82?q=80&w=500", categoria:"Salvajes", color:"#57606f"}, 
-    {url:"https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=500", categoria:"Salvajes", color:"#16a085"}, // Añadido Guepardo estable
+    {url:"https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=500", categoria:"Salvajes", color:"#16a085"}, 
 
     // MARINOS
     {url:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=500", categoria:"Marinos",  color:"#6a1b9a"}, 
@@ -424,10 +424,9 @@ let tiempoCaja = 3600;
 let puedeAbrir = true;
 let tiempoFinal = null;
 let idIntervalo = null;
-let idImagenSeleccionada = null; // Guardamos el ID único de la tarjeta en vez de la URL
+let idImagenSeleccionada = null; 
 let elementoSeleccionado = null;
 
-// AHORA LAS IMÁGENES TIENEN UN ID ÚNICO PROPIO E INDEPENDIENTE
 let favoritos = JSON.parse(localStorage.getItem("favoritos_ids")) || [];
 let coleccionGuardada = JSON.parse(localStorage.getItem("coleccion_v2")) || [];
 
@@ -489,7 +488,6 @@ function abrirCaja(){
         monedas += 50;
         actualizarMonedas();
 
-        // Generamos un ID único temporal basado en milisegundos para independizar repetidos
         const idUnico = "anim_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
         coleccionGuardada.push({ id: idUnico, url: random.url, categoria: random.categoria });
         
@@ -503,12 +501,9 @@ function abrirCaja(){
 
 function renderizarColeccion(){
     coleccionGrid.innerHTML = "";
-    
-    // Set auxiliar para filtrar repetidas visuales si la pestaña activa lo pide
     const urlsVistas = new Set();
 
     coleccionGuardada.forEach(item => {
-        // Si el filtro "SinRepetidas" está activo en los estilos internos, omitimos renderizar si la URL ya se usó
         if (coleccionGrid.dataset.filtroActual === "SinRepetidas" && urlsVistas.has(item.url)) {
             return; 
         }
@@ -525,14 +520,7 @@ function renderizarColeccion(){
             abrirMenuImagen(item.url, item.id, img);
         };
 
-        img.onerror = function(){
-            img.remove();
-            coleccionGuardada = coleccionGuardada.filter(i => i.id !== item.id);
-            favoritos = favoritos.filter(fav => fav !== item.id);
-            monedas += 25;
-            actualizarMonedas();
-            guardarDatos();
-        };
+        // SE ELIMINÓ EL MANEJO DE ERROR QUE BORRABA LA IMAGEN AUTOMÁTICAMENTE DE LOCALSTORAGE
 
         if(favoritos.includes(item.id)){
             coleccionGrid.prepend(img);
@@ -546,11 +534,11 @@ function filtrarCategoria(categoria){
     coleccionGrid.dataset.filtroActual = categoria;
     
     if(categoria === "SinRepetidas") {
-        renderizarColeccion(); // Re-renderiza ocultando duplicados
+        renderizarColeccion();
         return;
     }
 
-    renderizarColeccion(); // Render normal para re-establecer
+    renderizarColeccion();
     const imagenes = coleccionGrid.querySelectorAll("img");
     imagenes.forEach(img => {
         if(categoria === "Todos" || img.dataset.categoria === categoria){
@@ -642,7 +630,7 @@ function verCompleta(){
 
 function toggleFavorito(){
     if(favoritos.includes(idImagenSeleccionada)){
-        favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
+        favoritos = favorites.filter(fav => fav !== idImagenSeleccionada);
     } else {
         favoritos.push(idImagenSeleccionada);
     }
