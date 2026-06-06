@@ -7,7 +7,7 @@
 
 <style>
 /* ==========================================
-   DISEÑO NEO-MINIMALISTA SUAVE
+   DISEÑO NEO-MINIMALISTA SUAVE Y PREMIUM
    ========================================== */
 :root {
     --bg-principal: #f0f7f4; 
@@ -16,6 +16,7 @@
     --color-acento: #47a8bd;  
     --color-recompensa: #ffb142; 
     --color-abrir: #2ecc71; 
+    --color-gold: #ffd700;
     --fuente: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -28,7 +29,7 @@ body {
     overflow-x: hidden;
 }
 
-ul {
+ul.nav-bar {
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -39,7 +40,7 @@ ul {
     box-shadow: 0 2px 10px rgba(0,0,0,0.03);
 }
 
-ul button {
+ul.nav-bar button {
     background: none;
     border: none;
     color: #a0aec0;
@@ -51,7 +52,7 @@ ul button {
     transition: all 0.2s ease;
 }
 
-ul button:hover {
+ul.nav-bar button:hover {
     color: var(--color-acento);
     background-color: #f7fafc;
 }
@@ -159,7 +160,7 @@ h1 {
     background-color: #edf2f7;
 }
 
-.coleccion-grid {
+.coleccion-grid, .good-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 16px;
@@ -168,7 +169,7 @@ h1 {
     margin: 0 auto;
 }
 
-.coleccion-grid img {
+.coleccion-grid img, .good-grid img {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
@@ -179,11 +180,21 @@ h1 {
     background-color: white;
 }
 
-.coleccion-grid img:hover {
+.coleccion-grid img:hover, .good-grid img:hover {
     transform: translateY(-3px);
 }
 
-/* EFECTO GLOW DINÁMICO PARA FAVORITOS MANTENIENDO SU COLOR */
+/* EFECTO GLOW PARA ARTÍCULOS GOOD (ORO PARPADEANTE) */
+.good-glow {
+    animation: goldBrillo 1.5s infinite alternate;
+}
+
+@keyframes goldBrillo {
+    from { box-shadow: 0 0 4px #ffd700; border-color: #ffd700; }
+    to { box-shadow: 0 0 20px #ffaa00; border-color: #ffaa00; }
+}
+
+/* EFECTO GLOW DINÁMICO PARA FAVORITOS */
 .favorita-glow {
     animation: glowBrillo 2s infinite alternate;
 }
@@ -191,6 +202,19 @@ h1 {
 @keyframes glowBrillo {
     from { box-shadow: 0 0 4px rgba(0,0,0,0.1); }
     to { box-shadow: 0 0 16px currentColor; }
+}
+
+/* DISEÑO VISUAL PARA LAS IMÁGENES SELECCIONADAS PARA BORRAR MASIVO */
+.seleccionada-borrar {
+    border: 5px dashed #e53e3e !important;
+    opacity: 0.6;
+    animation: temblorBorrar 0.3s infinite;
+}
+
+@keyframes temblorBorrar {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(1deg); }
+    100% { transform: rotate(-1deg); }
 }
 
 #menuImagen {
@@ -325,6 +349,16 @@ h1 {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     border: 1px solid #edf2f7;
 }
+
+.contenedor-good-vip {
+    max-width: 900px;
+    margin: 30px auto;
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+    border: 3px solid var(--color-gold);
+}
 </style>
 </head>
 <body>
@@ -335,10 +369,11 @@ h1 {
     <button onclick="toggleMusica()">🎵 Música</button>
 </div>
 
-<ul>
+<ul class="nav-bar">
     <li><button onclick="mostrarSeccion('inicio')">Inicio</button></li>
     <li><button onclick="mostrarSeccion('coleccion')">Colección</button></li>
     <li><button onclick="mostrarSeccion('tienda')">Tienda</button></li>
+    <li><button onclick="mostrarSeccion('seccionGood')">✨ Objetos GOOD</button></li>
 </ul>
 
 <div id="inicio" class="seccion activa">
@@ -364,6 +399,9 @@ h1 {
         <button onclick="filtrarCategoria('Salvajes')">Salvajes</button>
         <button onclick="filtrarCategoria('Marinos')">Marinos</button>
         <button onclick="filtrarCategoria('Aves')">Aves</button>
+        <br><br>
+        <button id="btnModoSeleccion" onclick="toggleModoSeleccion()" style="background-color: #ffb142; color: white;">🗑️ Seleccionar Varias</button>
+        <button id="btnConfirmarVenta" onclick="confirmarVentaMasiva()" style="background-color: #e53e3e; color: white; display: none;">Confirmar Venta Masiva (<span id="countVenta">0</span>)</button>
     </div>
     <div class="coleccion-grid" id="coleccionGrid"></div>
 </div>
@@ -373,11 +411,19 @@ h1 {
     <div class="tienda-grid" id="tiendaOfertas"></div>
 </div>
 
+<div id="seccionGood" class="seccion">
+    <h1>✨ Galería GOOD Legendaria ✨</h1>
+    <p style="text-align:center; color:#718096; font-weight:600;">Rarezas Cyberpunk y Espaciales de nivel coleccionista experto.</p>
+    <div class="contenedor-good-vip">
+        <div class="good-grid" id="goodGrid"></div>
+    </div>
+</div>
+
 <div id="menuImagen">
     <img id="imagenGrande">
     <br><br>
     <button onclick="verCompleta()">👁️ Ver Completa</button>
-    <button onclick="toggleFavorito()">⭐ Favorito</button>
+    <button id="btnFavMenu" onclick="toggleFavorito()">⭐ Favorito</button>
     <button onclick="venderActual()" style="color: #e53e3e;">💸 Vender</button>
     <br><br>
     <button onclick="cerrarMenu()" style="background-color: #edf2f7;">❌ Cerrar</button>
@@ -389,7 +435,7 @@ h1 {
 
 <script>
 // ==========================================
-// POOL DE ANIMALES
+// POOL DE ANIMALES Y RECOMPENSAS LEGENDARIAS
 // ==========================================
 const animales = [
     // MASCOTAS
@@ -403,8 +449,8 @@ const animales = [
     // SALVAJES
     {url:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=500", categoria:"Salvajes", color:"#2c3e50"}, 
     {url:"https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd?q=80&w=500", categoria:"Salvajes", color:"#d35400"}, 
-    {url:"https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=636&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"Salvajes", color:"#57606f"}, 
-    {url:"https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?q=80&w=915&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"Salvajes", color:"#16a085"}, 
+    {url:"https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=636&auto=format&fit=crop", categoria:"Salvajes", color:"#57606f"}, 
+    {url:"https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?q=80&w=915&auto=format&fit=crop", categoria:"Salvajes", color:"#16a085"}, 
 
     // MARINOS
     {url:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=500", categoria:"Marinos",  color:"#6a1b9a"}, 
@@ -416,7 +462,15 @@ const animales = [
     {url:"https://images.unsplash.com/photo-1555169062-013468b47731?q=80&w=500", categoria:"Aves",     color:"#008080"}, 
     {url:"https://images.unsplash.com/photo-1516233758813-a38d024919c5?q=80&w=500", categoria:"Aves",     color:"#8e44ad"}, 
     {url:"https://images.unsplash.com/photo-1480044965905-02098d419e96?q=80&w=500", categoria:"Aves",     color:"#a52a2a"}, 
-    {url:"https://images.unsplash.com/photo-1606567595334-d39972c85dbe?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"Aves",     color:"#ff007f"} 
+    {url:"https://images.unsplash.com/photo-1606567595334-d39972c85dbe?q=80&w=387&auto=format&fit=crop", categoria:"Aves",     color:"#ff007f"} 
+];
+
+// RECOMPENSAS PREMIUM NO ANIMALES
+const objetosGood = [
+    {url:"https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, // Neon Cyberpunk
+    {url:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, // Portal 3D Estelar
+    {url:"https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, // Set Retro Gaming Neon
+    {url:"https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=500", categoria:"GOOD", color:"#ffd700"}  // Galaxia Abstracta Futurista
 ];
 
 let monedas = 0;
@@ -427,6 +481,10 @@ let idIntervalo = null;
 let idImagenSeleccionada = null; 
 let elementoSeleccionado = null;
 
+// SELECTOR MÚLTIPLE DE BORRADO
+let modoSeleccionActivo = false;
+let listaSeleccionadosParaBorrar = [];
+
 let favoritos = JSON.parse(localStorage.getItem("favoritos_ids")) || [];
 let coleccionGuardada = JSON.parse(localStorage.getItem("coleccion_v2")) || [];
 
@@ -434,6 +492,7 @@ const monedasTexto = document.getElementById("monedas");
 const tiempoTexto = document.getElementById("tiempo");
 const animalImg = document.getElementById("animalImg");
 const coleccionGrid = document.getElementById("coleccionGrid");
+const goodGrid = document.getElementById("goodGrid");
 const tiendaOfertas = document.getElementById("tiendaOfertas");
 const musica = document.getElementById("musica");
 
@@ -445,20 +504,27 @@ const ofertas = [
 ];
 
 function obtenerColorDeImagen(url) {
-    const animalEncontrado = animales.find(a => a.url === url);
-    return animalEncontrado ? animalEncontrado.color : "#4b6584";
+    let item = animales.find(a => a.url === url) || objetosGood.find(g => g.url === url);
+    return item ? item.color : "#4b6584";
 }
 
 function aplicarEstiloBorde(elemento, url, idUnico) {
     const colorAsignado = obtenerColorDeImagen(url);
-    elemento.style.borderColor = colorAsignado;
-    elemento.style.borderWidth = "4px";
-    elemento.style.borderStyle = "solid";
-    elemento.style.color = colorAsignado; 
+    const esGood = objetosGood.some(g => g.url === url);
+
+    if(esGood) {
+        elemento.classList.add("good-glow");
+        elemento.style.border = "4px solid #ffd700";
+    } else {
+        elemento.classList.remove("good-glow");
+        elemento.style.borderColor = colorAsignado;
+        elemento.style.borderWidth = "4px";
+        elemento.style.borderStyle = "solid";
+    }
 
     if (idUnico && favoritos.includes(idUnico)) {
         elemento.classList.add("favorita-glow");
-    } else {
+    } else if (!esGood) {
         elemento.classList.remove("favorita-glow");
         elemento.style.boxShadow = "none";
     }
@@ -468,6 +534,9 @@ function mostrarSeccion(id){
     const secciones = document.querySelectorAll(".seccion");
     secciones.forEach(seccion => seccion.classList.remove("activa"));
     document.getElementById(id).classList.add("activa");
+    
+    // Desactivar borrado masivo automáticamente al cambiar de menú
+    if(id !== 'coleccion' && modoSeleccionActivo) toggleModoSeleccion();
 }
 
 function abrirCaja(){
@@ -480,16 +549,26 @@ function abrirCaja(){
 
     setTimeout(() => {
         animalImg.classList.remove("animacion-caja");
-        const random = animales[Math.floor(Math.random()*animales.length)];
-        animalImg.src = random.url;
         
-        aplicarEstiloBorde(animalImg, random.url, null);
+        let elegido;
+        let suerte = Math.random() * 100;
+        
+        // RAREZA MÍSTICA: 4% de probabilidad de conseguir una carta GOOD, 96% animales normales
+        if(suerte <= 4) {
+            elegido = objetosGood[Math.floor(Math.random()*objetosGood.length)];
+            alert("💥 ¡ÉPICO! ¡Te ha salido una recompensa misteriosa 'GOOD'! ✨");
+        } else {
+            elegido = animales[Math.floor(Math.random()*animales.length)];
+        }
+        
+        animalImg.src = elegido.url;
+        aplicarEstiloBorde(animalImg, elegido.url, null);
 
         monedas += 50;
         actualizarMonedas();
 
         const idUnico = "anim_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
-        coleccionGuardada.push({ id: idUnico, url: random.url, categoria: random.categoria });
+        coleccionGuardada.push({ id: idUnico, url: elegido.url, categoria: elegido.categoria });
         
         guardarDatos();
         renderizarColeccion();
@@ -501,9 +580,12 @@ function abrirCaja(){
 
 function renderizarColeccion(){
     coleccionGrid.innerHTML = "";
+    goodGrid.innerHTML = ""; 
     const urlsVistas = new Set();
 
     coleccionGuardada.forEach(item => {
+        const esGood = (item.categoria === "GOOD");
+
         if (coleccionGrid.dataset.filtroActual === "SinRepetidas" && urlsVistas.has(item.url)) {
             return; 
         }
@@ -517,17 +599,80 @@ function renderizarColeccion(){
         aplicarEstiloBorde(img, item.url, item.id);
 
         img.onclick = function(){
-            abrirMenuImagen(item.url, item.id, img);
+            if(modoSeleccionActivo) {
+                gestionarSeleccionMultiple(item.id, img);
+            } else {
+                abrirMenuImagen(item.url, item.id, img);
+            }
         };
 
-        // SE ELIMINÓ EL MANEJO DE ERROR QUE BORRABA LA IMAGEN AUTOMÁTICAMENTE DE LOCALSTORAGE
-
-        if(favoritos.includes(item.id)){
-            coleccionGrid.prepend(img);
+        // Redirección de dibujo: Cartas GOOD se renderizan abajo en su vitrina VIP
+        if(esGood) {
+            goodGrid.appendChild(img);
         } else {
-            coleccionGrid.appendChild(img);
+            if(favoritos.includes(item.id)){
+                coleccionGrid.prepend(img);
+            } else {
+                coleccionGrid.appendChild(img);
+            }
         }
     });
+}
+
+// SISTEMA Y PANEL DEL BORRADO MULTIPLE
+function toggleModoSeleccion() {
+    modoSeleccionActivo = !modoSeleccionActivo;
+    const btnModo = document.getElementById("btnModoSeleccion");
+    const btnConfirmar = document.getElementById("btnConfirmarVenta");
+
+    if(modoSeleccionActivo) {
+        btnModo.textContent = "❌ Cancelar Selección";
+        btnModo.style.backgroundColor = "#718096";
+        btnConfirmar.style.display = "inline-block";
+        listaSeleccionadosParaBorrar = [];
+        document.getElementById("countVenta").textContent = "0";
+    } else {
+        btnModo.textContent = "🗑️ Seleccionar Varias";
+        btnModo.style.backgroundColor = "#ffb142";
+        btnConfirmar.style.display = "none";
+        
+        const de-marcar = coleccionGrid.querySelectorAll("img");
+        de-marcar.forEach(i => i.classList.remove("seleccionada-borrar"));
+        listaSeleccionadosParaBorrar = [];
+    }
+}
+
+function gestionarSeleccionMultiple(idUnico, elemento) {
+    if(listaSeleccionadosParaBorrar.includes(idUnico)) {
+        listaSeleccionadosParaBorrar = listaSeleccionadosParaBorrar.filter(id => id !== idUnico);
+        elemento.classList.remove("seleccionada-borrar");
+    } else {
+        listaSeleccionadosParaBorrar.push(idUnico);
+        elemento.classList.add("seleccionada-borrar");
+    }
+    document.getElementById("countVenta").textContent = listaSeleccionadosParaBorrar.length;
+}
+
+function confirmarVentaMasiva() {
+    if(listaSeleccionadosParaBorrar.length === 0) {
+        alert("Selecciona al menos una imagen.");
+        return;
+    }
+
+    if(confirm(`¿Seguro que deseas vender estas ${listaSeleccionadosParaBorrar.length} imágenes juntas?`)) {
+        let ganancias = listaSeleccionadosParaBorrar.length * 25;
+        
+        coleccionGuardada = coleccionGuardada.filter(item => !listaSeleccionadosParaBorrar.includes(item.id));
+        favoritos = favoritos.filter(favId => !listaSeleccionadosParaBorrar.includes(favId));
+        
+        monedas += ganancias;
+        actualizarMonedas();
+        guardarDatos();
+        
+        toggleModoSeleccion();
+        renderizarColeccion();
+        alert(`¡Borrado exitoso! Recibiste 💰 ${ganancias} monedas.`);
+    }
 }
 
 function filtrarCategoria(categoria){
@@ -612,11 +757,32 @@ function guardarDatos(){
 function abrirMenuImagen(src, idUnico, elemento){
     idImagenSeleccionada = idUnico;
     elementoSeleccionado = elemento;
-    document.getElementById("menuImagen").style.display = "block";
     
+    const btnFav = document.getElementById("btnFavMenu");
+    if(elemento.dataset.categoria === "GOOD") {
+        btnFav.style.display = "none"; // Ocultar favorito en sección GOOD
+    } else {
+        btnFav.style.display = "inline-block";
+    }
+
+    document.getElementById("menuImagen").style.display = "block";
     const imgGrande = document.getElementById("imagenGrande");
     imgGrande.src = src;
     aplicarEstiloBorde(imgGrande, src, idUnico);
+}
+
+// CORRECCIÓN DEL FILTRO ERROR ('favorites' CAMBIADO A 'favoritos')
+function toggleFavorito(){
+    if(favoritos.includes(idImagenSeleccionada)){
+        favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
+    } else {
+        favoritos.push(idImagenSeleccionada);
+    }
+    guardarDatos();
+    renderizarColeccion();
+    
+    const imgGrande = document.getElementById("imagenGrande");
+    aplicarEstiloBorde(imgGrande, imgGrande.src, idImagenSeleccionada);
 }
 
 function cerrarMenu(){
@@ -626,19 +792,6 @@ function cerrarMenu(){
 function verCompleta(){
     const imgGrande = document.getElementById("imagenGrande");
     window.open(imgGrande.src);
-}
-
-function toggleFavorito(){
-    if(favoritos.includes(idImagenSeleccionada)){
-        favoritos = favorites.filter(fav => fav !== idImagenSeleccionada);
-    } else {
-        favoritos.push(idImagenSeleccionada);
-    }
-    guardarDatos();
-    renderizarColeccion();
-    
-    const imgGrande = document.getElementById("imagenGrande");
-    aplicarEstiloBorde(imgGrande, imgGrande.src, idImagenSeleccionada);
 }
 
 function venderActual(){
@@ -658,6 +811,8 @@ function venderActual(){
 
 function crearOfertas(){
     tiendaOfertas.innerHTML = "";
+    
+    // Tarjetas normales de tiempo
     ofertas.forEach((oferta,index) => {
         const card = document.createElement("div");
         card.classList.add("card-oferta");
@@ -671,6 +826,18 @@ function crearOfertas(){
         `;
         tiendaOfertas.appendChild(card);
     });
+
+    // ELEMENTO EXCLUSIVO CON PRECIO EXAGERADO AL FINAL DE LA TIENDA
+    const cardExagerada = document.createElement("div");
+    cardExagerada.classList.add("card-oferta");
+    cardExagerada.style.border = "2px solid #ffd700";
+    cardExagerada.innerHTML = `
+        <h2 style="color:#ffaa00;">✨ COMPRA GOOD DIRECTA</h2>
+        <p style="font-size: 22px; font-weight:800; color:#e53e3e;">💰 5,000 MONEDAS</p>
+        <p>⚠️ Precio exageradamente costoso solo para maestros millonarios.</p>
+        <button onclick="comprarGoodVip()" style="background: linear-gradient(45deg, #ffd700, #ffaa00);">OBTENER LEGENDARIA</button>
+    `;
+    tiendaOfertas.appendChild(cardExagerada);
 }
 
 function comprarOferta(index){
@@ -698,6 +865,26 @@ function comprarOferta(index){
     guardarDatos();
     actualizarTemporizador();
     alert("¡Tiempo restado con éxito! 😎");
+}
+
+function comprarGoodVip() {
+    if(monedas < 5000) {
+        alert("¡No te alcanza! Consigue 5,000 monedas trabajando duro. 😭");
+        return;
+    }
+
+    monedas -= 5000;
+    actualizarMonedas();
+
+    // Obtener un objeto GOOD completamente aleatorio
+    const randomGood = objetosGood[Math.floor(Math.random() * objetosGood.length)];
+    const idUnico = "anim_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+    
+    coleccionGuardada.push({ id: idUnico, url: randomGood.url, categoria: randomGood.categoria });
+    
+    guardarDatos();
+    renderizarColeccion();
+    alert("💸 ¡Gastaste una fortuna! Tu objeto GOOD fue añadido directamente a tu galería especial.");
 }
 
 function toggleMusica(){
