@@ -27,6 +27,8 @@ body {
     font-family: var(--fuente);
     color: var(--texto-oscuro);
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 ul.nav-bar {
@@ -69,6 +71,7 @@ h1 {
 .seccion {
     display: none;
     animation: fadeIn 0.4s ease-in-out;
+    flex: 1;
 }
 
 .activa {
@@ -160,7 +163,7 @@ h1 {
     background-color: #edf2f7;
 }
 
-/* ESTRUCTURA DE DOS COLUMNAS PARA LA SECCIÓN COLECCIÓN */
+/* LAYOUT DE COLECCIÓN */
 .layout-coleccion {
     display: flex;
     gap: 20px;
@@ -169,7 +172,6 @@ h1 {
     padding: 0 25px;
 }
 
-/* FILA LATERAL IZQUIERDA (ÁLBUM DE CONTEO) */
 .lista-conteo-izquierda {
     width: 200px;
     min-width: 200px;
@@ -178,7 +180,7 @@ h1 {
     padding: 15px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     border: 1px solid #edf2f7;
-    max-height: 65vh;
+    max-height: 75vh;
     overflow-y: auto;
     box-sizing: border-box;
 }
@@ -202,7 +204,6 @@ h1 {
     border-radius: 10px;
 }
 
-/* Imagen opaca y gris si tienes 0 unidades */
 .item-conteo.bloqueado img {
     filter: grayscale(1) opacity(0.35);
 }
@@ -239,7 +240,6 @@ h1 {
     transform: translateY(-3px);
 }
 
-/* EFECTO GLOW PARA ARTÍCULOS GOOD (ORO PARPADEANTE) */
 .good-glow {
     animation: goldBrillo 1.5s infinite alternate;
 }
@@ -249,7 +249,6 @@ h1 {
     to { box-shadow: 0 0 20px #ffaa00; border-color: #ffaa00; }
 }
 
-/* EFECTO GLOW DINÁMICO PARA FAVORITOS */
 .favorita-glow {
     animation: glowBrillo 2s infinite alternate;
 }
@@ -259,7 +258,6 @@ h1 {
     to { box-shadow: 0 0 16px currentColor; }
 }
 
-/* DISEÑO VISUAL PARA LAS IMÁGENES SELECCIONADAS PARA BORRAR MASIVO */
 .seleccionada-borrar {
     border: 5px dashed #e53e3e !important;
     opacity: 0.6;
@@ -270,6 +268,23 @@ h1 {
     0% { transform: rotate(0deg); }
     50% { transform: rotate(1deg); }
     100% { transform: rotate(-1deg); }
+}
+
+/* DIVISIÓN INTERNA DE OBJETOS GOOD */
+.division-good {
+    margin-top: 30px;
+    border-top: 3px dashed var(--color-gold);
+    padding-top: 20px;
+}
+
+.subtitulo-good {
+    color: #d4af37;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 #menuImagen {
@@ -322,18 +337,14 @@ h1 {
 
 .card-oferta {
     background-color: var(--bg-tarjeta);
-    width: 220px;
+    width: 240px;
     color: var(--texto-oscuro);
     padding: 25px;
     border-radius: 24px;
     text-align: center;
     box-shadow: 0 4px 20px rgba(0,0,0,0.02);
     border: 1px solid #edf2f7;
-}
-
-.card-oferta h2 {
-    font-size: 20px;
-    margin-top: 0;
+    position: relative;
 }
 
 .card-oferta button {
@@ -352,13 +363,28 @@ h1 {
     opacity: 0.9;
 }
 
-.filtros {
+/* ETIQUETAS DE RAREZA DE MISIÓN */
+.badge-rareza {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+}
+.rareza-poco { background-color: #a0aec0; }
+.rareza-medio { background-color: #47a8bd; }
+.rareza-mucho { background-color: #9b59b6; }
+
+.filtros, .selectores-misiones {
     text-align: center;
     margin-top: 25px;
     margin-bottom: 10px;
 }
 
-.filtros button {
+.filtros button, .selectores-misiones button {
     margin: 4px;
     padding: 10px 20px;
     border: none;
@@ -371,7 +397,7 @@ h1 {
     transition: all 0.2s;
 }
 
-.filtros button:hover {
+.filtros button:hover, .selectores-misiones button.activo {
     background-color: var(--color-acento);
     color: white;
 }
@@ -405,19 +431,16 @@ h1 {
     border: 1px solid #edf2f7;
 }
 
-.contenedor-good-vip {
-    max-width: 900px;
-    margin: 30px auto;
-    background: #ffffff;
-    border-radius: 28px;
+footer {
+    text-align: center;
     padding: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.02);
-    border: 3px solid var(--color-gold);
+    font-size: 14px;
+    color: #718096;
+    background-color: var(--bg-tarjeta);
+    border-top: 1px solid #edf2f7;
+    margin-top: 40px;
+    font-weight: 500;
 }
-   footer{
-      backround-color: #333333
-      color: white
-   }
 </style>
 </head>
 <body>
@@ -431,8 +454,8 @@ h1 {
 <ul class="nav-bar">
     <li><button onclick="mostrarSeccion('inicio')">Inicio</button></li>
     <li><button onclick="mostrarSeccion('coleccion')">Colección</button></li>
+    <li><button onclick="mostrarSeccion('misiones')">🧭 Misiones</button></li>
     <li><button onclick="mostrarSeccion('tienda')">Tienda</button></li>
-    <li><button onclick="mostrarSeccion('seccionGood')">✨ Objetos GOOD</button></li>
 </ul>
 
 <div id="inicio" class="seccion activa">
@@ -452,7 +475,7 @@ h1 {
 <div id="coleccion" class="seccion">
     <h1>Tu Colección</h1>
     <div class="filtros">
-        <button onclick="filtrarCategoria('Todos')">Todos</button>
+        <button onclick="filtrarCategoria('Todos')">Todos Normales</button>
         <button onclick="filtrarCategoria('SinRepetidas')" style="background-color: #e2e8f0;">✨ Sin Repetidas</button>
         <button onclick="filtrarCategoria('Mascotas')">Mascotas</button>
         <button onclick="filtrarCategoria('Salvajes')">Salvajes</button>
@@ -465,21 +488,41 @@ h1 {
 
     <div class="layout-coleccion">
         <div class="lista-conteo-izquierda" id="listaConteoIzquierda"></div>
-        <div class="coleccion-grid" id="coleccionGrid" style="flex-grow: 1; margin: 0;"></div>
+        
+        <div style="flex-grow: 1; margin: 0;">
+            <div class="coleccion-grid" id="coleccionGrid"></div>
+            
+            <div class="division-good" id="bloqueGoodInterno">
+                <div class="subtitulo-good">✨ Galería Especial GOOD Legendaria ✨</div>
+                <div class="good-grid" id="goodGrid"></div>
+            </div>
+        </div>
     </div>
+</div>
+
+<div id="misiones" class="seccion">
+    <h1>Gremio de Expediciones Diarias</h1>
+    <p style="text-align:center; color:#718096; font-weight:600;">Selecciona el tipo de animal que quieres enviar. ¡7 misiones diferentes por categoría cambiadas cada día!</p>
+    
+    <div class="selectores-misiones" id="selectoresAnimales">
+        <button id="btn-Tab-Mascotas" class="activo" onclick="cambiarTabMisiones('Mascotas')">🐱 Mascotas</button>
+        <button id="btn-Tab-Salvajes" onclick="cambiarTabMisiones('Salvajes')">🦁 Salvajes</button>
+        <button id="btn-Tab-Marinos" onclick="cambiarTabMisiones('Marinos')">🐬 Marinos</button>
+        <button id="btn-Tab-Aves" onclick="cambiarTabMisiones('Aves')">🦅 Aves</button>
+        <button id="btn-Tab-GOOD" onclick="cambiarTabMisiones('GOOD')">✨ GOOD</button>
+        <button id="btn-Tab-Rara" onclick="cambiarTabMisiones('Rara')">⭐ Raras</button>
+    </div>
+
+    <h3 id="tituloMisionesHoy" style="text-align:center; color:#718096; font-size:16px; margin-top:15px;">Misiones disponibles para enviar hoy:</h3>
+    <div class="tienda-grid" id="tiendaExpediciones"></div>
 </div>
 
 <div id="tienda" class="seccion">
-    <h1>Tienda / Powerups</h1>
+    <h1>Tienda del Juego</h1>
+    <p style="text-align:center; color:#718096; font-weight:600;">Invierte fondos para acelerar los tiempos de espera de las cajas o comprar objetos premium directamente.</p>
+    
+    <h2 style="text-align:center; margin-top:20px; color:var(--texto-oscuro);">⏱️ Reducción de Tiempo</h2>
     <div class="tienda-grid" id="tiendaOfertas"></div>
-</div>
-
-<div id="seccionGood" class="seccion">
-    <h1>✨ Galería GOOD Legendaria ✨</h1>
-    <p style="text-align:center; color:#718096; font-weight:600;">Rarezas Cyberpunk y Espaciales de nivel coleccionista experto.</p>
-    <div class="contenedor-good-vip">
-        <div class="good-grid" id="goodGrid"></div>
-    </div>
 </div>
 
 <div id="menuImagen">
@@ -497,7 +540,7 @@ h1 {
 </audio>
 
 <footer>Pagina web impulsada por IA, para fine educativos</footer>
-   
+
 <script>
 // ==========================================
 // POOL DE ANIMALES Y RECOMPENSAS LEGENDARIAS
@@ -540,6 +583,19 @@ const objetosGood = [
     {url:"https://images.unsplash.com/photo-1716045168176-15d310a01dc0?q=80&w=580&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"}
 ];
 
+const ofertas = [
+    {precio:50, reduccion:300},   
+    {precio:100, reduccion:600},  
+    {precio:200, reduccion:1200}, 
+    {precio:400, reduccion:1800}  
+];
+
+const verbosAccion = ["Explorar", "Cazar en", "Investigar", "Hurgar en", "Vigilar", "Buscar tesoros en", "Rescatar objetos en"];
+const lugaresMisiones = ["el bosque prohibido", "un callejón Cyberpunk", "las ruinas antiguas", "el sótano de la casa", "un parque abandonado", "una isla desierta", "los servidores centrales"];
+
+// ==========================================
+// VARIABLES DE ESTADO LOCAL
+// ==========================================
 let monedas = 0;
 let tiempoCaja = 3600; 
 let puedeAbrir = true;
@@ -550,9 +606,14 @@ let elementoSeleccionado = null;
 
 let modoSeleccionActivo = false;
 let listaSeleccionadosParaBorrar = [];
+let categoriaMisionesTabActual = "Mascotas";
 
 let favoritos = JSON.parse(localStorage.getItem("favoritos_ids")) || [];
 let coleccionGuardada = JSON.parse(localStorage.getItem("coleccion_v2")) || [];
+
+let misionesDiariasHoy = JSON.parse(localStorage.getItem("misionesDiariasHoy")) || {};
+let misionesActivas = JSON.parse(localStorage.getItem("misionesActivas")) || {};
+let ultimaFechaGeneracion = localStorage.getItem("ultimaFechaGeneracion") || "";
 
 const monedasTexto = document.getElementById("monedas");
 const tiempoTexto = document.getElementById("tiempo");
@@ -562,21 +623,19 @@ const goodGrid = document.getElementById("goodGrid");
 const tiendaOfertas = document.getElementById("tiendaOfertas");
 const musica = document.getElementById("musica");
 
-const ofertas = [
-    {precio:50, reduccion:300},   
-    {precio:100, reduccion:600},  
-    {precio:200, reduccion:1200}, 
-    {precio:400, reduccion:1800}  
-];
-
+// ==========================================
+// LÓGICA DE INTERFAZ Y RECOLECCIÓN
+// ==========================================
 function obtenerColorDeImagen(url) {
-    let item = animales.find(a => a.url === url) || objetosGood.find(g => g.url === url);
+    if(!url) return "#4b6584";
+    let item = animales.find(a => a.url.trim() === url.trim()) || objetosGood.find(g => g.url.trim() === url.trim());
     return item ? item.color : "#4b6584";
 }
 
 function aplicarEstiloBorde(elemento, url, idUnico) {
+    if(!url) return;
     const colorAsignado = obtenerColorDeImagen(url);
-    const esGood = objetosGood.some(g => g.url === url);
+    const esGood = objetosGood.some(g => g.url.trim() === url.trim());
 
     if(esGood) {
         elemento.classList.add("good-glow");
@@ -602,6 +661,7 @@ function mostrarSeccion(id){
     document.getElementById(id).classList.add("activa");
     
     if(id !== 'coleccion' && modoSeleccionActivo) toggleModoSeleccion();
+    if(id === 'misiones') comprobarYGenerarMisionesDiarias();
 }
 
 function abrirCaja(){
@@ -646,11 +706,10 @@ function renderizarColeccion(){
     coleccionGrid.innerHTML = "";
     goodGrid.innerHTML = ""; 
     const listaConteo = document.getElementById("listaConteoIzquierda");
-    listaConteo.innerHTML = ""; // Limpiar barra izquierda
+    listaConteo.innerHTML = ""; 
 
     const urlsVistas = new Set();
     
-    // 1. MAPEO DE CANTIDADES INDIVIDUALES (Limpiando espacios en blanco)
     const mapeoCantidades = {};
     coleccionGuardada.forEach(item => {
         if (item && item.url) {
@@ -659,8 +718,6 @@ function renderizarColeccion(){
         }
     });
 
-    // 2. CONSTRUIR FILA LATERAL IZQUIERDA (ÁLBUM / RECUENTOS)
-    // Primero añadimos todos los animales y objetos GOOD oficiales del pool
     const todoElPool = [...animales, ...objetosGood];
     const urlsDelPool = new Set(todoElPool.map(item => item.url.trim()));
 
@@ -681,27 +738,22 @@ function renderizarColeccion(){
         listaConteo.appendChild(divItem);
     });
 
-    // DETECTAR IMÁGENES RARAS O NO CARGADAS EN TU INVENTARIO
-    // Si tienes una URL guardada que ya no está en el código base, ¡la mostramos como Rara!
     const urlsRarasProcesadas = new Set();
-    
     coleccionGuardada.forEach(item => {
         if (!item || !item.url) return;
         const urlLimpia = item.url.trim();
 
-        // Si no está en el pool oficial y no la hemos listado en la barra izquierda aún
         if (!urlsDelPool.has(urlLimpia) && !urlsRarasProcesadas.has(urlLimpia)) {
             urlsRarasProcesadas.add(urlLimpia);
             const cantidadRara = mapeoCantidades[urlLimpia] || 0;
 
             const divItemRaro = document.createElement("div");
             divItemRaro.classList.add("item-conteo");
-            divItemRaro.style.border = "1px dashed #9b59b6"; // Borde morado estilo "Raro"
+            divItemRaro.style.border = "1px dashed #9b59b6"; 
             divItemRaro.style.background = "#f3e5f5";
 
-            // Usamos un placeholder con texto si la imagen está totalmente rota y no carga
             divItemRaro.innerHTML = `
-                <img src="${item.url}" onerror="this.src='https://placehold.co/45x45?text=⭐'" title="Objeto Raro">
+                <img src="${item.url}" onerror="this.src='https://placehold.co/45x45?text=⭐'">
                 <span style="font-size: 11px; font-weight: bold; color: #8e44ad; margin-left: 4px;">Rara</span>
                 <span class="contador-numero" style="background: #8e44ad; color: white;">${cantidadRara}</span>
             `;
@@ -709,7 +761,8 @@ function renderizarColeccion(){
         }
     });
 
-    // 3. RENDERIZAR CUADRÍCULA DE LA DERECHA
+    let tieneObjetosGoodVistos = false;
+
     coleccionGuardada.forEach(item => {
         const esGood = (item.categoria === "GOOD");
 
@@ -723,7 +776,6 @@ function renderizarColeccion(){
         img.dataset.categoria = item.categoria || "Rara";
         img.dataset.idUnico = item.id;
 
-        // Si la imagen está rota en la cuadrícula, le pone un icono visual para que puedas seleccionarla o venderla
         img.onerror = function() {
             this.src = "https://placehold.co/130x130?text=Imagen+Rara+🚫";
             this.style.border = "4px dashed #9b59b6";
@@ -741,6 +793,7 @@ function renderizarColeccion(){
 
         if(esGood) {
             goodGrid.appendChild(img);
+            tieneObjetosGoodVistos = true;
         } else {
             if(favoritos.includes(item.id)){
                 coleccionGrid.prepend(img);
@@ -749,9 +802,16 @@ function renderizarColeccion(){
             }
         }
     });
+
+    const filtro = coleccionGrid.dataset.filtroActual;
+    const bloqueGood = document.getElementById("bloqueGoodInterno");
+    if((filtro && filtro !== "Todos" && filtro !== "SinRepetidas") || !tieneObjetosGoodVistos) {
+        bloqueGood.style.display = "none";
+    } else {
+        bloqueGood.style.display = "block";
+    }
 }
 
-   
 function toggleModoSeleccion() {
     modoSeleccionActivo = !modoSeleccionActivo;
     const btnModo = document.getElementById("btnModoSeleccion");
@@ -806,7 +866,6 @@ function confirmarVentaMasiva() {
         alert("Selecciona al menos una imagen.");
         return;
     }
-
     let gananciasTotales = calcularGananciaMasiva();
 
     if(confirm(`¿Seguro que deseas vender estas ${listaSeleccionadosParaBorrar.length} imágenes juntas por 💰 ${gananciasTotales} monedas?`)) {
@@ -819,22 +878,19 @@ function confirmarVentaMasiva() {
         
         toggleModoSeleccion();
         renderizarColeccion();
-        alert(`¡Venta masiva completada con éxito! Recibiste 💰 ${gananciasTotales} monedas.`);
+        alert(`¡Venta masiva completada! Recibiste 💰 ${gananciasTotales} monedas.`);
     }
 }
 
 function filtrarCategoria(categoria){
     coleccionGrid.dataset.filtroActual = categoria;
-    
-    if(categoria === "SinRepetidas") {
-        renderizarColeccion();
-        return;
-    }
-
     renderizarColeccion();
+    
+    if(categoria === "SinRepetidas" || categoria === "Todos") return;
+
     const imagenes = coleccionGrid.querySelectorAll("img");
     imagenes.forEach(img => {
-        if(categoria === "Todos" || img.dataset.categoria === categoria){
+        if(img.dataset.categoria === categoria){
             img.style.display = "block";
         } else {
             img.style.display = "none";
@@ -852,7 +908,6 @@ function actualizarTemporizador(){
     if(idIntervalo) clearInterval(idIntervalo);
 
     idIntervalo = setInterval(() => {
-        const abrirBoton = document.querySelector(".btn-abrir");
         const ahora = Date.now();
         let tiempoRestante = Math.floor((tiempoFinal - ahora) / 1000);
 
@@ -863,7 +918,6 @@ function actualizarTemporizador(){
             localStorage.removeItem("tiempoFinal");
             return;
         }
-
         actualizarTextoTiempo(tiempoRestante);
     }, 1000);
 }
@@ -921,6 +975,11 @@ function abrirMenuImagen(src, idUnico, elemento){
     document.getElementById("menuImagen").style.display = "block";
     const imgGrande = document.getElementById("imagenGrande");
     imgGrande.src = src;
+
+    imgGrande.onerror = function() {
+        this.src = "https://placehold.co/130x130?text=Imagen+Rara+🚫";
+    };
+
     aplicarEstiloBorde(imgGrande, src, idUnico);
 }
 
@@ -964,9 +1023,205 @@ function venderActual(){
     }
 }
 
+// ==========================================
+// EXPEDICIONES DIARIAS
+// ==========================================
+const configuracionRarezas = [
+    { tipo: "Poco", duracion: 60, costo: 20, minR: 45, maxR: 70 },       
+    { tipo: "Medio", duracion: 600, costo: 75, minR: 180, maxR: 280 },   
+    { tipo: "Mucho", duracion: 3600, costo: 250, minR: 650, maxR: 1100 } 
+];
+
+const categoriasDisponibles = ["Mascotas", "Salvajes", "Marinos", "Aves", "GOOD", "Rara"];
+
+function comprobarYGenerarMisionesDiarias() {
+    const hoy = new Date().toDateString();
+
+    if (ultimaFechaGeneracion !== hoy) {
+        misionesDiariasHoy = {};
+        
+        categoriasDisponibles.forEach(cat => {
+            misionesDiariasHoy[cat] = [];
+            
+            for (let i = 0; i < 7; i++) {
+                const rarezaElegida = configuracionRarezas[Math.floor(Math.random() * configuracionRarezas.length)];
+                const verbo = verbosAccion[Math.floor(Math.random() * verbosAccion.length)];
+                const lugar = lugaresMisiones[Math.floor(Math.random() * lugaresMisiones.length)];
+                
+                const nombreMision = `${verbo} en ${lugar}`;
+
+                misionesDiariasHoy[cat].push({
+                    id: `mis_${cat}_${i}_${Date.now()}`,
+                    nombre: nombreMision,
+                    rareza: rarezaElegida.tipo,
+                    duracion: rarezaElegida.duracion,
+                    costo: rarezaElegida.costo,
+                    recompensaMin: rarezaElegida.minR,
+                    recompensaMax: rarezaElegida.maxR
+                });
+            }
+        });
+
+        ultimaFechaGeneracion = hoy;
+        localStorage.setItem("ultimaFechaGeneracion", ultimaFechaGeneracion);
+        localStorage.setItem("misionesDiariasHoy", JSON.stringify(misionesDiariasHoy));
+    }
+    renderizarSeccionExpediciones();
+}
+
+function cambiarTabMisiones(categoriaTab) {
+    categoriaMisionesTabActual = categoriaTab;
+    
+    categoriasDisponibles.forEach(cat => {
+        const btn = document.getElementById(`btn-Tab-${cat}`);
+        if(btn) btn.classList.remove("activo");
+    });
+    document.getElementById(`btn-Tab-${categoriaTab}`).classList.add("activo");
+
+    renderizarSeccionExpediciones();
+}
+
+function renderizarSeccionExpediciones() {
+    const contenedor = document.getElementById("tiendaExpediciones");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+
+    const misionesDeEstaCategoria = misionesDiariasHoy[categoriaMisionesTabActual] || [];
+
+    const tieneAnimalRequerido = coleccionGuardada.some(item => {
+        if (categoriaMisionesTabActual === "Rara") {
+            const todoElPool = [...animales, ...objetosGood];
+            return !todoElPool.some(p => p.url.trim() === item.url.trim());
+        }
+        return item.categoria === categoriaMisionesTabActual;
+    });
+
+    misionesDeEstaCategoria.forEach(mision => {
+        const card = document.createElement("div");
+        card.classList.add("card-oferta");
+        
+        const badge = document.createElement("span");
+        badge.classList.add("badge-rareza", `rareza-${mision.rareza.toLowerCase()}`);
+        badge.textContent = `Botín: ${mision.rareza}`;
+        card.appendChild(badge);
+
+        const estadoActual = misionesActivas[mision.id];
+
+        if (!estadoActual) {
+            const mins = Math.floor(mision.duracion / 60);
+            const stringTiempo = mins >= 1 ? `${mins} min` : `${mision.duracion} seg`;
+
+            card.innerHTML += `
+                <h3 style="margin:20px 0 10px 0; font-size:16px; color:var(--texto-oscuro);">${mision.nombre}</h3>
+                <p style="font-size:13px; margin: 5px 0;">Requiere: <b>${categoriaMisionesTabActual}</b></p>
+                <p style="margin: 5px 0;">Inversión: 🪙 ${mision.costo}</p>
+                <p style="margin: 5px 0;">Tiempo: ⏳ ${stringTiempo}</p>
+                <button id="btn-enviar-${mision.id}" onclick="comenzarExpedicionDiaria('${mision.id}')">Enviar 🧭</button>
+            `;
+
+            setTimeout(() => {
+                const btnEnv = document.getElementById(`btn-enviar-${mision.id}`);
+                if (btnEnv && !tieneAnimalRequerido) {
+                    btnEnv.disabled = true;
+                    btnEnv.style.background = "#cbd5e0";
+                    btnEnv.style.cursor = "not-allowed";
+                    btnEnv.title = `Necesitas tener al menos 1 espécimen tipo ${categoriaMisionesTabActual} en tu inventario.`;
+                }
+            }, 0);
+
+        } else {
+            card.innerHTML += `
+                <h3 style="margin:20px 0 10px 0; font-size:16px; color:var(--texto-oscuro);">${mision.nombre}</h3>
+                <p id="timer_${mision.id}" style="font-weight:bold; color:var(--color-recompensa); margin-top:15px;">Calculando...</p>
+                <div id="accion_${mision.id}"></div>
+            `;
+        }
+        contenedor.appendChild(card);
+    });
+}
+
+function comenzarExpedicionDiaria(idMision) {
+    const misionesDeEstaCategoria = misionesDiariasHoy[categoriaMisionesTabActual] || [];
+    const mision = misionesDeEstaCategoria.find(m => m.id === idMision);
+    if (!mision) return;
+
+    if (monedas < mision.costo) {
+        alert("No tienes suficientes monedas para financiar esta expedición 😭");
+        return;
+    }
+
+    monedas -= mision.costo;
+    actualizarMonedas();
+
+    const tiempoFinalMision = Date.now() + (mision.duracion * 1000);
+    misionesActivas[idMision] = { tiempoFinal: tiempoFinalMision, categoriaOrigen: categoriaMisionesTabActual };
+    
+    localStorage.setItem("misionesActivas", JSON.stringify(misionesActivas));
+    localStorage.setItem("monedas", monedas);
+
+    renderizarSeccionExpediciones();
+    actualizarLoopsMisiones();
+}
+
+let intervaloMisiones = null;
+function actualizarLoopsMisiones() {
+    if (intervaloMisiones) clearInterval(intervaloMisiones);
+
+    intervaloMisiones = setInterval(() => {
+        let hayMisionesActivas = false;
+        const ahora = Date.now();
+
+        categoriasDisponibles.forEach(cat => {
+            const misionesCat = misionesDiariasHoy[cat] || [];
+            misionesCat.forEach(mision => {
+                const estado = misionesActivas[mision.id];
+                if (!estado) return;
+
+                hayMisionesActivas = true;
+                const timerTxt = document.getElementById(`timer_${mision.id}`);
+                const accionContenedor = document.getElementById(`accion_${mision.id}`);
+                
+                let restante = Math.floor((estado.tiempoFinal - ahora) / 1000);
+
+                if (restante <= 0) {
+                    if (timerTxt) timerTxt.textContent = "✅ ¡Expedición Regresó!";
+                    if (accionContenedor && accionContenedor.innerHTML === "") {
+                        accionContenedor.innerHTML = `<button onclick="reclamarExpedicionDiaria('${mision.id}', '${cat}')" style="background: linear-gradient(45deg, #ffb142, #ffaa00); color:white;">Recoger Botín 💰</button>`;
+                    }
+                } else {
+                    const mins = Math.floor(restante / 60);
+                    const secs = restante % 60;
+                    if (timerTxt) {
+                        timerTxt.textContent = mins >= 1 ? `⏳ Regresa en: ${mins}m ${secs}s` : `⏳ Regresa en: ${secs}s`;
+                    }
+                }
+            });
+        });
+
+        if (!hayMisionesActivas) clearInterval(intervaloMisiones);
+    }, 1000);
+}
+
+function reclamarExpedicionDiaria(idMision, cat) {
+    const misionesCat = misionesDiariasHoy[cat] || [];
+    const mision = misionesCat.find(m => m.id === idMision);
+    if (!mision) return;
+
+    const ganancia = Math.floor(Math.random() * (mision.recompensaMax - mision.recompensaMin + 1)) + mision.recompensaMin;
+
+    monedas += ganancia;
+    actualizarMonedas();
+
+    delete misionesActivas[idMision];
+    localStorage.setItem("misionesActivas", JSON.stringify(misionesActivas));
+    localStorage.setItem("monedas", monedas);
+
+    alert(`🎉 ¡Tu animal ha regresado con éxito! Trajo un botín de 🪙 ${ganancia} monedas.`);
+    renderizarSeccionExpediciones();
+}
+
 function crearOfertas(){
     tiendaOfertas.innerHTML = "";
-    
     ofertas.forEach((oferta,index) => {
         const card = document.createElement("div");
         card.classList.add("card-oferta");
@@ -986,8 +1241,8 @@ function crearOfertas(){
     cardExagerada.style.border = "2px solid #ffd700";
     cardExagerada.innerHTML = `
         <h2 style="color:#ffaa00;">✨ COMPRA GOOD DIRECTA</h2>
-        <p style="font-size: 22px; font-weight:800; color:#e53e3e;">💰 5,00000 MONEDAS</p>
-        <p>⚠️ Precio exageradamente costoso solo para maestros millonarios.</p>
+        <p style="font-size: 20px; font-weight:800; color:#e53e3e;">💰 500,000 MONEDAS</p>
+        <p>⚠️ Solo para maestros millonarios de nivel experto.</p>
         <button onclick="comprarGoodVip()" style="background: linear-gradient(45deg, #ffd700, #ffaa00);">OBTENER LEGENDARIA</button>
     `;
     tiendaOfertas.appendChild(cardExagerada);
@@ -995,12 +1250,10 @@ function crearOfertas(){
 
 function comprarOferta(index){
     const oferta = ofertas[index];
-
     if(monedas < oferta.precio){
         alert("No tienes suficientes monedas 😭");
         return;
     }
-
     if(puedeAbrir){
         alert("¡La caja ya está lista para abrir!");
         return;
@@ -1022,7 +1275,7 @@ function comprarOferta(index){
 
 function comprarGoodVip() {
     if(monedas < 500000) {
-        alert("¡No te alcanza! Consigue 5,00000 monedas trabajando duro. 😭");
+        alert("¡No te alcanza! Consigue 500,000 monedas trabajando duro. 😭");
         return;
     }
 
@@ -1036,7 +1289,7 @@ function comprarGoodVip() {
     
     guardarDatos();
     renderizarColeccion();
-    alert("💸 ¡Gastaste una fortuna! Tu objeto GOOD fue añadido directamente a tu galería especial.");
+    alert("💸 ¡Tu objeto GOOD fue añadido directamente a tu galería!");
 }
 
 function toggleMusica(){
@@ -1055,7 +1308,6 @@ function cargarDatos(){
     if(tiempoGuardado) tiempoCaja = Number(tiempoGuardado);
 
     actualizarMonedas();
-    
     aplicarEstiloBorde(animalImg, animalImg.src, null);
     renderizarColeccion();
 
@@ -1075,8 +1327,11 @@ function cargarDatos(){
     }
 }
 
+// INICIALIZACIÓN GLOBAL DEL JUEGO
 crearOfertas();
 cargarDatos();
+comprobarYGenerarMisionesDiarias();
+actualizarLoopsMisiones();
 </script>
 </body>
 </html>
