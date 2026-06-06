@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cube Timer Pro - Estudio Sermiteop</title>
     <style>
         body {
@@ -15,12 +15,32 @@
             margin: 0;
             background-color: #0f0f0f;
             color: white;
-            user-select: none; /* Evita que seleccionen y copien el texto */
+            user-select: none; /* Evita selección de texto al mantener presionado en celular */
+            -webkit-user-select: none;
+            touch-action: manipulation; /* Optimiza retrasos de clics en móviles */
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        .timer-box { text-align: center; margin-bottom: 20px; }
-        #display-seconds { font-size: 8rem; font-weight: bold; font-family: 'Courier New', monospace; line-height: 1; }
-        #display-minutes { font-size: 2.5rem; color: #888; font-family: monospace; margin-top: 10px; }
+        .timer-box { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            width: 100%;
+        }
+        
+        /* Ajuste responsivo para pantallas pequeñas */
+        #display-seconds { 
+            font-size: calc(5rem + 5vw); 
+            font-weight: bold; 
+            font-family: 'Courier New', monospace; 
+            line-height: 1; 
+        }
+        #display-minutes { 
+            font-size: calc(1.5rem + 1vw); 
+            color: #888; 
+            font-family: monospace; 
+            margin-top: 10px; 
+        }
 
         .ready { color: #ff4d4d !important; } 
         .go { color: #2ecc71 !important; }    
@@ -38,17 +58,22 @@
             font-weight: bold;
             cursor: pointer;
             margin-bottom: 20px;
+            width: 100%;
+            max-width: 450px;
+            z-index: 10; /* Asegura interacción por encima del área de toque */
         }
 
         .records-list {
             width: 100%;
             max-width: 450px;
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
             background: #1a1a1a;
             padding: 10px;
             border-radius: 12px;
             border: 1px solid #333;
+            box-sizing: border-box;
+            z-index: 10;
         }
 
         .record-item {
@@ -60,6 +85,7 @@
             background: #252525;
             border-radius: 8px;
             border-left: 4px solid #00ffcc;
+            font-size: 0.95rem;
         }
 
         .btn-delete {
@@ -67,11 +93,16 @@
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 6px 12px;
+            padding: 8px 16px;
             cursor: pointer;
         }
 
-        .hint { color: #444; margin-bottom: 10px; font-size: 0.9rem; }
+        .hint { 
+            color: #444; 
+            margin-bottom: 15px; 
+            font-size: 0.9rem; 
+            text-align: center;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -83,13 +114,12 @@
         <div id="display-minutes">00:00.00</div>
     </div>
 
-    <button id="btn-reset" onclick="saveAndReset()">GUARDAR Y REINICIAR</button>
+    <button id="btn-reset" onclick="saveAndReset(event)">GUARDAR Y REINICIAR</button>
     <div class="records-list" id="recordsList"></div>
 
     <script>
         // --- PROTECCIÓN ANTICUBRE ---
         document.onkeydown = function(e) {
-            // Bloquear F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S
             if(e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && e.keyCode == 73) || e.keyCode == 85 || e.keyCode == 83)) {
                 return false;
             }
@@ -115,27 +145,58 @@
             return { min: minutes, secRest: secondsStr, onlySec: totalSeconds, fullTime: `${minStr}:${secondsStr.padStart(5, '0')}` };
         }
 
-        window.addEventListener("keydown", function(e) {
-            if (e.code !== "Space") return;
-            e.preventDefault();
-            if (isRunning) pauseTimer();
-            else if (!isReady) {
+        // --- MANEJADORES DE ACCIÓN (PC & MÓVIL) ---
+        function triggerPressStart(e) {
+            // Evita activar el temporizador si se pulsa sobre los botones o la lista de registros
+            if (e.target.closest('#btn-reset') || e.target.closest('#recordsList')) return;
+            
+            if (isRunning) {
+                pauseTimer();
+            } else if (!isReady) {
                 isReady = true;
                 displaySec.className = "ready";
                 holdTimeout = setTimeout(() => { displaySec.className = "go"; }, 350);
             }
-        });
+        }
 
-        window.addEventListener("keyup", function(e) {
-            if (e.code !== "Space") return;
+        function triggerPressEnd(e) {
+            if (e.target.closest('#btn-reset') || e.target.closest('#recordsList')) return;
+
             if (isReady && !isRunning) {
                 if (displaySec.className === "go") startTimer();
                 else displaySec.className = elapsedTime > 0 ? "paused" : "";
                 clearTimeout(holdTimeout);
                 isReady = false;
             }
+        }
+
+        // Eventos de Teclado (PC)
+        window.addEventListener("keydown", function(e) {
+            if (e.code !== "Space") return;
+            e.preventDefault();
+            triggerPressStart(e);
         });
 
+        window.addEventListener("keyup", function(e) {
+            if (e.code !== "Space") return;
+            triggerPressEnd(e);
+        });
+
+        // Eventos Táctiles (Celular)
+        window.addEventListener("touchstart", function(e) {
+            // Previene zooms raros o comportamientos del navegador por defecto al dejar presionado
+            if (!e.target.closest('#btn-reset') && !e.target.closest('#recordsList')) {
+                e.preventDefault(); 
+            }
+            triggerPressStart(e);
+        }, { passive: false });
+
+        window.addEventListener("touchend", function(e) {
+            triggerPressEnd(e);
+        });
+
+
+        // --- FUNCIONES INTERNAS ---
         function startTimer() {
             isRunning = true;
             btnReset.style.display = "none";
@@ -156,7 +217,8 @@
             btnReset.style.display = "block";
         }
 
-        function saveAndReset() {
+        function saveAndReset(e) {
+            if (e) e.stopPropagation(); // Evita que el click reactive el timer involuntariamente
             const data = formatTime(elapsedTime);
             let mensaje = data.min > 0 ? `tardaste <b>${data.min}min</b> con <b>${data.secRest}seg</b>` : `tardaste <b>${data.secRest}seg</b>`;
             savedRecords.unshift(mensaje);
@@ -174,12 +236,13 @@
             savedRecords.forEach((rec, index) => {
                 const item = document.createElement("div");
                 item.className = "record-item";
-                item.innerHTML = `<div>${rec}</div><button class="btn-delete" onclick="deleteRecord(${index})">Borrar</button>`;
+                item.innerHTML = `<div>${rec}</div><button class="btn-delete" onclick="deleteRecord(event, ${index})">Borrar</button>`;
                 list.appendChild(item);
             });
         }
 
-        function deleteRecord(index) {
+        function deleteRecord(e, index) {
+            if (e) e.stopPropagation(); // Evita que se dispare el touch del fondo
             savedRecords.splice(index, 1);
             localStorage.setItem('cubeRecords', JSON.stringify(savedRecords));
             renderRecords();
