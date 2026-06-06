@@ -448,7 +448,7 @@ footer {
 }
 
 /* ==========================================
-   NUEVOS ESTILOS DEL SISTEMA DE LOGROS
+   ESTILOS DEL SISTEMA DE LOGROS
    ========================================== */
 .contenedor-logros {
     max-width: 800px;
@@ -580,6 +580,7 @@ footer {
     <li><button id="nav-logros" onclick="mostrarSeccion('logros')">🏆 Logros (<span id="cuenta-logros-notif">0</span>)</button></li>
 </ul>
 
+<!-- INICIO -->
 <div id="inicio" class="seccion activa">
     <h1>AnimalBox</h1>
     <div class="caja-principal">
@@ -597,6 +598,7 @@ footer {
     </div>
 </div>
 
+<!-- COLECCIÓN -->
 <div id="coleccion" class="seccion">
     <h1>Tu Colección</h1>
     <div class="filtros">
@@ -625,9 +627,10 @@ footer {
     </div>
 </div>
 
+<!-- MISIONES -->
 <div id="misiones" class="seccion">
     <h1>Gremio de Expediciones Diarias</h1>
-    <p style="text-align:center; color:#718096; font-weight:600;">Selecciona el tipo de animal que quieres enviar. ¡7 misiones diferentes por categoría cambiadas cada día!</p>
+    <p style="text-align:center; color:#718096; font-weight:600;">Selecciona el tipo de animal que quieres enviar. ¡7 misiones fijas por categoría que se reinician diariamente!</p>
     
     <div class="selectores-misiones" id="selectoresAnimales">
         <button id="btn-Tab-Mascotas" class="activo" onclick="cambiarTabMisiones('Mascotas')">🐱 Mascotas</button>
@@ -638,10 +641,11 @@ footer {
         <button id="btn-Tab-Rara" onclick="cambiarTabMisiones('Rara')">⭐ Raras</button>
     </div>
 
-    <h3 id="tituloMisionesHoy" style="text-align:center; color:#718096; font-size:16px; margin-top:15px;">Misiones disponibles para enviar hoy:</h3>
+    <h3 id="tituloMisionesHoy" style="text-align:center; color:#718096; font-size:16px; margin-top:15px;">Tablón de hoy:</h3>
     <div class="tienda-grid" id="tiendaExpediciones"></div>
 </div>
 
+<!-- TIENDA -->
 <div id="tienda" class="seccion">
     <h1>Tienda del Juego</h1>
     <p style="text-align:center; color:#718096; font-weight:600;">Invierte fondos para acelerar los tiempos de espera de las cajas o comprar objetos premium directamente.</p>
@@ -650,12 +654,14 @@ footer {
     <div class="tienda-grid" id="tiendaOfertas"></div>
 </div>
 
+<!-- LOGROS -->
 <div id="logros" class="seccion">
     <h1>🏆 Logros de la Cuenta</h1>
     <p style="text-align:center; color:#718096; font-weight:600; margin-bottom: 30px;">Completa desafíos para desbloquear bonificaciones especiales de dinero.</p>
     <div class="contenedor-logros" id="listaLogrosContenedor"></div>
 </div>
 
+<!-- POPUP DE REVISIÓN DE IMAGEN -->
 <div id="menuImagen">
     <img id="imagenGrande">
     <br><br>
@@ -674,10 +680,9 @@ footer {
 
 <script>
 // ==========================================
-// POOL DE ANIMALES Y RECOMPENSAS LEGENDARIAS
+// POOL DE ANIMALES Y RECOMPENSAS
 // ==========================================
 const animales = [
-    // MASCOTAS
     {url:"https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500", categoria:"Mascotas", color:"#e74c3c"}, 
     {url:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=500", categoria:"Mascotas", color:"#3498db"}, 
     {url:"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?q=80&w=500", categoria:"Mascotas", color:"#9b59b6"}, 
@@ -685,18 +690,15 @@ const animales = [
     {url:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?q=80&w=500", categoria:"Mascotas", color:"#ff4757"}, 
     {url:"https://images.unsplash.com/photo-1472491235688-bdc81a63246e?q=80&w=500", categoria:"Mascotas", color:"#747d8c"}, 
 
-    // SALVAJES
     {url:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=500", categoria:"Salvajes", color:"#2c3e50"}, 
     {url:"https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd?q=80&w=500", categoria:"Salvajes", color:"#d35400"}, 
     {url:"https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=636&auto=format&fit=crop", categoria:"Salvajes", color:"#57606f"}, 
     {url:"https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?q=80&w=915&auto=format&fit=crop", categoria:"Salvajes", color:"#16a085"}, 
 
-    // MARINOS
     {url:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=500", categoria:"Marinos",  color:"#6a1b9a"}, 
     {url:"https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=500", categoria:"Marinos",  color:"#00ced1"}, 
     {url:"https://images.unsplash.com/photo-1568430462989-44163eb1752f?q=80&w=500", categoria:"Marinos",  color:"#ff6b81"}, 
 
-    // AVES
     {url:"https://images.unsplash.com/photo-1452570053594-1b985d6ea890?q=80&w=500", categoria:"Aves",     color:"#ff4500"}, 
     {url:"https://images.unsplash.com/photo-1555169062-013468b47731?q=80&w=500", categoria:"Aves",     color:"#008080"}, 
     {url:"https://images.unsplash.com/photo-1516233758813-a38d024919c5?q=80&w=500", categoria:"Aves",     color:"#8e44ad"}, 
@@ -704,7 +706,6 @@ const animales = [
     {url:"https://images.unsplash.com/photo-1606567595334-d39972c85dbe?q=80&w=387&auto=format&fit=crop", categoria:"Aves",     color:"#ff007f"} 
 ];
 
-// RECOMPENSAS PREMIUM NO ANIMALES
 const objetosGood = [
     {url:"https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, 
     {url:"https://plus.unsplash.com/premium_photo-1666700698946-fbf7baa0134a?q=80&w=436&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"}, 
@@ -724,7 +725,6 @@ const ofertas = [
 const verbosAccion = ["Explorar", "Cazar en", "Investigar", "Hurgar en", "Vigilar", "Buscar tesoros en", "Rescatar objetos en"];
 const lugaresMisiones = ["el bosque prohibido", "un callejón Cyberpunk", "las ruinas antiguas", "el sótano de la casa", "un parque abandonado", "una isla desierta", "los servidores centrales"];
 
-// STRUCT DE LOGROS INICIALES
 let logrosEstructura = [
     { id: "logro_abrir_1", titulo: "Primeros Pasos 📦", desc: "Abre tu primer sobre de AnimalBox.", actual: 0, max: 1, recompensa: 50, reclamado: false },
     { id: "logro_mascotas_5", titulo: "Coleccionista Entusiasta 🐾", desc: "Consigue un total de 5 estampas en tu galería.", actual: 0, max: 5, recompensa: 200, reclamado: false },
@@ -763,9 +763,16 @@ const coleccionGrid = document.getElementById("coleccionGrid");
 const goodGrid = document.getElementById("goodGrid");
 const tiendaOfertas = document.getElementById("tiendaOfertas");
 const musica = document.getElementById("musica");
+const categoriasDisponibles = ["Mascotas", "Salvajes", "Marinos", "Aves", "GOOD", "Rara"];
+
+const configuracionRarezas = [
+    { tipo: "Poco", duracion: 60, costo: 20, minR: 45, maxR: 70 },       
+    { tipo: "Medio", duracion: 600, costo: 75, minR: 180, maxR: 280 },   
+    { tipo: "Mucho", duracion: 3600, costo: 250, minR: 650, maxR: 1100 } 
+];
 
 // ==========================================
-// LÓGICA DE INTERFAZ Y RECOLECCIÓN
+// LÓGICA CORE GENERAL Y DEL RENDER
 // ==========================================
 function obtenerColorDeImagen(url) {
     if(!url) return "#4b6584";
@@ -801,7 +808,6 @@ function mostrarSeccion(id){
     secciones.forEach(seccion => seccion.classList.remove("activa"));
     document.getElementById(id).classList.add("activa");
     
-    // Cambiar clases en la barra de navegación
     const botonesNav = document.querySelectorAll("ul.nav-bar button");
     botonesNav.forEach(b => b.classList.remove("activo-nav"));
     document.getElementById(`nav-${id}`).classList.add("activo-nav");
@@ -844,7 +850,6 @@ function abrirCaja(){
         const idUnico = "anim_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
         coleccionGuardada.push({ id: idUnico, url: elegido.url, categoria: elegido.categoria });
         
-        // ACTUALIZACIÓN DE TRIGGERS PARA LOGROS
         actualizarProgresoLogro("logro_abrir_1", 1);
         actualizarProgresoLogro("logro_mascotas_5", coleccionGuardada.length);
         if(esGoodObtenido) {
@@ -1033,7 +1038,6 @@ function confirmarVentaMasiva() {
         monedas += gananciasTotales;
         actualizarMonedas();
         
-        // RE-EVALUAR DESAFÍO DE GALERÍA AL REDUCIR
         actualizarProgresoLogro("logro_mascotas_5", coleccionGuardada.length);
         
         guardarDatos();
@@ -1181,7 +1185,6 @@ function venderActual(){
         monedas += pago;
         actualizarMonedas();
 
-        // RE-EVALUAR DESAFÍO DE GALERÍA AL REDUCIR
         actualizarProgresoLogro("logro_mascotas_5", coleccionGuardada.length);
 
         guardarDatos();
@@ -1193,16 +1196,8 @@ function venderActual(){
 }
 
 // ==========================================
-// EXPEDICIONES DIARIAS
+// NUEVO: EXPEDICIONES DIARIAS VERDADERAS
 // ==========================================
-const configuracionRarezas = [
-    { tipo: "Poco", duracion: 60, costo: 20, minR: 45, maxR: 70 },       
-    { tipo: "Medio", duracion: 600, costo: 75, minR: 180, maxR: 280 },   
-    { tipo: "Mucho", duracion: 3600, costo: 250, minR: 650, maxR: 1100 } 
-];
-
-const categoriasDisponibles = ["Mascotas", "Salvajes", "Marinos", "Aves", "GOOD", "Rara"];
-
 function comprobarYGenerarMisionesDiarias() {
     const hoy = new Date().toDateString();
 
@@ -1226,7 +1221,8 @@ function comprobarYGenerarMisionesDiarias() {
                     duracion: rarezaElegida.duracion,
                     costo: rarezaElegida.costo,
                     recompensaMin: rarezaElegida.minR,
-                    recompensaMax: rarezaElegida.maxR
+                    recompensaMax: rarezaElegida.maxR,
+                    completadaHoy: false // Nuevo interruptor por defecto diario
                 });
             }
         });
@@ -1276,7 +1272,14 @@ function renderizarSeccionExpediciones() {
 
         const estadoActual = misionesActivas[mision.id];
 
-        if (!estadoActual) {
+        // Bloqueo visual permanente si ya se cobró en el mismo día
+        if (mision.completadaHoy) {
+            card.innerHTML += `
+                <h3 style="margin:20px 0 10px 0; font-size:16px; color:#a0aec0; text-decoration: line-through;">${mision.nombre}</h3>
+                <p style="font-weight:bold; color:var(--color-abrir); margin-top:15px;">✅ Completada hoy</p>
+                <button style="background-color: #e2e8f0; color: #a0aec0; cursor: not-allowed; margin-top:15px;" disabled>Mañana más ⏰</button>
+            `;
+        } else if (!estadoActual) {
             const mins = Math.floor(mision.duracion / 60);
             const stringTiempo = mins >= 1 ? `${mins} min` : `${mision.duracion} seg`;
 
@@ -1384,6 +1387,10 @@ function reclamarExpedicionDiaria(idMision, cat) {
     totalMisionesCompletadasContador += 1;
     actualizarProgresoLogro("logro_misiones_5", totalMisionesCompletadasContador);
 
+    // Guardamos de forma persistente que esta misión ya se cerró por hoy
+    mision.completadaHoy = true;
+    localStorage.setItem("misionesDiariasHoy", JSON.stringify(misionesDiariasHoy));
+
     delete misionesActivas[idMision];
     localStorage.setItem("misionesActivas", JSON.stringify(misionesActivas));
     
@@ -1394,6 +1401,9 @@ function reclamarExpedicionDiaria(idMision, cat) {
     renderizarSeccionExpediciones();
 }
 
+// ==========================================
+// TIENDA Y ACELERADORES
+// ==========================================
 function crearOfertas(){
     tiendaOfertas.innerHTML = "";
     ofertas.forEach((oferta,index) => {
@@ -1420,6 +1430,10 @@ function crearOfertas(){
         <button onclick="comprarGoodVip()" style="background: linear-gradient(45deg, #ffd700, #ffaa00);">OBTENER LEGENDARIA</button>
     `;
     tiendaOfertas.appendChild(cardExagerada);
+}
+
+function comprarOffer(index) { // compatible binding
+    comprarOferta(index);
 }
 
 function comprarOferta(index){
@@ -1479,7 +1493,7 @@ function toggleMusica(){
 }
 
 // ==========================================
-// NUEVA LÓGICA: SISTEMA DE LOGROS INTEGRADO
+// SISTEMA DE LOGROS INTEGRADO
 // ==========================================
 function actualizarProgresoLogro(id, valor) {
     let logro = logrosGuardados.find(l => l.id === id);
