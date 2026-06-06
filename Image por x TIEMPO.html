@@ -464,6 +464,9 @@ footer {
         <button class="btn-recompensa" onclick="recompensaDiaria()">🎁 Recompensa Diaria</button>
         <br>
         <img id="animalImg" class="animal-img" src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500">
+        
+        <div id="mensajeClics" style="color: #e67e22; font-weight: bold; margin-top: 15px; font-size: 16px; display: block;">¡Haz clic muchas veces para romper el sobre! 🔥</div>
+        
         <br>
         <button class="btn-abrir" onclick="abrirCaja()">📦 ABRIR CAJA</button>
         <div class="info">
@@ -669,6 +672,9 @@ function abrirCaja(){
         alert("Todavía no puedes abrir 😭");
         return;
     }
+
+    // OCULTAR EL MENSAJE EN CUANTO EMPIEZA LA ANIMACIÓN Y LA ESPERA
+    document.getElementById("mensajeClics").style.display = "none";
 
     animalImg.classList.add("animacion-caja");
 
@@ -915,6 +921,10 @@ function actualizarTemporizador(){
             clearInterval(idIntervalo);
             puedeAbrir = true;
             tiempoTexto.textContent = "⏳ Listo";
+            
+            // MOSTRAR EL MENSAJE CUANDO EL TIEMPO HAYA ACABADO
+            document.getElementById("mensajeClics").style.display = "block";
+            
             localStorage.removeItem("tiempoFinal");
             return;
         }
@@ -985,7 +995,7 @@ function abrirMenuImagen(src, idUnico, elemento){
 
 function toggleFavorito(){
     if(favoritos.includes(idImagenSeleccionada)){
-        favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
+        favoritos = favorites.filter(fav => fav !== idImagenSeleccionada);
     } else {
         favoritos.push(idImagenSeleccionada);
     }
@@ -1318,12 +1328,19 @@ function cargarDatos(){
 
         if(ahora < tiempoFinal){
             puedeAbrir = false;
+            // SI ESTÁ CORRIENDO TIEMPO, OCULTAMOS EL MENSAJE
+            document.getElementById("mensajeClics").style.display = "none";
             actualizarTemporizador();
         } else {
             puedeAbrir = true;
             tiempoTexto.textContent = "⏳ Listo";
+            // SI YA PASÓ EL TIEMPO, LO MOSTRAMOS
+            document.getElementById("mensajeClics").style.display = "block";
             localStorage.removeItem("tiempoFinal");
         }
+    } else {
+        // SI NO HAY TIEMPO REGISTRADO, ESTÁ DISPONIBLE POR DEFECTO
+        document.getElementById("mensajeClics").style.display = "block";
     }
 }
 
