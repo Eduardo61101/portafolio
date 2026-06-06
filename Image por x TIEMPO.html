@@ -636,8 +636,8 @@ function toggleModoSeleccion() {
         btnModo.style.backgroundColor = "#ffb142";
         btnConfirmar.style.display = "none";
         
-        const de-marcar = coleccionGrid.querySelectorAll("img");
-        de-marcar.forEach(i => i.classList.remove("seleccionada-borrar"));
+        const deMarcar = coleccionGrid.querySelectorAll("img");
+        deMarcar.forEach(i => i.classList.remove("seleccionada-borrar"));
         listaSeleccionadosParaBorrar = [];
     }
 }
@@ -760,7 +760,7 @@ function abrirMenuImagen(src, idUnico, elemento){
     
     const btnFav = document.getElementById("btnFavMenu");
     if(elemento.dataset.categoria === "GOOD") {
-        btnFav.style.display = "none"; // Ocultar favorito en sección GOOD
+        btnFav.style.display = "none"; 
     } else {
         btnFav.style.display = "inline-block";
     }
@@ -771,7 +771,6 @@ function abrirMenuImagen(src, idUnico, elemento){
     aplicarEstiloBorde(imgGrande, src, idUnico);
 }
 
-// CORRECCIÓN DEL FILTRO ERROR ('favorites' CAMBIADO A 'favoritos')
 function toggleFavorito(){
     if(favoritos.includes(idImagenSeleccionada)){
         favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
@@ -812,7 +811,6 @@ function venderActual(){
 function crearOfertas(){
     tiendaOfertas.innerHTML = "";
     
-    // Tarjetas normales de tiempo
     ofertas.forEach((oferta,index) => {
         const card = document.createElement("div");
         card.classList.add("card-oferta");
@@ -827,7 +825,6 @@ function crearOfertas(){
         tiendaOfertas.appendChild(card);
     });
 
-    // ELEMENTO EXCLUSIVO CON PRECIO EXAGERADO AL FINAL DE LA TIENDA
     const cardExagerada = document.createElement("div");
     cardExagerada.classList.add("card-oferta");
     cardExagerada.style.border = "2px solid #ffd700";
@@ -876,7 +873,6 @@ function comprarGoodVip() {
     monedas -= 5000;
     actualizarMonedas();
 
-    // Obtener un objeto GOOD completamente aleatorio
     const randomGood = objetosGood[Math.floor(Math.random() * objetosGood.length)];
     const idUnico = "anim_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
     
