@@ -118,12 +118,7 @@
     <div class="records-list" id="recordsList"></div>
 
     <script>
-        // --- PROTECCIÓN ANTICUBRE ---
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && e.keyCode == 73) || e.keyCode == 85 || e.keyCode == 83)) {
-                return false;
-            }
-        };
+        
 
         // --- LÓGICA DEL CRONÓMETRO ---
         let startTime, elapsedTime = 0, timerInterval;
