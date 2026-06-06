@@ -15,12 +15,59 @@
             margin: 0;
             background-color: #0f0f0f;
             color: white;
-            user-select: none; /* Evita selección de texto al mantener presionado en celular */
+            user-select: none; 
             -webkit-user-select: none;
-            touch-action: manipulation; /* Optimiza retrasos de clics en móviles */
+            touch-action: manipulation; 
             padding: 20px;
             box-sizing: border-box;
         }
+
+        .hint { 
+            color: #444; 
+            margin-bottom: 5px; 
+            font-size: 0.9rem; 
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* Botón de Ayuda Desplegable */
+        .btn-ayuda {
+            background: none;
+            border: 1px solid #333;
+            color: #888;
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+            z-index: 15;
+        }
+        .btn-ayuda:hover {
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        /* Contenedor del Tutorial (Oculto por defecto) */
+        .tutorial-box {
+            display: none;
+            width: 100%;
+            max-width: 450px;
+            background: #141414;
+            border: 1px solid #252525;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #ccc;
+            z-index: 15;
+        }
+        .tutorial-box h3 { margin-top: 0; color: #00ffcc; font-size: 1.1rem; }
+        .tutorial-box h4 { margin: 10px 0 5px 0; color: white; }
+        .tutorial-box ul { margin: 0; padding-left: 20px; }
+        .tutorial-box li { margin-bottom: 5px; }
 
         .timer-box { 
             text-align: center; 
@@ -28,7 +75,6 @@
             width: 100%;
         }
         
-        /* Ajuste responsivo para pantallas pequeñas */
         #display-seconds { 
             font-size: calc(5rem + 5vw); 
             font-weight: bold; 
@@ -60,13 +106,13 @@
             margin-bottom: 20px;
             width: 100%;
             max-width: 450px;
-            z-index: 10; /* Asegura interacción por encima del área de toque */
+            z-index: 10; 
         }
 
         .records-list {
             width: 100%;
             max-width: 450px;
-            max-height: 250px;
+            max-height: 220px;
             overflow-y: auto;
             background: #1a1a1a;
             padding: 10px;
@@ -96,18 +142,33 @@
             padding: 8px 16px;
             cursor: pointer;
         }
-
-        .hint { 
-            color: #444; 
-            margin-bottom: 15px; 
-            font-size: 0.9rem; 
-            text-align: center;
-        }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
     <div class="hint">ESTUDIO SERMITEOP | PROTEGIDO</div>
+    
+    <button class="btn-ayuda" id="btnAyuda" onclick="toggleTutorial(event)">❔ Ver Guía de Uso</button>
+
+    <div class="tutorial-box" id="tutorialBox">
+        <h3>⏱️ Guía de Uso Rápida</h3>
+        
+        <h4>💻 En Computadora (PC)</h4>
+        <ul>
+            <li><b>Preparar:</b> Mantén presionada la <span style="color:#ff4d4d">Barra Espaciadora</span> (cambiará a rojo).</li>
+            <li><b>Listo:</b> Espera a que se ponga en <span style="color:#2ecc71">Verde</span> (350ms).</li>
+            <li><b>Iniciar:</b> Suelta el espacio para que empiece a correr (<span style="color:#00ffcc">Cian</span>).</li>
+            <li><b>Detener:</b> Presiona la barra espaciadora una vez (<span style="color:#f1c40f">Amarillo</span>).</li>
+        </ul>
+
+        <h4>📱 En Celular / Tablet</h4>
+        <ul>
+            <li><b>Preparar:</b> Deja presionado tu dedo en cualquier área vacía.</li>
+            <li><b>Listo:</b> Espera que el número cambie de rojo a <span style="color:#2ecc71">Verde</span>.</li>
+            <li><b>Iniciar:</b> Levanta tu dedo de la pantalla.</li>
+            <li><b>Detener:</b> Da un toque rápido en la pantalla al terminar.</li>
+        </ul>
+    </div>
     
     <div class="timer-box">
         <div id="display-seconds">0.00</div>
@@ -118,7 +179,26 @@
     <div class="records-list" id="recordsList"></div>
 
     <script>
-        
+        // --- PROTECCIÓN ANTICUBRE ---
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123 || (e.ctrlKey && (e.shiftKey && e.keyCode == 73) || e.keyCode == 85 || e.keyCode == 83)) {
+                return false;
+            }
+        };
+
+        // --- INTERRUPTOR DEL TUTORIAL ---
+        function toggleTutorial(e) {
+            if (e) e.stopPropagation();
+            const box = document.getElementById("tutorialBox");
+            const btn = document.getElementById("btnAyuda");
+            if (box.style.display === "block") {
+                box.style.display = "none";
+                btn.textContent = "❔ Ver Guía de Uso";
+            } else {
+                box.style.display = "block";
+                btn.textContent = "❌ Cerrar Guía";
+            }
+        }
 
         // --- LÓGICA DEL CRONÓMETRO ---
         let startTime, elapsedTime = 0, timerInterval;
@@ -142,8 +222,8 @@
 
         // --- MANEJADORES DE ACCIÓN (PC & MÓVIL) ---
         function triggerPressStart(e) {
-            // Evita activar el temporizador si se pulsa sobre los botones o la lista de registros
-            if (e.target.closest('#btn-reset') || e.target.closest('#recordsList')) return;
+            // Evita activar el timer si se pulsa sobre la interfaz interactiva
+            if (e.target.closest('#btn-reset') || e.target.closest('#recordsList') || e.target.closest('#btnAyuda') || e.target.closest('#tutorialBox')) return;
             
             if (isRunning) {
                 pauseTimer();
@@ -155,7 +235,7 @@
         }
 
         function triggerPressEnd(e) {
-            if (e.target.closest('#btn-reset') || e.target.closest('#recordsList')) return;
+            if (e.target.closest('#btn-reset') || e.target.closest('#recordsList') || e.target.closest('#btnAyuda') || e.target.closest('#tutorialBox')) return;
 
             if (isReady && !isRunning) {
                 if (displaySec.className === "go") startTimer();
@@ -165,7 +245,7 @@
             }
         }
 
-        // Eventos de Teclado (PC)
+        // Teclado PC
         window.addEventListener("keydown", function(e) {
             if (e.code !== "Space") return;
             e.preventDefault();
@@ -177,10 +257,9 @@
             triggerPressEnd(e);
         });
 
-        // Eventos Táctiles (Celular)
+        // Táctil Celular
         window.addEventListener("touchstart", function(e) {
-            // Previene zooms raros o comportamientos del navegador por defecto al dejar presionado
-            if (!e.target.closest('#btn-reset') && !e.target.closest('#recordsList')) {
+            if (!e.target.closest('#btn-reset') && !e.target.closest('#recordsList') && !e.target.closest('#btnAyuda') && !e.target.closest('#tutorialBox')) {
                 e.preventDefault(); 
             }
             triggerPressStart(e);
@@ -189,7 +268,6 @@
         window.addEventListener("touchend", function(e) {
             triggerPressEnd(e);
         });
-
 
         // --- FUNCIONES INTERNAS ---
         function startTimer() {
@@ -213,7 +291,7 @@
         }
 
         function saveAndReset(e) {
-            if (e) e.stopPropagation(); // Evita que el click reactive el timer involuntariamente
+            if (e) e.stopPropagation(); 
             const data = formatTime(elapsedTime);
             let mensaje = data.min > 0 ? `tardaste <b>${data.min}min</b> con <b>${data.secRest}seg</b>` : `tardaste <b>${data.secRest}seg</b>`;
             savedRecords.unshift(mensaje);
@@ -237,7 +315,7 @@
         }
 
         function deleteRecord(e, index) {
-            if (e) e.stopPropagation(); // Evita que se dispare el touch del fondo
+            if (e) e.stopPropagation(); 
             savedRecords.splice(index, 1);
             localStorage.setItem('cubeRecords', JSON.stringify(savedRecords));
             renderRecords();
