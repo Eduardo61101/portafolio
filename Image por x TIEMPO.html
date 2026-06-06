@@ -160,13 +160,68 @@ h1 {
     background-color: #edf2f7;
 }
 
+/* ESTRUCTURA DE DOS COLUMNAS PARA LA SECCIÓN COLECCIÓN */
+.layout-coleccion {
+    display: flex;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 25px;
+}
+
+/* FILA LATERAL IZQUIERDA (ÁLBUM DE CONTEO) */
+.lista-conteo-izquierda {
+    width: 200px;
+    min-width: 200px;
+    background-color: var(--bg-tarjeta);
+    border-radius: 24px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    border: 1px solid #edf2f7;
+    max-height: 65vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.item-conteo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 14px;
+    background: #f7fafc;
+    border: 1px solid #edf2f7;
+    transition: all 0.2s;
+}
+
+.item-conteo img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Imagen opaca y gris si tienes 0 unidades */
+.item-conteo.bloqueado img {
+    filter: grayscale(1) opacity(0.35);
+}
+
+.item-conteo .contador-numero {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--texto-oscuro);
+    background: #edf2f7;
+    padding: 4px 10px;
+    border-radius: 8px;
+    margin-left: auto;
+}
+
 .coleccion-grid, .good-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 16px;
-    padding: 25px;
-    max-width: 900px;
-    margin: 0 auto;
+    padding: 10px 0 25px 0;
 }
 
 .coleccion-grid img, .good-grid img {
@@ -401,9 +456,13 @@ h1 {
         <button onclick="filtrarCategoria('Aves')">Aves</button>
         <br><br>
         <button id="btnModoSeleccion" onclick="toggleModoSeleccion()" style="background-color: #ffb142; color: white;">🗑️ Seleccionar Varias</button>
-        <button id="btnConfirmarVenta" onclick="confirmarVentaMasiva()" style="background-color: #e53e3e; color: white; display: none;">Confirmar Venta Masiva (<span id="countVenta">0</span>)</button>
+        <button id="btnConfirmarVenta" onclick="confirmarVentaMasiva()" style="background-color: #e53e3e; color: white; display: none;">Confirmar Venta Masiva (<span id="countVenta">0</span>) | +🪙<span id="gananciaEstimada">0</span></button>
     </div>
-    <div class="coleccion-grid" id="coleccionGrid"></div>
+
+    <div class="layout-coleccion">
+        <div class="lista-conteo-izquierda" id="listaConteoIzquierda"></div>
+        <div class="coleccion-grid" id="coleccionGrid" style="flex-grow: 1; margin: 0;"></div>
+    </div>
 </div>
 
 <div id="tienda" class="seccion">
@@ -424,7 +483,7 @@ h1 {
     <br><br>
     <button onclick="verCompleta()">👁️ Ver Completa</button>
     <button id="btnFavMenu" onclick="toggleFavorito()">⭐ Favorito</button>
-    <button onclick="venderActual()" style="color: #e53e3e;">💸 Vender</button>
+    <button id="btnVenderTexto" onclick="venderActual()" style="color: #e53e3e; font-weight: bold;">💸 Vender</button>
     <br><br>
     <button onclick="cerrarMenu()" style="background-color: #edf2f7;">❌ Cerrar</button>
 </div>
@@ -467,12 +526,12 @@ const animales = [
 
 // RECOMPENSAS PREMIUM NO ANIMALES
 const objetosGood = [
-    {url:"https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, // Neon Cyberpunk
-    {url:"https://plus.unsplash.com/premium_photo-1666700698946-fbf7baa0134a?q=80&w=436&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"GOOD", color:"#ffd700"}, // Portal 3D Estelar
-    {url:"https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"GOOD", color:"#ffd700"}, // Set Retro Gaming Neon
-    {url:"https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=500", categoria:"GOOD", color:"#ffd700"},  // Galaxia Abstracta Futurista
-    {url:"https://images.unsplash.com/photo-1590796583326-afd3bb20d22d?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"GOOD", color:"#ffd700"},
-   {url:"https://images.unsplash.com/photo-1716045168176-15d310a01dc0?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"GOOD", color:"#ffd700"}
+    {url:"https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, 
+    {url:"https://plus.unsplash.com/premium_photo-1666700698946-fbf7baa0134a?q=80&w=436&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"}, 
+    {url:"https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=870&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"}, 
+    {url:"https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=500", categoria:"GOOD", color:"#ffd700"},  
+    {url:"https://images.unsplash.com/photo-1590796583326-afd3bb20d22d?q=80&w=387&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"},
+    {url:"https://images.unsplash.com/photo-1716045168176-15d310a01dc0?q=80&w=580&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"}
 ];
 
 let monedas = 0;
@@ -483,7 +542,6 @@ let idIntervalo = null;
 let idImagenSeleccionada = null; 
 let elementoSeleccionado = null;
 
-// SELECTOR MÚLTIPLE DE BORRADO
 let modoSeleccionActivo = false;
 let listaSeleccionadosParaBorrar = [];
 
@@ -537,7 +595,6 @@ function mostrarSeccion(id){
     secciones.forEach(seccion => seccion.classList.remove("activa"));
     document.getElementById(id).classList.add("activa");
     
-    // Desactivar borrado masivo automáticamente al cambiar de menú
     if(id !== 'coleccion' && modoSeleccionActivo) toggleModoSeleccion();
 }
 
@@ -555,7 +612,6 @@ function abrirCaja(){
         let elegido;
         let suerte = Math.random() * 100;
         
-        // RAREZA MÍSTICA: 4% de probabilidad de conseguir una carta GOOD, 96% animales normales
         if(suerte <= 4) {
             elegido = objetosGood[Math.floor(Math.random()*objetosGood.length)];
             alert("💥 ¡ÉPICO! ¡Te ha salido una recompensa misteriosa 'GOOD'! ✨");
@@ -583,8 +639,36 @@ function abrirCaja(){
 function renderizarColeccion(){
     coleccionGrid.innerHTML = "";
     goodGrid.innerHTML = ""; 
-    const urlsVistas = new Set();
+    const listaConteo = document.getElementById("listaConteoIzquierda");
+    listaConteo.innerHTML = ""; // Limpiar barra izquierda
 
+    const urlsVistas = new Set();
+    
+    // 1. MAPEO DE CANTIDADES INDIVIDUALES
+    const mapeoCantidades = {};
+    coleccionGuardada.forEach(item => {
+        mapeoCantidades[item.url] = (mapeoCantidades[item.url] || 0) + 1;
+    });
+
+    // 2. CONSTRUIR FILA LATERAL IZQUIERDA (ÁLBUM / RECUENTOS)
+    const todoElPool = [...animales, ...objetosGood];
+    todoElPool.forEach(item => {
+        const cantidadActual = mapeoCantidades[item.url] || 0;
+        
+        const divItem = document.createElement("div");
+        divItem.classList.add("item-conteo");
+        if(cantidadActual === 0) {
+            divItem.classList.add("bloqueado"); 
+        }
+
+        divItem.innerHTML = `
+            <img src="${item.url}">
+            <span class="contador-numero">${cantidadActual}</span>
+        `;
+        listaConteo.appendChild(divItem);
+    });
+
+    // 3. RENDERIZAR CUADRÍCULA DE LA DERECHA
     coleccionGuardada.forEach(item => {
         const esGood = (item.categoria === "GOOD");
 
@@ -608,7 +692,6 @@ function renderizarColeccion(){
             }
         };
 
-        // Redirección de dibujo: Cartas GOOD se renderizan abajo en su vitrina VIP
         if(esGood) {
             goodGrid.appendChild(img);
         } else {
@@ -621,7 +704,6 @@ function renderizarColeccion(){
     });
 }
 
-// SISTEMA Y PANEL DEL BORRADO MULTIPLE
 function toggleModoSeleccion() {
     modoSeleccionActivo = !modoSeleccionActivo;
     const btnModo = document.getElementById("btnModoSeleccion");
@@ -632,13 +714,13 @@ function toggleModoSeleccion() {
         btnModo.style.backgroundColor = "#718096";
         btnConfirmar.style.display = "inline-block";
         listaSeleccionadosParaBorrar = [];
-        document.getElementById("countVenta").textContent = "0";
+        actualizarContadoresVentaMasiva();
     } else {
         btnModo.textContent = "🗑️ Seleccionar Varias";
         btnModo.style.backgroundColor = "#ffb142";
         btnConfirmar.style.display = "none";
         
-        const deMarcar = coleccionGrid.querySelectorAll("img");
+        const deMarcar = document.querySelectorAll(".coleccion-grid img, .good-grid img");
         deMarcar.forEach(i => i.classList.remove("seleccionada-borrar"));
         listaSeleccionadosParaBorrar = [];
     }
@@ -652,7 +734,23 @@ function gestionarSeleccionMultiple(idUnico, elemento) {
         listaSeleccionadosParaBorrar.push(idUnico);
         elemento.classList.add("seleccionada-borrar");
     }
+    actualizarContadoresVentaMasiva();
+}
+
+function calcularGananciaMasiva() {
+    let total = 0;
+    listaSeleccionadosParaBorrar.forEach(id => {
+        const item = coleccionGuardada.find(c => c.id === id);
+        if(item) {
+            total += (item.categoria === "GOOD") ? 1500 : 25;
+        }
+    });
+    return total;
+}
+
+function actualizarContadoresVentaMasiva() {
     document.getElementById("countVenta").textContent = listaSeleccionadosParaBorrar.length;
+    document.getElementById("gananciaEstimada").textContent = calcularGananciaMasiva();
 }
 
 function confirmarVentaMasiva() {
@@ -661,19 +759,19 @@ function confirmarVentaMasiva() {
         return;
     }
 
-    if(confirm(`¿Seguro que deseas vender estas ${listaSeleccionadosParaBorrar.length} imágenes juntas?`)) {
-        let ganancias = listaSeleccionadosParaBorrar.length * 25;
-        
+    let gananciasTotales = calcularGananciaMasiva();
+
+    if(confirm(`¿Seguro que deseas vender estas ${listaSeleccionadosParaBorrar.length} imágenes juntas por 💰 ${gananciasTotales} monedas?`)) {
         coleccionGuardada = coleccionGuardada.filter(item => !listaSeleccionadosParaBorrar.includes(item.id));
         favoritos = favoritos.filter(favId => !listaSeleccionadosParaBorrar.includes(favId));
         
-        monedas += ganancias;
+        monedas += gananciasTotales;
         actualizarMonedas();
         guardarDatos();
         
         toggleModoSeleccion();
         renderizarColeccion();
-        alert(`¡Borrado exitoso! Recibiste 💰 ${ganancias} monedas.`);
+        alert(`¡Venta masiva completada con éxito! Recibiste 💰 ${gananciasTotales} monedas.`);
     }
 }
 
@@ -706,6 +804,7 @@ function actualizarTemporizador(){
     if(idIntervalo) clearInterval(idIntervalo);
 
     idIntervalo = setInterval(() => {
+        const abrirBoton = document.querySelector(".btn-abrir");
         const ahora = Date.now();
         let tiempoRestante = Math.floor((tiempoFinal - ahora) / 1000);
 
@@ -763,7 +862,6 @@ function abrirMenuImagen(src, idUnico, elemento){
     const btnFav = document.getElementById("btnFavMenu");
     const btnVender = document.getElementById("btnVenderTexto");
     
-    // Detecta si es un objeto GOOD para actualizar el precio del botón
     if(elemento.dataset.categoria === "GOOD") {
         btnFav.style.display = "none"; 
         btnVender.textContent = "💸 Vender (💸 1,500)";
@@ -803,7 +901,6 @@ function verCompleta(){
 function venderActual(){
     if(elementoSeleccionado){
         const itemColeccion = coleccionGuardada.find(item => item.id === idImagenSeleccionada);
-        // ¡Aquí está la magia! Si es GOOD te da 1500, si no, 25
         let pago = (itemColeccion && itemColeccion.categoria === "GOOD") ? 1500 : 25;
 
         coleccionGuardada = coleccionGuardada.filter(item => item.id !== idImagenSeleccionada);
