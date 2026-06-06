@@ -492,6 +492,8 @@ h1 {
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
 </audio>
 
+<footer>Pagina web impulsada por IA, para fine educativos</footer>
+   
 <script>
 // ==========================================
 // POOL DE ANIMALES Y RECOMPENSAS LEGENDARIAS
@@ -644,16 +646,20 @@ function renderizarColeccion(){
 
     const urlsVistas = new Set();
     
-    // 1. MAPEO DE CANTIDADES INDIVIDUALES
+    // 1. MAPEO DE CANTIDADES INDIVIDUALES (Limpiando espacios en blanco)
     const mapeoCantidades = {};
     coleccionGuardada.forEach(item => {
-        mapeoCantidades[item.url] = (mapeoCantidades[item.url] || 0) + 1;
+        if (item && item.url) {
+            const urlLimpia = item.url.trim();
+            mapeoCantidades[urlLimpia] = (mapeoCantidades[urlLimpia] || 0) + 1;
+        }
     });
 
     // 2. CONSTRUIR FILA LATERAL IZQUIERDA (ÁLBUM / RECUENTOS)
     const todoElPool = [...animales, ...objetosGood];
     todoElPool.forEach(item => {
-        const cantidadActual = mapeoCantidades[item.url] || 0;
+        const urlPoolLimpia = item.url.trim();
+        const cantidadActual = mapeoCantidades[urlPoolLimpia] || 0;
         
         const divItem = document.createElement("div");
         divItem.classList.add("item-conteo");
