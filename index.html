@@ -332,7 +332,7 @@ h6{
     <div id="visitas">👀 Visitas: 0</div>
 </div>
 
-<img class="perfil" src="imagenes/p5.png" alt="Foto de Perfil">
+<img id="fotoPerfil" class="perfil" src="imagenes/p5.png" alt="Foto de Perfil" style="cursor: pointer;">
 
 <p id="reloj" style="margin-top: 10px; font-weight: bold; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);"></p>
 
@@ -636,6 +636,32 @@ document.getElementById("btnLike").addEventListener("click", (e) => {
         .catch(err => console.error("Error:", err));
     }
 });
+
+// --------------------------------------------------------------------------
+// VISOR ESPECIAL PARA LA FOTO DE PERFIL (SIN LIKES)
+// --------------------------------------------------------------------------
+document.getElementById("fotoPerfil").addEventListener("click", function() {
+    // 1. Abrimos el visor principal
+    document.getElementById("visor").style.display = "flex";
+    
+    // 2. Le pasamos la ruta de tu foto de perfil al visor
+    document.getElementById("imagenGrande").src = this.src;
+    
+    // 3. Reseteamos el ID actual para que el botón de like no haga nada por si acaso
+    idImagenActual = "";
+    
+    // 4. Buscamos el contenedor de likes dentro del visor y lo ESCONDEMOS por completo
+    document.querySelector(".contenedor-likes").style.display = "none";
+});
+
+// MODIFICACIÓN A TU FUNCIÓN DE CERRAR: 
+// Debemos asegurarnos de que cuando se cierre el visor, la barra de likes vuelva a aparecer
+// para que los renders de Blender sí sigan mostrando sus respectivos corazones y conteos.
+function cerrarVisor(){
+    document.getElementById("visor").style.display = "none";
+    // Volvemos a hacer visible la caja de likes para los renders normales
+    document.querySelector(".contenedor-likes").style.display = "flex";
+}
 
 function cerrarVisor(){
     document.getElementById("visor").style.display = "none";
