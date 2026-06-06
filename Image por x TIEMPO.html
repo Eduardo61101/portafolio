@@ -1,615 +1,1605 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimalBox & Gremio - Edición Final</title>
-    <style>
-        :root {
-            --color-fondo: #0f172a;
-            --color-tarjeta: #1e293b;
-            --color-borde: #334155;
-            --color-texto: #f8fafc;
-            --color-texto-mutado: #94a3b8;
-            --color-primario: #3b82f6;
-            --color-primario-hover: #2563eb;
-            --color-exito: #10b981;
-            --color-exito-hover: #059669;
-            --color-oro: #f59e0b;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AnimalBox Premium</title>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<style>
+/* ==========================================
+   DISEÑO NEO-MINIMALISTA SUAVE Y PREMIUM
+   ========================================== */
+:root {
+    --bg-principal: #f0f7f4; 
+    --bg-tarjeta: #ffffff;
+    --texto-oscuro: #2d3748;
+    --color-acento: #47a8bd;  
+    --color-recompensa: #ffb142; 
+    --color-abrir: #2ecc71; 
+    --color-gold: #ffd700;
+    --fuente: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
 
-        body {
-            background-color: var(--color-fondo);
-            color: var(--color-texto);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg-principal);
+    font-family: var(--fuente);
+    color: var(--texto-oscuro);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
 
-        header {
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--color-borde);
-            margin-bottom: 20px;
-        }
+ul.nav-bar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    background-color: var(--bg-tarjeta);
+    padding: 15px;
+    margin: 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
 
-        .logo-container h1 {
-            font-size: 24px;
-            color: var(--color-texto);
-        }
+ul.nav-bar button {
+    background: none;
+    border: none;
+    color: #a0aec0;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
 
-        .stats-top {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
+ul.nav-bar button:hover {
+    color: var(--color-acento);
+    background-color: #f7fafc;
+}
 
-        .stat-box {
-            background-color: var(--color-tarjeta);
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid var(--color-borde);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+ul.nav-bar button.activo-nav {
+    color: var(--color-acento);
+    background-color: #edf2f7;
+}
 
-        .stat-box span {
-            color: var(--color-oro);
-        }
+h1 {
+    text-align: center;
+    color: var(--texto-oscuro);
+    margin-top: 40px;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
 
-        /* Navegación de pestañas */
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            width: 100%;
-            max-width: 1000px;
-        }
+.seccion {
+    display: none;
+    animation: fadeIn 0.4s ease-in-out;
+    flex: 1;
+}
 
-        .tab-btn {
-            background-color: var(--color-tarjeta);
-            color: var(--color-texto-mutado);
-            border: 1px solid var(--color-borde);
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            flex: 1;
-            text-align: center;
-        }
+.activa {
+    display: block;
+}
 
-        .tab-btn:hover {
-            color: var(--color-texto);
-            border-color: var(--color-texto-mutado);
-        }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-        .tab-btn.active {
-            background-color: var(--color-primario);
-            color: var(--color-texto);
-            border-color: var(--color-primario);
-        }
+.monedas-box {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    background-color: var(--bg-tarjeta);
+    color: var(--texto-oscuro);
+    padding: 12px 20px;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    z-index: 100;
+    border: 1px solid #edf2f7;
+}
 
-        /* Contenedores de vistas */
-        .view-panel {
-            display: none;
-            width: 100%;
-            max-width: 1000px;
-        }
+.caja-principal {
+    width: 360px;
+    margin: auto;
+    margin-top: 20px;
+    background-color: var(--bg-tarjeta);
+    border-radius: 28px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    border: 1px solid #edf2f7;
+}
 
-        .view-panel.active {
-            display: block;
-        }
+.animal-img {
+    width: 260px;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-sizing: border-box;
+    background-color: #f7fafc;
+}
 
-        /* Estilos generales de secciones y rejillas */
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
+.btn-abrir {
+    margin-top: 25px;
+    padding: 16px 40px;
+    border: none;
+    border-radius: 18px;
+    background-color: var(--color-abrir);
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.2);
+    transition: all 0.2s ease;
+}
 
-        .card {
-            background-color: var(--color-tarjeta);
-            border: 1px solid var(--color-borde);
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
-        }
+.btn-abrir:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
+}
 
-        /* Estilos de la Tienda / Sobres */
-        .shop-box {
-            text-align: center;
-            padding: 30px;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-        }
+.info {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #718096;
+}
 
-        .btn-action {
-            background-color: var(--color-primario);
-            color: var(--color-texto);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            width: 100%;
-        }
+.btn-recompensa {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 14px;
+    background-color: #f7fafc;
+    color: var(--color-recompensa);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid #edf2f7;
+    transition: background 0.2s;
+}
 
-        .btn-action:hover {
-            background-color: var(--color-primario-hover);
-        }
+.btn-recompensa:hover {
+    background-color: #edf2f7;
+}
 
-        .btn-action:disabled {
-            background-color: var(--color-borde);
-            color: var(--color-texto-mutado);
-            cursor: not-allowed;
-        }
+/* LAYOUT DE COLECCIÓN */
+.layout-coleccion {
+    display: flex;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 25px;
+}
 
-        /* Rarezas */
-        .rarity-tag {
-            align-self: flex-start;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .rare-normal { background-color: #64748b; color: #fff; }
-        .rare-good { background-color: var(--color-oro); color: #000; font-shadow: 0 0 5px rgba(245, 158, 11, 0.5); }
+.lista-conteo-izquierda {
+    width: 200px;
+    min-width: 200px;
+    background-color: var(--bg-tarjeta);
+    border-radius: 24px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    border: 1px solid #edf2f7;
+    max-height: 75vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
 
-        /* Estilos de las Misiones */
-        .mission-reward {
-            color: var(--color-oro);
-            font-weight: bold;
-            font-size: 14px;
-        }
+.item-conteo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 14px;
+    background: #f7fafc;
+    border: 1px solid #edf2f7;
+    transition: all 0.2s;
+}
 
-        /* --- NUEVO: SISTEMA DE LOGROS --- */
-        .achievements-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+.item-conteo img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 10px;
+}
 
-        .achievement-card {
-            background-color: var(--color-tarjeta);
-            border: 1px solid var(--color-borde);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            transition: border-color 0.3s ease;
-        }
+.item-conteo.bloqueado img {
+    filter: grayscale(1) opacity(0.35);
+}
 
-        .achievement-card.completed-border {
-            border-color: var(--color-exito);
-        }
+.item-conteo .contador-numero {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--texto-oscuro);
+    background: #edf2f7;
+    padding: 4px 10px;
+    border-radius: 8px;
+    margin-left: auto;
+}
 
-        .achievement-info {
-            flex: 1;
-        }
+.coleccion-grid, .good-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 16px;
+    padding: 10px 0 25px 0;
+}
 
-        .achievement-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+.coleccion-grid img, .good-grid img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    background-color: white;
+}
 
-        .achievement-desc {
-            font-size: 14px;
-            color: var(--color-texto-mutado);
-            margin-bottom: 12px;
-        }
+.coleccion-grid img:hover, .good-grid img:hover {
+    transform: translateY(-3px);
+}
 
-        /* Barra de Progreso */
-        .progress-container {
-            background-color: var(--color-fondo);
-            border-radius: 20px;
-            height: 12px;
-            width: 100%;
-            max-width: 350px;
-            overflow: hidden;
-            border: 1px solid var(--color-borde);
-        }
+.good-glow {
+    animation: goldBrillo 1.5s infinite alternate;
+}
 
-        .progress-bar {
-            background-color: var(--color-primario);
-            height: 100%;
-            width: 0%;
-            transition: width 0.4s ease;
-        }
+@keyframes goldBrillo {
+    from { box-shadow: 0 0 4px #ffd700; border-color: #ffd700; }
+    to { box-shadow: 0 0 20px #ffaa00; border-color: #ffaa00; }
+}
 
-        .achievement-card.completed-border .progress-bar {
-            background-color: var(--color-exito);
-        }
+.favorita-glow {
+    animation: glowBrillo 2s infinite alternate;
+}
 
-        .progress-text {
-            font-size: 12px;
-            color: var(--color-texto-mutado);
-            margin-top: 4px;
-        }
+@keyframes glowBrillo {
+    from { box-shadow: 0 0 4px rgba(0,0,0,0.1); }
+    to { box-shadow: 0 0 16px currentColor; }
+}
 
-        /* Botón Reclamar Logro */
-        .btn-claim {
-            background-color: var(--color-exito);
-            color: var(--color-texto);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
+.seleccionada-borrar {
+    border: 5px dashed #e53e3e !important;
+    opacity: 0.6;
+    animation: temblorBorrar 0.3s infinite;
+}
 
-        .btn-claim:hover {
-            background-color: var(--color-exito-hover);
-        }
+@keyframes temblorBorrar {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(1deg); }
+    100% { transform: rotate(-1deg); }
+}
 
-        .btn-claim:disabled {
-            background-color: var(--color-borde);
-            color: var(--color-texto-mutado);
-            cursor: not-allowed;
-        }
+/* DIVISIÓN INTERNA DE OBJETOS GOOD */
+.division-good {
+    margin-top: 30px;
+    border-top: 3px dashed var(--color-gold);
+    padding-top: 20px;
+}
 
-        .claimed-status {
-            color: var(--color-texto-mutado);
-            font-weight: bold;
-            font-size: 15px;
-            padding: 12px 20px;
-        }
+.subtitulo-good {
+    color: #d4af37;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        /* Responsivo para Logros */
-        @media (max-width: 600px) {
-            .achievement-card {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .btn-claim, .claimed-status {
-                width: 100%;
-                text-align: center;
-            }
-            .progress-container {
-                max-width: 100%;
-            }
-        }
-    </style>
+#menuImagen {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-tarjeta);
+    padding: 30px;
+    border-radius: 28px;
+    z-index: 999;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    border: 1px solid #edf2f7;
+}
+
+#imagenGrande {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+
+#menuImagen button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 5px;
+    font-weight: 600;
+    font-size: 14px;
+    background-color: #f7fafc;
+    color: var(--texto-oscuro);
+    transition: background 0.2s;
+}
+
+#menuImagen button:hover {
+    background-color: #edf2f7;
+}
+
+.tienda-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 25px;
+}
+
+.card-oferta {
+    background-color: var(--bg-tarjeta);
+    width: 240px;
+    color: var(--texto-oscuro);
+    padding: 25px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    border: 1px solid #edf2f7;
+    position: relative;
+}
+
+.card-oferta button {
+    margin-top: 15px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 14px;
+    background-color: var(--color-acento);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.card-oferta button:hover {
+    opacity: 0.9;
+}
+
+/* ETIQUETAS DE RAREZA DE MISIÓN */
+.badge-rareza {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+}
+.rareza-poco { background-color: #a0aec0; }
+.rareza-medio { background-color: #47a8bd; }
+.rareza-mucho { background-color: #9b59b6; }
+
+.filtros, .selectores-misiones {
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.filtros button, .selectores-misiones button {
+    margin: 4px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: var(--bg-tarjeta);
+    color: var(--texto-oscuro);
+    font-weight: 600;
+    border: 1px solid #edf2f7;
+    transition: all 0.2s;
+}
+
+.filtros button:hover, .selectores-misiones button.activo {
+    background-color: var(--color-acento);
+    color: white;
+}
+
+.animacion-caja {
+    animation: shake 0.4s infinite;
+}
+
+@keyframes shake {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95) rotate(2deg); }
+    100% { transform: scale(1); }
+}
+
+.musica-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.musica-box button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    background: var(--bg-tarjeta);
+    color: var(--texto-oscuro);
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #edf2f7;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #718096;
+    background-color: var(--bg-tarjeta);
+    border-top: 1px solid #edf2f7;
+    margin-top: 40px;
+    font-weight: 500;
+}
+
+/* ==========================================
+   NUEVOS ESTILOS DEL SISTEMA DE LOGROS
+   ========================================== */
+.contenedor-logros {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.tarjeta-logro {
+    background-color: var(--bg-tarjeta);
+    border: 1px solid #edf2f7;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+    transition: border-color 0.3s;
+}
+
+.tarjeta-logro.completado-borde {
+    border: 2px solid var(--color-abrir);
+}
+
+.info-logro {
+    flex: 1;
+}
+
+.titulo-logro {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--texto-oscuro);
+    margin-bottom: 5px;
+}
+
+.desc-logro {
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 12px;
+}
+
+.contenedor-barra-progreso {
+    background-color: #edf2f7;
+    border-radius: 10px;
+    height: 10px;
+    width: 100%;
+    max-width: 300px;
+    overflow: hidden;
+}
+
+.barra-progreso {
+    background-color: var(--color-acento);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+.tarjeta-logro.completado-borde .barra-progreso {
+    background-color: var(--color-abrir);
+}
+
+.texto-progreso {
+    font-size: 12px;
+    color: #a0aec0;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+.btn-reclamar-logro {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 14px;
+    background-color: var(--color-abrir);
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    white-space: nowrap;
+}
+
+.btn-reclamar-logro:hover {
+    transform: scale(1.03);
+}
+
+.btn-reclamar-logro:disabled {
+    background-color: #e2e8f0;
+    color: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.estado-reclamado {
+    color: #a0aec0;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 12px 20px;
+}
+
+@media (max-width: 600px) {
+    .tarjeta-logro {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .btn-reclamar-logro {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <h1>AnimalBox & Gremio</h1>
-        </div>
-        <div class="stats-top">
-            <div class="stat-box">Monedas: <span id="global-coins">500</span></div>
-        </div>
-    </header>
+<div class="monedas-box" id="monedas">🪙 0</div>
 
-    <!-- Menú de Pestañas -->
-    <nav class="nav-tabs">
-        <div class="tab-btn active" onclick="switchView('shop')">🛒 Tienda</div>
-        <div class="tab-btn" onclick="switchView('collection')">🐾 Colección</div>
-        <div class="tab-btn" onclick="switchView('guild')">⚔️ Gremio de Misiones</div>
-        <div class="tab-btn" id="tab-achievements" onclick="switchView('achievements')">🏆 Logros (0)</div>
-    </nav>
+<div class="musica-box">
+    <button onclick="toggleMusica()">🎵 Música</button>
+</div>
 
-    <!-- VISTA 1: TIENDA -->
-    <section id="view-shop" class="view-panel active">
-        <h2>Adquirir Sobres</h2>
-        <div class="grid-layout">
-            <div class="card shop-box">
-                <h3>Sobre Común</h3>
-                <p style="color: var(--color-texto-mutado); margin: 10px 0;">Contiene animales domésticos o exóticos.</p>
-                <p style="font-weight: bold; margin-bottom: 15px; color: var(--color-oro);">Costo: 100 Monedas</p>
-                <button class="btn-action" onclick="buyBox()">Abrir Sobre</button>
+<ul class="nav-bar">
+    <li><button id="nav-inicio" class="activo-nav" onclick="mostrarSeccion('inicio')">Inicio</button></li>
+    <li><button id="nav-coleccion" onclick="mostrarSeccion('coleccion')">Colección</button></li>
+    <li><button id="nav-misiones" onclick="mostrarSeccion('misiones')">🧭 Misiones</button></li>
+    <li><button id="nav-tienda" onclick="mostrarSeccion('tienda')">Tienda</button></li>
+    <li><button id="nav-logros" onclick="mostrarSeccion('logros')">🏆 Logros (<span id="cuenta-logros-notif">0</span>)</button></li>
+</ul>
+
+<div id="inicio" class="seccion activa">
+    <h1>AnimalBox</h1>
+    <div class="caja-principal">
+        <button class="btn-recompensa" onclick="recompensaDiaria()">🎁 Recompensa Diaria</button>
+        <br>
+        <img id="animalImg" class="animal-img" src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500">
+        
+        <div id="mensajeClics" style="color: #e67e22; font-weight: bold; margin-top: 15px; font-size: 16px; display: block;">¡Haz clic muchas veces para romper el sobre! 🔥</div>
+        
+        <br>
+        <button class="btn-abrir" onclick="abrirCaja()">📦 ABRIR CAJA</button>
+        <div class="info">
+            <p id="tiempo">⏳ Listo</p>
+        </div>
+    </div>
+</div>
+
+<div id="coleccion" class="seccion">
+    <h1>Tu Colección</h1>
+    <div class="filtros">
+        <button onclick="filtrarCategoria('Todos')">Todos Normales</button>
+        <button onclick="filtrarCategoria('SinRepetidas')" style="background-color: #e2e8f0;">✨ Sin Repetidas</button>
+        <button onclick="filtrarCategoria('Mascotas')">Mascotas</button>
+        <button onclick="filtrarCategoria('Salvajes')">Salvajes</button>
+        <button onclick="filtrarCategoria('Marinos')">Marinos</button>
+        <button onclick="filtrarCategoria('Aves')">Aves</button>
+        <br><br>
+        <button id="btnModoSeleccion" onclick="toggleModoSeleccion()" style="background-color: #ffb142; color: white;">🗑️ Seleccionar Varias</button>
+        <button id="btnConfirmarVenta" onclick="confirmarVentaMasiva()" style="background-color: #e53e3e; color: white; display: none;">Confirmar Venta Masiva (<span id="countVenta">0</span>) | +🪙<span id="gananciaEstimada">0</span></button>
+    </div>
+
+    <div class="layout-coleccion">
+        <div class="lista-conteo-izquierda" id="listaConteoIzquierda"></div>
+        
+        <div style="flex-grow: 1; margin: 0;">
+            <div class="coleccion-grid" id="coleccionGrid"></div>
+            
+            <div class="division-good" id="bloqueGoodInterno">
+                <div class="subtitulo-good">✨ Galería Especial GOOD Legendaria ✨</div>
+                <div class="good-grid" id="goodGrid"></div>
             </div>
         </div>
-        <div id="reward-display" style="margin-top: 20px; text-align: center; font-size: 18px; font-weight: bold;"></div>
-    </section>
+    </div>
+</div>
 
-    <!-- VISTA 2: COLECCIÓN -->
-    <section id="view-collection" class="view-panel">
-        <h2>Tus Animales</h2>
-        <div id="collection-grid" class="grid-layout">
-            <!-- Los animales obtenidos aparecerán aquí dinámicamente -->
-        </div>
-    </section>
+<div id="misiones" class="seccion">
+    <h1>Gremio de Expediciones Diarias</h1>
+    <p style="text-align:center; color:#718096; font-weight:600;">Selecciona el tipo de animal que quieres enviar. ¡7 misiones diferentes por categoría cambiadas cada día!</p>
+    
+    <div class="selectores-misiones" id="selectoresAnimales">
+        <button id="btn-Tab-Mascotas" class="activo" onclick="cambiarTabMisiones('Mascotas')">🐱 Mascotas</button>
+        <button id="btn-Tab-Salvajes" onclick="cambiarTabMisiones('Salvajes')">🦁 Salvajes</button>
+        <button id="btn-Tab-Marinos" onclick="cambiarTabMisiones('Marinos')">🐬 Marinos</button>
+        <button id="btn-Tab-Aves" onclick="cambiarTabMisiones('Aves')">🦅 Aves</button>
+        <button id="btn-Tab-GOOD" onclick="cambiarTabMisiones('GOOD')">✨ GOOD</button>
+        <button id="btn-Tab-Rara" onclick="cambiarTabMisiones('Rara')">⭐ Raras</button>
+    </div>
 
-    <!-- VISTA 3: GREMIO -->
-    <section id="view-guild" class="view-panel">
-        <h2>Tablón de Anuncios</h2>
-        <div class="grid-layout">
-            <div class="card">
-                <h3>Expedición al Bosque</h3>
-                <p class="mission-reward">Recompensa: +150 Monedas</p>
-                <button class="btn-action" onclick="completeMission(150)">Enviar Equipo</button>
-            </div>
-            <div class="card">
-                <h3>Rescate en la Sabana</h3>
-                <p class="mission-reward">Recompensa: +300 Monedas</p>
-                <button class="btn-action" onclick="completeMission(300)">Enviar Equipo</button>
-            </div>
-        </div>
-    </section>
+    <h3 id="tituloMisionesHoy" style="text-align:center; color:#718096; font-size:16px; margin-top:15px;">Misiones disponibles para enviar hoy:</h3>
+    <div class="tienda-grid" id="tiendaExpediciones"></div>
+</div>
 
-    <!-- VISTA 4: SISTEMA DE LOGROS -->
-    <section id="view-achievements" class="view-panel">
-        <h2>Logros del Juego</h2>
-        <p style="color: var(--color-texto-mutado); margin-bottom: 20px;">Cumple las metas para desbloquear recompensas masivas.</p>
-        <div class="achievements-container" id="achievements-list">
-            <!-- Los logros se renderizan aquí dinámicamente -->
-        </div>
-    </section>
+<div id="tienda" class="seccion">
+    <h1>Tienda del Juego</h1>
+    <p style="text-align:center; color:#718096; font-weight:600;">Invierte fondos para acelerar los tiempos de espera de las cajas o comprar objetos premium directamente.</p>
+    
+    <h2 style="text-align:center; margin-top:20px; color:var(--texto-oscuro);">⏱️ Reducción de Tiempo</h2>
+    <div class="tienda-grid" id="tiendaOfertas"></div>
+</div>
 
-    <script>
-        // --- BASE DE DATOS LOCAL Y ESTADOS ---
-        let playerData = {
-            coins: 500,
-            collection: [],
-            missionsCompleted: 0,
-            achievements: [
-                {
-                    id: "logro_abrir_1",
-                    titulo: "Primeros Pasos",
-                    descripcion: "Abre tu primer sobre de AnimalBox.",
-                    progresoActual: 0,
-                    progresoMax: 1,
-                    recompensa: 50,
-                    reclamado: false
-                },
-                {
-                    id: "logro_mascotas_5",
-                    titulo: "Coleccionista de Hogar",
-                    descripcion: "Consigue 5 animales del juego.",
-                    progresoActual: 0,
-                    progresoMax: 5,
-                    recompensa: 200,
-                    reclamado: false
-                },
-                {
-                    id: "logro_good_1",
-                    titulo: "Suerte de Oro ✨",
-                    descripcion: "Consigue tu primer objeto con rareza GOOD.",
-                    progresoActual: 0,
-                    progresoMax: 1,
-                    recompensa: 500,
-                    reclamado: false
-                },
-                {
-                    id: "logro_misiones_5",
-                    titulo: "Comandante del Gremio",
-                    descripcion: "Completa 5 misiones en el Tablón.",
-                    progresoActual: 0,
-                    progresoMax: 5,
-                    recompensa: 400,
-                    reclamado: false
-                }
-            ]
+<div id="logros" class="seccion">
+    <h1>🏆 Logros de la Cuenta</h1>
+    <p style="text-align:center; color:#718096; font-weight:600; margin-bottom: 30px;">Completa desafíos para desbloquear bonificaciones especiales de dinero.</p>
+    <div class="contenedor-logros" id="listaLogrosContenedor"></div>
+</div>
+
+<div id="menuImagen">
+    <img id="imagenGrande">
+    <br><br>
+    <button onclick="verCompleta()">👁️ Ver Completa</button>
+    <button id="btnFavMenu" onclick="toggleFavorito()">⭐ Favorito</button>
+    <button id="btnVenderTexto" onclick="venderActual()" style="color: #e53e3e; font-weight: bold;">💸 Vender</button>
+    <br><br>
+    <button onclick="cerrarMenu()" style="background-color: #edf2f7;">❌ Cerrar</button>
+</div>
+
+<audio id="musica" loop preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<footer>Pagina web impulsada por IA, para fines educativos</footer>
+
+<script>
+// ==========================================
+// POOL DE ANIMALES Y RECOMPENSAS LEGENDARIAS
+// ==========================================
+const animales = [
+    // MASCOTAS
+    {url:"https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500", categoria:"Mascotas", color:"#e74c3c"}, 
+    {url:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=500", categoria:"Mascotas", color:"#3498db"}, 
+    {url:"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?q=80&w=500", categoria:"Mascotas", color:"#9b59b6"}, 
+    {url:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=500", categoria:"Mascotas", color:"#e67e22"}, 
+    {url:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?q=80&w=500", categoria:"Mascotas", color:"#ff4757"}, 
+    {url:"https://images.unsplash.com/photo-1472491235688-bdc81a63246e?q=80&w=500", categoria:"Mascotas", color:"#747d8c"}, 
+
+    // SALVAJES
+    {url:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=500", categoria:"Salvajes", color:"#2c3e50"}, 
+    {url:"https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd?q=80&w=500", categoria:"Salvajes", color:"#d35400"}, 
+    {url:"https://images.unsplash.com/photo-1547970810-dc1eac37d174?q=80&w=636&auto=format&fit=crop", categoria:"Salvajes", color:"#57606f"}, 
+    {url:"https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?q=80&w=915&auto=format&fit=crop", categoria:"Salvajes", color:"#16a085"}, 
+
+    // MARINOS
+    {url:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=500", categoria:"Marinos",  color:"#6a1b9a"}, 
+    {url:"https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=500", categoria:"Marinos",  color:"#00ced1"}, 
+    {url:"https://images.unsplash.com/photo-1568430462989-44163eb1752f?q=80&w=500", categoria:"Marinos",  color:"#ff6b81"}, 
+
+    // AVES
+    {url:"https://images.unsplash.com/photo-1452570053594-1b985d6ea890?q=80&w=500", categoria:"Aves",     color:"#ff4500"}, 
+    {url:"https://images.unsplash.com/photo-1555169062-013468b47731?q=80&w=500", categoria:"Aves",     color:"#008080"}, 
+    {url:"https://images.unsplash.com/photo-1516233758813-a38d024919c5?q=80&w=500", categoria:"Aves",     color:"#8e44ad"}, 
+    {url:"https://images.unsplash.com/photo-1480044965905-02098d419e96?q=80&w=500", categoria:"Aves",     color:"#a52a2a"}, 
+    {url:"https://images.unsplash.com/photo-1606567595334-d39972c85dbe?q=80&w=387&auto=format&fit=crop", categoria:"Aves",     color:"#ff007f"} 
+];
+
+// RECOMPENSAS PREMIUM NO ANIMALES
+const objetosGood = [
+    {url:"https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, 
+    {url:"https://plus.unsplash.com/premium_photo-1666700698946-fbf7baa0134a?q=80&w=436&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"}, 
+    {url:"https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=870&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"}, 
+    {url:"https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=500", categoria:"GOOD", color:"#ffd700"},  
+    {url:"https://images.unsplash.com/photo-1590796583326-afd3bb20d22d?q=80&w=387&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"},
+    {url:"https://images.unsplash.com/photo-1716045168176-15d310a01dc0?q=80&w=580&auto=format&fit=crop", categoria:"GOOD", color:"#ffd700"}
+];
+
+const ofertas = [
+    {precio:50, reduccion:300},   
+    {precio:100, reduccion:600},  
+    {precio:200, reduccion:1200}, 
+    {precio:400, reduccion:1800}  
+];
+
+const verbosAccion = ["Explorar", "Cazar en", "Investigar", "Hurgar en", "Vigilar", "Buscar tesoros en", "Rescatar objetos en"];
+const lugaresMisiones = ["el bosque prohibido", "un callejón Cyberpunk", "las ruinas antiguas", "el sótano de la casa", "un parque abandonado", "una isla desierta", "los servidores centrales"];
+
+// STRUCT DE LOGROS INICIALES
+let logrosEstructura = [
+    { id: "logro_abrir_1", titulo: "Primeros Pasos 📦", desc: "Abre tu primer sobre de AnimalBox.", actual: 0, max: 1, recompensa: 50, reclamado: false },
+    { id: "logro_mascotas_5", titulo: "Coleccionista Entusiasta 🐾", desc: "Consigue un total de 5 estampas en tu galería.", actual: 0, max: 5, recompensa: 200, reclamado: false },
+    { id: "logro_good_1", titulo: "Suerte de Oro ✨", desc: "Consigue tu primer objeto misterioso de categoría GOOD.", actual: 0, max: 1, recompensa: 1500, reclamado: false },
+    { id: "logro_misiones_5", titulo: "Comandante de Expedición 🧭", desc: "Completa un total de 5 misiones del Gremio.", actual: 0, max: 5, recompensa: 500, reclamado: false }
+];
+
+// ==========================================
+// VARIABLES DE ESTADO LOCAL
+// ==========================================
+let monedas = 0;
+let tiempoCaja = 3600; 
+let puedeAbrir = true;
+let tiempoFinal = null;
+let idIntervalo = null;
+let idImagenSeleccionada = null; 
+let elementoSeleccionado = null;
+
+let modoSeleccionActivo = false;
+let listaSeleccionadosParaBorrar = [];
+let categoriaMisionesTabActual = "Mascotas";
+let totalMisionesCompletadasContador = 0;
+
+let favoritos = JSON.parse(localStorage.getItem("favoritos_ids")) || [];
+let coleccionGuardada = JSON.parse(localStorage.getItem("coleccion_v2")) || [];
+let logrosGuardados = JSON.parse(localStorage.getItem("logros_data")) || logrosEstructura;
+
+let misionesDiariasHoy = JSON.parse(localStorage.getItem("misionesDiariasHoy")) || {};
+let misionesActivas = JSON.parse(localStorage.getItem("misionesActivas")) || {};
+let ultimaFechaGeneracion = localStorage.getItem("ultimaFechaGeneracion") || "";
+
+const monedasTexto = document.getElementById("monedas");
+const tiempoTexto = document.getElementById("tiempo");
+const animalImg = document.getElementById("animalImg");
+const coleccionGrid = document.getElementById("coleccionGrid");
+const goodGrid = document.getElementById("goodGrid");
+const tiendaOfertas = document.getElementById("tiendaOfertas");
+const musica = document.getElementById("musica");
+
+// ==========================================
+// LÓGICA DE INTERFAZ Y RECOLECCIÓN
+// ==========================================
+function obtenerColorDeImagen(url) {
+    if(!url) return "#4b6584";
+    let item = animales.find(a => a.url.trim() === url.trim()) || objetosGood.find(g => g.url.trim() === url.trim());
+    return item ? item.color : "#4b6584";
+}
+
+function aplicarEstiloBorde(elemento, url, idUnico) {
+    if(!url) return;
+    const colorAsignado = obtenerColorDeImagen(url);
+    const esGood = objetosGood.some(g => g.url.trim() === url.trim());
+
+    if(esGood) {
+        elemento.classList.add("good-glow");
+        elemento.style.border = "4px solid #ffd700";
+    } else {
+        elemento.classList.remove("good-glow");
+        elemento.style.borderColor = colorAsignado;
+        elemento.style.borderWidth = "4px";
+        elemento.style.borderStyle = "solid";
+    }
+
+    if (idUnico && favoritos.includes(idUnico)) {
+        elemento.classList.add("favorita-glow");
+    } else if (!esGood) {
+        elemento.classList.remove("favorita-glow");
+        elemento.style.boxShadow = "none";
+    }
+}
+
+function mostrarSeccion(id){
+    const secciones = document.querySelectorAll(".seccion");
+    secciones.forEach(seccion => seccion.classList.remove("activa"));
+    document.getElementById(id).classList.add("activa");
+    
+    // Cambiar clases en la barra de navegación
+    const botonesNav = document.querySelectorAll("ul.nav-bar button");
+    botonesNav.forEach(b => b.classList.remove("activo-nav"));
+    document.getElementById(`nav-${id}`).classList.add("activo-nav");
+    
+    if(id !== 'coleccion' && modoSeleccionActivo) toggleModoSeleccion();
+    if(id === 'misiones') comprobarYGenerarMisionesDiarias();
+    if(id === 'logros') renderizarLogros();
+}
+
+function abrirCaja(){
+    if(!puedeAbrir){
+        alert("Todavía no puedes abrir 😭");
+        return;
+    }
+
+    document.getElementById("mensajeClics").style.display = "none";
+    animalImg.classList.add("animacion-caja");
+
+    setTimeout(() => {
+        animalImg.classList.remove("animacion-caja");
+        
+        let elegido;
+        let suerte = Math.random() * 100;
+        let esGoodObtenido = false;
+        
+        if(suerte <= 4) {
+            elegido = objetosGood[Math.floor(Math.random()*objetosGood.length)];
+            esGoodObtenido = true;
+            alert("💥 ¡ÉPICO! ¡Te ha salido una recompensa misteriosa 'GOOD' ! ✨");
+        } else {
+            elegido = animales[Math.floor(Math.random()*animales.length)];
+        }
+        
+        animalImg.src = elegido.url;
+        aplicarEstiloBorde(animalImg, elegido.url, null);
+
+        monedas += 50;
+        actualizarMonedas();
+
+        const idUnico = "anim_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+        coleccionGuardada.push({ id: idUnico, url: elegido.url, categoria: elegido.categoria });
+        
+        // ACTUALIZACIÓN DE TRIGGERS PARA LOGROS
+        actualizarProgresoLogro("logro_abrir_1", 1);
+        actualizarProgresoLogro("logro_mascotas_5", coleccionGuardada.length);
+        if(esGoodObtenido) {
+            actualizarProgresoLogro("logro_good_1", 1);
+        }
+
+        guardarDatos();
+        renderizarColeccion();
+        actualizarNotificacionesLogros();
+
+        puedeAbrir = false;
+        iniciarTiempo();
+    }, 1200);
+}
+
+function renderizarColeccion(){
+    coleccionGrid.innerHTML = "";
+    goodGrid.innerHTML = ""; 
+    const listaConteo = document.getElementById("listaConteoIzquierda");
+    listaConteo.innerHTML = ""; 
+
+    const urlsVistas = new Set();
+    
+    const mapeoCantidades = {};
+    coleccionGuardada.forEach(item => {
+        if (item && item.url) {
+            const urlLimpia = item.url.trim();
+            mapeoCantidades[urlLimpia] = (mapeoCantidades[urlLimpia] || 0) + 1;
+        }
+    });
+
+    const todoElPool = [...animales, ...objetosGood];
+    const urlsDelPool = new Set(todoElPool.map(item => item.url.trim()));
+
+    todoElPool.forEach(item => {
+        const urlPoolLimpia = item.url.trim();
+        const cantidadActual = mapeoCantidades[urlPoolLimpia] || 0;
+        
+        const divItem = document.createElement("div");
+        divItem.classList.add("item-conteo");
+        if(cantidadActual === 0) {
+            divItem.classList.add("bloqueado"); 
+        }
+
+        divItem.innerHTML = `
+            <img src="${item.url}" onerror="this.src='https://placehold.co/45x45?text=🚫'">
+            <span class="contador-numero">${cantidadActual}</span>
+        `;
+        listaConteo.appendChild(divItem);
+    });
+
+    const urlsRarasProcesadas = new Set();
+    coleccionGuardada.forEach(item => {
+        if (!item || !item.url) return;
+        const urlLimpia = item.url.trim();
+
+        if (!urlsDelPool.has(urlLimpia) && !urlsRarasProcesadas.has(urlLimpia)) {
+            urlsRarasProcesadas.add(urlLimpia);
+            const cantidadRara = mapeoCantidades[urlLimpia] || 0;
+
+            const divItemRaro = document.createElement("div");
+            divItemRaro.classList.add("item-conteo");
+            divItemRaro.style.border = "1px dashed #9b59b6"; 
+            divItemRaro.style.background = "#f3e5f5";
+
+            divItemRaro.innerHTML = `
+                <img src="${item.url}" onerror="this.src='https://placehold.co/45x45?text=⭐'">
+                <span style="font-size: 11px; font-weight: bold; color: #8e44ad; margin-left: 4px;">Rara</span>
+                <span class="contador-numero" style="background: #8e44ad; color: white;">${cantidadRara}</span>
+            `;
+            listaConteo.appendChild(divItemRaro);
+        }
+    });
+
+    let tieneObjetosGoodVistos = false;
+
+    coleccionGuardada.forEach(item => {
+        const esGood = (item.categoria === "GOOD");
+
+        if (coleccionGrid.dataset.filtroActual === "SinRepetidas" && urlsVistas.has(item.url)) {
+            return; 
+        }
+        urlsVistas.add(item.url);
+
+        const img = document.createElement("img");
+        img.src = item.url;
+        img.dataset.categoria = item.categoria || "Rara";
+        img.dataset.idUnico = item.id;
+
+        img.onerror = function() {
+            this.src = "https://placehold.co/130x130?text=Imagen+Rara+🚫";
+            this.style.border = "4px dashed #9b59b6";
         };
 
-        // Base de datos de animales obtenibles
-        const poolAnimales = [
-            { nombre: "Gato", categoria: "Mascotas", rareza: "normal" },
-            { nombre: "Perro", categoria: "Mascotas", rareza: "normal" },
-            { nombre: "Loro", categoria: "Mascotas", rareza: "normal" },
-            { nombre: "León", categoria: "Salvajes", rareza: "good" },
-            { nombre: "Dragón", categoria: "Míticos", rareza: "good" }
-        ];
+        aplicarEstiloBorde(img, item.url, item.id);
 
-        // --- SISTEMA DE NAVEGACIÓN ---
-        function switchView(viewId) {
-            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(`view-${viewId}`).classList.add('active');
-            
-            // Encontrar botón activo
-            const eventBtn = Array.from(document.querySelectorAll('.nav-tabs .tab-btn')).find(btn => btn.getAttribute('onclick').includes(viewId));
-            if(eventBtn) eventBtn.classList.add('active');
-        }
-
-        // --- INICIALIZACIÓN Y PERSISTENCIA (LOCAL STORAGE) ---
-        function saveData() {
-            localStorage.setItem('animalbox_save_final', JSON.stringify(playerData));
-        }
-
-        function loadData() {
-            const saved = localStorage.getItem('animalbox_save_final');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                // Aseguramos compatibilidad si faltan campos
-                playerData.coins = parsed.coins ?? 500;
-                playerData.collection = parsed.collection ?? [];
-                playerData.missionsCompleted = parsed.missionsCompleted ?? 0;
-                if(parsed.achievements) playerData.achievements = parsed.achievements;
-            }
-            updateUI();
-        }
-
-        // --- ACTUALIZACIÓN DE INTERFAZ ---
-        function updateUI() {
-            // Actualizar Monedas
-            document.getElementById('global-coins').innerText = playerData.coins;
-
-            // Renderizar Colección
-            const collectionGrid = document.getElementById('collection-grid');
-            collectionGrid.innerHTML = '';
-            if(playerData.collection.length === 0) {
-                collectionGrid.innerHTML = `<p style="color: var(--color-texto-mutado);">No tienes animales aún. ¡Ve a la tienda!</p>`;
+        img.onclick = function(){
+            if(modoSeleccionActivo) {
+                gestionarSeleccionMultiple(item.id, img);
             } else {
-                playerData.collection.forEach(animal => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <h3>${animal.nombre}</h3>
-                        <p style="color: var(--color-texto-mutado); font-size: 14px;">Cat: ${animal.categoria}</p>
-                        <span class="rarity-tag rare-${animal.rareza}">${animal.rareza}</span>
-                    `;
-                    collectionGrid.appendChild(card);
+                abrirMenuImagen(item.url, item.id, img);
+            }
+        };
+
+        if(esGood) {
+            goodGrid.appendChild(img);
+            tieneObjetosGoodVistos = true;
+        } else {
+            if(favoritos.includes(item.id)){
+                coleccionGrid.prepend(img);
+            } else {
+                coleccionGrid.appendChild(img);
+            }
+        }
+    });
+
+    const filtro = coleccionGrid.dataset.filtroActual;
+    const bloqueGood = document.getElementById("bloqueGoodInterno");
+    if((filtro && filtro !== "Todos" && filtro !== "SinRepetidas") || !tieneObjetosGoodVistos) {
+        bloqueGood.style.display = "none";
+    } else {
+        bloqueGood.style.display = "block";
+    }
+}
+
+function toggleModoSeleccion() {
+    modoSeleccionActivo = !modoSeleccionActivo;
+    const btnModo = document.getElementById("btnModoSeleccion");
+    const btnConfirmar = document.getElementById("btnConfirmarVenta");
+
+    if(modoSeleccionActivo) {
+        btnModo.textContent = "❌ Cancelar Selección";
+        btnModo.style.backgroundColor = "#718096";
+        btnConfirmar.style.display = "inline-block";
+        listaSeleccionadosParaBorrar = [];
+        actualizarContadoresVentaMasiva();
+    } else {
+        btnModo.textContent = "🗑️ Seleccionar Varias";
+        btnModo.style.backgroundColor = "#ffb142";
+        btnConfirmar.style.display = "none";
+        
+        const deMarcar = document.querySelectorAll(".coleccion-grid img, .good-grid img");
+        deMarcar.forEach(i => i.classList.remove("seleccionada-borrar"));
+        listaSeleccionadosParaBorrar = [];
+    }
+}
+
+function gestionarSeleccionMultiple(idUnico, elemento) {
+    if(listaSeleccionadosParaBorrar.includes(idUnico)) {
+        listaSeleccionadosParaBorrar = listaSeleccionadosParaBorrar.filter(id => id !== idUnico);
+        elemento.classList.remove("seleccionada-borrar");
+    } else {
+        listaSeleccionadosParaBorrar.push(idUnico);
+        elemento.classList.add("seleccionada-borrar");
+    }
+    actualizarContadoresVentaMasiva();
+}
+
+function calcularGananciaMasiva() {
+    let total = 0;
+    listaSeleccionadosParaBorrar.forEach(id => {
+        const item = coleccionGuardada.find(c => c.id === id);
+        if(item) {
+            total += (item.categoria === "GOOD") ? 1500 : 25;
+        }
+    });
+    return total;
+}
+
+function actualizarContadoresVentaMasiva() {
+    document.getElementById("countVenta").textContent = listaSeleccionadosParaBorrar.length;
+    document.getElementById("gananciaEstimada").textContent = calcularGananciaMasiva();
+}
+
+function confirmarVentaMasiva() {
+    if(listaSeleccionadosParaBorrar.length === 0) {
+        alert("Selecciona al menos una imagen.");
+        return;
+    }
+    let gananciasTotales = calcularGananciaMasiva();
+
+    if(confirm(`¿Seguro que deseas vender estas ${listaSeleccionadosParaBorrar.length} imágenes juntas por 💰 ${gananciasTotales} monedas?`)) {
+        coleccionGuardada = coleccionGuardada.filter(item => !listaSeleccionadosParaBorrar.includes(item.id));
+        favoritos = favoritos.filter(favId => !listaSeleccionadosParaBorrar.includes(favId));
+        
+        monedas += gananciasTotales;
+        actualizarMonedas();
+        
+        // RE-EVALUAR DESAFÍO DE GALERÍA AL REDUCIR
+        actualizarProgresoLogro("logro_mascotas_5", coleccionGuardada.length);
+        
+        guardarDatos();
+        toggleModoSeleccion();
+        renderizarColeccion();
+        actualizarNotificacionesLogros();
+        alert(`¡Venta masiva completada! Recibiste 💰 ${gananciasTotales} monedas.`);
+    }
+}
+
+function filtrarCategoria(categoria){
+    coleccionGrid.dataset.filtroActual = categoria;
+    renderizarColeccion();
+    
+    if(categoria === "SinRepetidas" || categoria === "Todos") return;
+
+    const imagenes = coleccionGrid.querySelectorAll("img");
+    imagenes.forEach(img => {
+        if(img.dataset.categoria === categoria){
+            img.style.display = "block";
+        } else {
+            img.style.display = "none";
+        }
+    });
+}
+
+function iniciarTiempo(){
+    tiempoFinal = Date.now() + (tiempoCaja * 1000);
+    localStorage.setItem("tiempoFinal", tiempoFinal);
+    actualizarTemporizador();
+}
+
+function actualizarTemporizador(){
+    if(idIntervalo) clearInterval(idIntervalo);
+
+    idIntervalo = setInterval(() => {
+        const ahora = Date.now();
+        let tiempoRestante = Math.floor((tiempoFinal - ahora) / 1000);
+
+        if(tiempoRestante <= 0){
+            clearInterval(idIntervalo);
+            puedeAbrir = true;
+            tiempoTexto.textContent = "⏳ Listo";
+            document.getElementById("mensajeClics").style.display = "block";
+            localStorage.removeItem("tiempoFinal");
+            return;
+        }
+        actualizarTextoTiempo(tiempoRestante);
+    }, 1000);
+}
+
+function actualizarTextoTiempo(segundos){
+    const horas = Math.floor(segundos / 3600);
+    const minutos = Math.floor((segundos % 3600) / 60);
+    const secs = segundos % 60;
+    tiempoTexto.textContent = `⏳ ${horas}h ${minutos}m ${secs}s`;
+}
+
+function actualizarMonedas(){
+    monedasTexto.textContent = `🪙 ${monedas}`;
+}
+
+function recompensaDiaria(){
+    const ultimaFecha = localStorage.getItem("ultimaRecompensaFecha");
+    const hoy = new Date().toDateString(); 
+
+    if(ultimaFecha === hoy){
+        alert("¡Ya reclamaste tu recompensa diaria de hoy! Regresa mañana 😉");
+        return;
+    }
+
+    monedas += 100;
+    actualizarMonedas();
+    
+    localStorage.setItem("ultimaRecompensaFecha", hoy);
+    guardarDatos();
+    alert("Ganaste 100 monedas 😎");
+}
+
+function guardarDatos(){
+    localStorage.setItem("monedas", monedas);
+    localStorage.setItem("coleccion_v2", JSON.stringify(coleccionGuardada));
+    localStorage.setItem("tiempoCaja", tiempoCaja);
+    localStorage.setItem("favoritos_ids", JSON.stringify(favoritos));
+    localStorage.setItem("logros_data", JSON.stringify(logrosGuardados));
+    localStorage.setItem("total_misiones_completas", totalMisionesCompletadasContador);
+}
+
+function abrirMenuImagen(src, idUnico, elemento){
+    idImagenSeleccionada = idUnico;
+    elementoSeleccionado = elemento;
+    
+    const btnFav = document.getElementById("btnFavMenu");
+    const btnVender = document.getElementById("btnVenderTexto");
+    
+    if(elemento.dataset.categoria === "GOOD") {
+        btnFav.style.display = "none"; 
+        btnVender.textContent = "💸 Vender (💸 1,500)";
+    } else {
+        btnFav.style.display = "inline-block";
+        btnVender.textContent = "💸 Vender (💸 25)";
+    }
+
+    document.getElementById("menuImagen").style.display = "block";
+    const imgGrande = document.getElementById("imagenGrande");
+    imgGrande.src = src;
+
+    imgGrande.onerror = function() {
+        this.src = "https://placehold.co/130x130?text=Imagen+Rara+🚫";
+    };
+
+    aplicarEstiloBorde(imgGrande, src, idUnico);
+}
+
+function toggleFavorito(){
+    if(favoritos.includes(idImagenSeleccionada)){
+        favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
+    } else {
+        favoritos.push(idImagenSeleccionada);
+    }
+    guardarDatos();
+    renderizarColeccion();
+    
+    const imgGrande = document.getElementById("imagenGrande");
+    aplicarEstiloBorde(imgGrande, imgGrande.src, idImagenSeleccionada);
+}
+
+function cerrarMenu(){
+    document.getElementById("menuImagen").style.display = "none";
+}
+
+function verCompleta(){
+    const imgGrande = document.getElementById("imagenGrande");
+    window.open(imgGrande.src);
+}
+
+function venderActual(){
+    if(elementoSeleccionado){
+        const itemColeccion = coleccionGuardada.find(item => item.id === idImagenSeleccionada);
+        let pago = (itemColeccion && itemColeccion.categoria === "GOOD") ? 1500 : 25;
+
+        coleccionGuardada = coleccionGuardada.filter(item => item.id !== idImagenSeleccionada);
+        favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
+
+        monedas += pago;
+        actualizarMonedas();
+
+        // RE-EVALUAR DESAFÍO DE GALERÍA AL REDUCIR
+        actualizarProgresoLogro("logro_mascotas_5", coleccionGuardada.length);
+
+        guardarDatos();
+        renderizarColeccion();
+        actualizarNotificacionesLogros();
+        cerrarMenu();
+        alert(`¡Imagen vendida! Recibiste 💰 ${pago} monedas.`);
+    }
+}
+
+// ==========================================
+// EXPEDICIONES DIARIAS
+// ==========================================
+const configuracionRarezas = [
+    { tipo: "Poco", duracion: 60, costo: 20, minR: 45, maxR: 70 },       
+    { tipo: "Medio", duracion: 600, costo: 75, minR: 180, maxR: 280 },   
+    { tipo: "Mucho", duracion: 3600, costo: 250, minR: 650, maxR: 1100 } 
+];
+
+const categoriasDisponibles = ["Mascotas", "Salvajes", "Marinos", "Aves", "GOOD", "Rara"];
+
+function comprobarYGenerarMisionesDiarias() {
+    const hoy = new Date().toDateString();
+
+    if (ultimaFechaGeneracion !== hoy) {
+        misionesDiariasHoy = {};
+        
+        categoriasDisponibles.forEach(cat => {
+            misionesDiariasHoy[cat] = [];
+            
+            for (let i = 0; i < 7; i++) {
+                const rarezaElegida = configuracionRarezas[Math.floor(Math.random() * configuracionRarezas.length)];
+                const verbo = verbosAccion[Math.floor(Math.random() * verbosAccion.length)];
+                const lugar = lugaresMisiones[Math.floor(Math.random() * lugaresMisiones.length)];
+                
+                const nombreMision = `${verbo} en ${lugar}`;
+
+                misionesDiariasHoy[cat].push({
+                    id: `mis_${cat}_${i}_${Date.now()}`,
+                    nombre: nombreMision,
+                    rareza: rarezaElegida.tipo,
+                    duracion: rarezaElegida.duracion,
+                    costo: rarezaElegida.costo,
+                    recompensaMin: rarezaElegida.minR,
+                    recompensaMax: rarezaElegida.maxR
                 });
             }
+        });
 
-            // Renderizar Logros
-            renderAchievements();
+        ultimaFechaGeneracion = hoy;
+        localStorage.setItem("ultimaFechaGeneracion", ultimaFechaGeneracion);
+        localStorage.setItem("misionesDiariasHoy", JSON.stringify(misionesDiariasHoy));
+    }
+    renderizarSeccionExpediciones();
+}
+
+function cambiarTabMisiones(categoriaTab) {
+    categoriaMisionesTabActual = categoriaTab;
+    
+    categoriasDisponibles.forEach(cat => {
+        const btn = document.getElementById(`btn-Tab-${cat}`);
+        if(btn) btn.classList.remove("activo");
+    });
+    document.getElementById(`btn-Tab-${categoriaTab}`).classList.add("activo");
+
+    renderizarSeccionExpediciones();
+}
+
+function renderizarSeccionExpediciones() {
+    const contenedor = document.getElementById("tiendaExpediciones");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+
+    const misionesDeEstaCategoria = misionesDiariasHoy[categoriaMisionesTabActual] || [];
+
+    const tieneAnimalRequerido = coleccionGuardada.some(item => {
+        if (categoriaMisionesTabActual === "Rara") {
+            const todoElPool = [...animales, ...objetosGood];
+            return !todoElPool.some(p => p.url.trim() === item.url.trim());
         }
+        return item.categoria === categoriaMisionesTabActual;
+    });
 
-        // --- LÓGICA DE TIENDA (ABRIR SOBRES) ---
-        function buyBox() {
-            if (playerData.coins < 100) {
-                alert("¡No tienes suficientes monedas!");
-                return;
-            }
+    misionesDeEstaCategoria.forEach(mision => {
+        const card = document.createElement("div");
+        card.classList.add("card-oferta");
+        
+        const badge = document.createElement("span");
+        badge.classList.add("badge-rareza", `rareza-${mision.rareza.toLowerCase()}`);
+        badge.textContent = `Botín: ${mision.rareza}`;
+        card.appendChild(badge);
 
-            playerData.coins -= 100;
+        const estadoActual = misionesActivas[mision.id];
 
-            // Selección aleatoria
-            const indiceAleatorio = Math.floor(Math.random() * poolAnimales.length);
-            const animalObtenido = poolAnimales[indiceAleatorio];
+        if (!estadoActual) {
+            const mins = Math.floor(mision.duracion / 60);
+            const stringTiempo = mins >= 1 ? `${mins} min` : `${mision.duracion} seg`;
 
-            // Añadir a colección
-            playerData.collection.push(animalObtenido);
+            card.innerHTML += `
+                <h3 style="margin:20px 0 10px 0; font-size:16px; color:var(--texto-oscuro);">${mision.nombre}</h3>
+                <p style="font-size:13px; margin: 5px 0;">Requiere: <b>${categoriaMisionesTabActual}</b></p>
+                <p style="margin: 5px 0;">Inversión: 🪙 ${mision.costo}</p>
+                <p style="margin: 5px 0;">Tiempo: ⏳ ${stringTiempo}</p>
+                <button id="btn-enviar-${mision.id}" onclick="comenzarExpedicionDiaria('${mision.id}')">Enviar 🧭</button>
+            `;
 
-            // Mostrar feedback visual en la tienda
-            const display = document.getElementById('reward-display');
-            display.innerHTML = `¡Te ha tocado: <span style="color: ${animalObtenido.rareza === 'good' ? 'var(--color-oro)' : 'var(--color-primario)'}">${animalObtenido.nombre}</span> (${animalObtenido.rareza.toUpperCase()})!`;
-
-            // ACTUALIZAR TRIGGERS DE LOGROS
-            // 1. Logro de abrir el primer sobre
-            updateAchievementProgress("logro_abrir_1", 1);
-            // 2. Logro de total de animales
-            updateAchievementProgress("logro_mascotas_5", playerData.collection.length);
-            // 3. Logro si toca un animal GOOD
-            if(animalObtenido.rareza === "good") {
-                updateAchievementProgress("logro_good_1", 1);
-            }
-
-            saveData();
-            updateUI();
-        }
-
-        // --- LÓGICA DE MISIONES (GREMIO) ---
-        function completeMission(reward) {
-            playerData.coins += reward;
-            playerData.missionsCompleted += 1;
-
-            alert(`¡Misión completada con éxito! Has ganado ${reward} monedas.`);
-
-            // ACTUALIZAR TRIGGER DE LOGRO
-            updateAchievementProgress("logro_misiones_5", playerData.missionsCompleted);
-
-            saveData();
-            updateUI();
-        }
-
-        // --- LÓGICA INTEGRADA DEL SISTEMA DE LOGROS ---
-        function updateAchievementProgress(id, value) {
-            const logro = playerData.achievements.find(a => a.id === id);
-            if (logro && !logro.reclamado) {
-                // Si el logro es acumulativo directo o de un solo evento
-                if(id === "logro_mascotas_5" || id === "logro_misiones_5") {
-                    logro.progresoActual = Math.min(value, logro.progresoMax);
-                } else {
-                    logro.progresoActual = Math.min(logro.progresoActual + value, logro.progresoMax);
+            setTimeout(() => {
+                const btnEnv = document.getElementById(`btn-enviar-${mision.id}`);
+                if (btnEnv && !tieneAnimalRequerido) {
+                    btnEnv.disabled = true;
+                    btnEnv.style.background = "#cbd5e0";
+                    btnEnv.style.cursor = "not-allowed";
+                    btnEnv.title = `Necesitas tener al menos 1 espécimen tipo ${categoriaMisionesTabActual} en tu inventario.`;
                 }
-            }
+            }, 0);
+
+        } else {
+            card.innerHTML += `
+                <h3 style="margin:20px 0 10px 0; font-size:16px; color:var(--texto-oscuro);">${mision.nombre}</h3>
+                <p id="timer_${mision.id}" style="font-weight:bold; color:var(--color-recompensa); margin-top:15px;">Calculando...</p>
+                <div id="accion_${mision.id}"></div>
+            `;
         }
+        contenedor.appendChild(card);
+    });
+}
 
-        function renderAchievements() {
-            const container = document.getElementById('achievements-list');
-            container.innerHTML = '';
-            
-            let listos ParaReclamar = 0;
+function comenzarExpedicionDiaria(idMision) {
+    const misionesDeEstaCategoria = misionesDiariasHoy[categoriaMisionesTabActual] || [];
+    const mision = misionesDeEstaCategoria.find(m => m.id === idMision);
+    if (!mision) return;
 
-            playerData.achievements.forEach(logro => {
-                const porcentaje = (logro.progresoActual / logro.progresoMax) * 100;
-                const estaCompleto = logro.progresoActual >= logro.progresoMax;
+    if (monedas < mision.costo) {
+        alert("No tienes suficientes monedas para financiar esta expedición 😭");
+        return;
+    }
+
+    monedas -= mision.costo;
+    actualizarMonedas();
+
+    const tiempoFinalMision = Date.now() + (mision.duracion * 1000);
+    misionesActivas[idMision] = { tiempoFinal: tiempoFinalMision, categoriaOrigen: categoriaMisionesTabActual };
+    
+    localStorage.setItem("misionesActivas", JSON.stringify(misionesActivas));
+    localStorage.setItem("monedas", monedas);
+
+    renderizarSeccionExpediciones();
+    actualizarLoopsMisiones();
+}
+
+let intervaloMisiones = null;
+function actualizarLoopsMisiones() {
+    if (intervaloMisiones) clearInterval(intervaloMisiones);
+
+    intervaloMisiones = setInterval(() => {
+        let hayMisionesActivas = false;
+        const ahora = Date.now();
+
+        categoriasDisponibles.forEach(cat => {
+            const misionesCat = misionesDiariasHoy[cat] || [];
+            misionesCat.forEach(mision => {
+                const estado = misionesActivas[mision.id];
+                if (!estado) return;
+
+                hayMisionesActivas = true;
+                const timerTxt = document.getElementById(`timer_${mision.id}`);
+                const accionContenedor = document.getElementById(`accion_${mision.id}`);
                 
-                if(estaCompleto && !logro.reclamado) {
-                    listosParaReclamar++;
-                }
+                let restante = Math.floor((estado.tiempoFinal - ahora) / 1000);
 
-                const card = document.createElement('div');
-                card.className = `achievement-card ${estaCompleto ? 'completed-border' : ''}`;
-
-                // Determinar el botón o estado de la derecha
-                let actionArea = '';
-                if (logro.reclamado) {
-                    actionArea = `<span class="claimed-status">💸 Reclamado</span>`;
-                } else if (estaCompleto) {
-                    actionArea = `<button class="btn-claim" onclick="claimAchievement('${logro.id}')">Reclamar +${logro.recompensa}💰</button>`;
+                if (restante <= 0) {
+                    if (timerTxt) timerTxt.textContent = "✅ ¡Expedición Regresó!";
+                    if (accionContenedor && accionContenedor.innerHTML === "") {
+                        accionContenedor.innerHTML = `<button onclick="reclamarExpedicionDiaria('${mision.id}', '${cat}')" style="background: linear-gradient(45deg, #ffb142, #ffaa00); color:white;">Recoger Botín 💰</button>`;
+                    }
                 } else {
-                    actionArea = `<button class="btn-claim" disabled>Bloqueado</button>`;
+                    const mins = Math.floor(restante / 60);
+                    const secs = restante % 60;
+                    if (timerTxt) {
+                        timerTxt.textContent = mins >= 1 ? `⏳ Regresa en: ${mins}m ${secs}s` : `⏳ Regresa en: ${secs}s`;
+                    }
                 }
-
-                card.innerHTML = `
-                    <div class="achievement-info">
-                        <div class="achievement-title">
-                            ${logro.titulo} 
-                        </div>
-                        <p class="achievement-desc">${logro.descripcion}</p>
-                        <div class="progress-container">
-                            <div class="progress-bar" style="width: ${porcentaje}%"></div>
-                        </div>
-                        <p class="progress-text">Progreso: ${logro.progresoActual} / ${logro.progresoMax}</p>
-                    </div>
-                    ${actionArea}
-                `;
-                container.appendChild(card);
             });
+        });
 
-            // Actualizar contador del menú superior
-            const tabBtn = document.getElementById('tab-achievements');
-            tabBtn.innerText = `🏆 Logros (${listosParaReclamar})`;
-            if(listosParaReclamar > 0) {
-                tabBtn.style.borderColor = "var(--color-exito)";
-            } else {
-                tabBtn.style.borderColor = "var(--color-borde)";
-            }
+        if (!hayMisionesActivas) clearInterval(intervaloMisiones);
+    }, 1000);
+}
+
+function reclamarExpedicionDiaria(idMision, cat) {
+    const misionesCat = misionesDiariasHoy[cat] || [];
+    const mision = misionesCat.find(m => m.id === idMision);
+    if (!mision) return;
+
+    const ganancia = Math.floor(Math.random() * (mision.recompensaMax - mision.recompensaMin + 1)) + mision.recompensaMin;
+
+    monedas += ganancia;
+    actualizarMonedas();
+
+    totalMisionesCompletadasContador += 1;
+    actualizarProgresoLogro("logro_misiones_5", totalMisionesCompletadasContador);
+
+    delete misionesActivas[idMision];
+    localStorage.setItem("misionesActivas", JSON.stringify(misionesActivas));
+    
+    guardarDatos();
+    actualizarNotificacionesLogros();
+
+    alert(`🎉 ¡Tu animal ha regresado con éxito! Trajo un botín de 🪙 ${ganancia} monedas.`);
+    renderizarSeccionExpediciones();
+}
+
+function crearOfertas(){
+    tiendaOfertas.innerHTML = "";
+    ofertas.forEach((oferta,index) => {
+        const card = document.createElement("div");
+        card.classList.add("card-oferta");
+        const mins = Math.floor(oferta.reduccion / 60);
+
+        card.innerHTML = `
+            <h2>Reducción ${index+1}</h2>
+            <p>💰 ${oferta.precio} monedas</p>
+            <p>⏳ -${mins} min</p>
+            <button onclick="comprarOferta(${index})">Comprar</button>
+        `;
+        tiendaOfertas.appendChild(card);
+    });
+
+    const cardExagerada = document.createElement("div");
+    cardExagerada.classList.add("card-oferta");
+    cardExagerada.style.border = "2px solid #ffd700";
+    cardExagerada.innerHTML = `
+        <h2 style="color:#ffaa00;">✨ COMPRA GOOD DIRECTA</h2>
+        <p style="font-size: 20px; font-weight:800; color:#e53e3e;">💰 500,000 MONEDAS</p>
+        <p>⚠️ Solo para maestros millonarios de nivel experto.</p>
+        <button onclick="comprarGoodVip()" style="background: linear-gradient(45deg, #ffd700, #ffaa00);">OBTENER LEGENDARIA</button>
+    `;
+    tiendaOfertas.appendChild(cardExagerada);
+}
+
+function comprarOferta(index){
+    const oferta = ofertas[index];
+    if(monedas < oferta.precio){
+        alert("No tienes suficientes monedas 😭");
+        return;
+    }
+    if(puedeAbrir){
+        alert("¡La caja ya está lista para abrir!");
+        return;
+    }
+
+    monedas -= oferta.precio;
+    actualizarMonedas();
+
+    tiempoFinal -= (oferta.reduccion * 1000); 
+    localStorage.setItem("tiempoFinal", tiempoFinal);
+
+    tiempoCaja -= oferta.reduccion;
+    if(tiempoCaja < 10) tiempoCaja = 10; 
+
+    guardarDatos();
+    actualizarTemporizador();
+    alert("¡Tiempo restado con éxito! 😎");
+}
+
+function comprarGoodVip() {
+    if(monedas < 500000) {
+        alert("¡No te alcanza! Consigue 500,000 monedas trabajando duro. 😭");
+        return;
+    }
+
+    monedas -= 500000;
+    actualizarMonedas();
+
+    const randomGood = objetosGood[Math.floor(Math.random() * objetosGood.length)];
+    const idUnico = "anim_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+    
+    coleccionGuardada.push({ id: idUnico, url: randomGood.url, categoria: randomGood.categoria });
+    
+    actualizarProgresoLogro("logro_mascotas_5", coleccionGuardada.length);
+    actualizarProgresoLogro("logro_good_1", 1);
+
+    guardarDatos();
+    renderizarColeccion();
+    actualizarNotificacionesLogros();
+    alert("💸 ¡Tu objeto GOOD fue añadido directamente a tu galería!");
+}
+
+function toggleMusica(){
+    if(musica.paused){
+        musica.play().catch(e => console.log("Permiso de audio requerido"));
+    } else {
+        musica.pause();
+    }
+}
+
+// ==========================================
+// NUEVA LÓGICA: SISTEMA DE LOGROS INTEGRADO
+// ==========================================
+function actualizarProgresoLogro(id, valor) {
+    let logro = logrosGuardados.find(l => l.id === id);
+    if(logro && !logro.reclamado) {
+        if(id === "logro_mascotas_5" || id === "logro_misiones_5") {
+            logro.actual = Math.min(valor, logro.max);
+        } else {
+            logro.actual = Math.min(logro.actual + valor, logro.max);
+        }
+    }
+}
+
+function actualizarNotificacionesLogros() {
+    let listosParaCobrar = 0;
+    logrosGuardados.forEach(l => {
+        if(l.actual >= l.max && !l.reclamado) {
+            listosParaCobrar++;
+        }
+    });
+    
+    const notifElemento = document.getElementById("cuenta-logros-notif");
+    const navLogros = document.getElementById("nav-logros");
+    
+    notifElemento.textContent = listosParaCobrar;
+    if(listosParaCobrar > 0) {
+        navLogros.style.color = "var(--color-abrir)";
+    } else {
+        navLogros.style.color = "#a0aec0";
+    }
+}
+
+function renderizarLogros() {
+    const contenedor = document.getElementById("listaLogrosContenedor");
+    contenedor.innerHTML = "";
+
+    logrosGuardados.forEach(logro => {
+        const porcentaje = (logro.actual / logro.max) * 100;
+        const completado = logro.actual >= logro.max;
+
+        const divLogro = document.createElement("div");
+        divLogro.className = `tarjeta-logro ${completado && !logro.reclamado ? 'completado-borde' : ''}`;
+
+        let zonaAccion = "";
+        if(logro.reclamado) {
+            zonaAccion = `<span class="estado-reclamado">💸 Reclamado</span>`;
+        } else if(completado) {
+            zonaAccion = `<button class="btn-reclamar-logro" onclick="reclamarRecompensaLogro('${logro.id}')">Cobrar 🪙 ${logro.recompensa}</button>`;
+        } else {
+            zonaAccion = `<button class="btn-reclamar-logro" disabled>Bloqueado</button>`;
         }
 
-        function claimAchievement(id) {
-            const logro = playerData.achievements.find(a => a.id === id);
-            if (logro && logro.progresoActual >= logro.progresoMax && !logro.reclamado) {
-                logro.reclamado = true;
-                playerData.coins += logro.recompensa;
-                
-                alert(`¡Excelente! Has reclamado tu recompensa de ${logro.recompensa} monedas.`);
-                
-                saveData();
-                updateUI();
-            }
-        }
+        divLogro.innerHTML = `
+            <div class="info-logro">
+                <div class="titulo-logro">${logro.titulo}</div>
+                <div class="desc-logro">${logro.desc}</div>
+                <div class="contenedor-barra-progreso">
+                    <div class="barra-progreso" style="width: ${porcentaje}%"></div>
+                </div>
+                <div class="texto-progreso">Progreso: ${logro.actual} / ${logro.max}</div>
+            </div>
+            ${zonaAccion}
+        `;
+        contenedor.appendChild(divLogro);
+    });
+}
 
-        // Cargar partida al iniciar la ventana
-        window.onload = function() {
-            loadData();
-        };
-    </script>
+function reclamarRecompensaLogro(id) {
+    let logro = logrosGuardados.find(l => l.id === id);
+    if(logro && logro.actual >= logro.max && !logro.reclamado) {
+        logro.reclamado = true;
+        monedas += logro.recompensa;
+        
+        actualizarMonedas();
+        guardarDatos();
+        renderizarLogros();
+        actualizarNotificacionesLogros();
+        
+        alert(`🎉 ¡Felicidades! Cobraste el logro "${logro.titulo}" y ganaste 🪙 ${logro.recompensa} monedas.`);
+    }
+}
+
+function cargarDatos(){
+    const monedasGuardadas = localStorage.getItem("monedas");
+    const tiempoGuardado = localStorage.getItem("tiempoCaja");
+    const misionesContadorGuardado = localStorage.getItem("total_misiones_completas");
+
+    if(monedasGuardadas) monedas = Number(monedasGuardadas);
+    if(tiempoGuardado) tiempoCaja = Number(tiempoGuardado);
+    if(misionesContadorGuardado) totalMisionesCompletadasContador = Number(misionesContadorGuardado);
+
+    actualizarMonedas();
+    aplicarEstiloBorde(animalImg, animalImg.src, null);
+    renderizarColeccion();
+    actualizarNotificacionesLogros();
+
+    const tiempoFinalGuardado = localStorage.getItem("tiempoFinal");
+    if(tiempoFinalGuardado){
+        tiempoFinal = Number(tiempoFinalGuardado);
+        const ahora = Date.now();
+
+        if(ahora < tiempoFinal){
+            puedeAbrir = false;
+            document.getElementById("mensajeClics").style.display = "none";
+            actualizarTemporizador();
+        } else {
+            puedeAbrir = true;
+            tiempoTexto.textContent = "⏳ Listo";
+            document.getElementById("mensajeClics").style.display = "block";
+            localStorage.removeItem("tiempoFinal");
+        }
+    } else {
+        document.getElementById("mensajeClics").style.display = "block";
+    }
+}
+
+// INICIALIZACIÓN GLOBAL DEL JUEGO
+crearOfertas();
+cargarDatos();
+comprobarYGenerarMisionesDiarias();
+actualizarLoopsMisiones();
+</script>
 </body>
 </html>
