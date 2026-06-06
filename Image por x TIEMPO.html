@@ -468,9 +468,11 @@ const animales = [
 // RECOMPENSAS PREMIUM NO ANIMALES
 const objetosGood = [
     {url:"https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, // Neon Cyberpunk
-    {url:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, // Portal 3D Estelar
-    {url:"https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=500", categoria:"GOOD", color:"#ffd700"}, // Set Retro Gaming Neon
-    {url:"https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=500", categoria:"GOOD", color:"#ffd700"}  // Galaxia Abstracta Futurista
+    {url:"https://plus.unsplash.com/premium_photo-1666700698946-fbf7baa0134a?q=80&w=436&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"GOOD", color:"#ffd700"}, // Portal 3D Estelar
+    {url:"https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"GOOD", color:"#ffd700"}, // Set Retro Gaming Neon
+    {url:"https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=500", categoria:"GOOD", color:"#ffd700"},  // Galaxia Abstracta Futurista
+    {url:"https://images.unsplash.com/photo-1590796583326-afd3bb20d22d?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"GOOD", color:"#ffd700"},
+   {url:"https://images.unsplash.com/photo-1716045168176-15d310a01dc0?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", categoria:"GOOD", color:"#ffd700"}
 ];
 
 let monedas = 0;
@@ -759,10 +761,15 @@ function abrirMenuImagen(src, idUnico, elemento){
     elementoSeleccionado = elemento;
     
     const btnFav = document.getElementById("btnFavMenu");
+    const btnVender = document.getElementById("btnVenderTexto");
+    
+    // Detecta si es un objeto GOOD para actualizar el precio del botón
     if(elemento.dataset.categoria === "GOOD") {
         btnFav.style.display = "none"; 
+        btnVender.textContent = "💸 Vender (💸 1,500)";
     } else {
         btnFav.style.display = "inline-block";
+        btnVender.textContent = "💸 Vender (💸 25)";
     }
 
     document.getElementById("menuImagen").style.display = "block";
@@ -795,16 +802,20 @@ function verCompleta(){
 
 function venderActual(){
     if(elementoSeleccionado){
+        const itemColeccion = coleccionGuardada.find(item => item.id === idImagenSeleccionada);
+        // ¡Aquí está la magia! Si es GOOD te da 1500, si no, 25
+        let pago = (itemColeccion && itemColeccion.categoria === "GOOD") ? 1500 : 25;
+
         coleccionGuardada = coleccionGuardada.filter(item => item.id !== idImagenSeleccionada);
         favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
 
-        monedas += 25;
+        monedas += pago;
         actualizarMonedas();
 
         guardarDatos();
         renderizarColeccion();
         cerrarMenu();
-        alert("Imagen vendida 😎");
+        alert(`¡Imagen vendida! Recibiste 💰 ${pago} monedas.`);
     }
 }
 
