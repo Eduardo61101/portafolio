@@ -183,7 +183,7 @@ h1 {
     transform: translateY(-3px);
 }
 
-/* EFECTO GLOW DINÁMICO PARA FAVORITOS */
+/* EFECTO GLOW DINÁMICO PARA FAVORITOS MANTENIENDO SU COLOR */
 .favorita-glow {
     animation: glowBrillo 2s infinite alternate;
 }
@@ -359,6 +359,7 @@ h1 {
     <h1>Tu Colección</h1>
     <div class="filtros">
         <button onclick="filtrarCategoria('Todos')">Todos</button>
+        <button onclick="filtrarCategoria('SinRepetidas')" style="background-color: #e2e8f0;">✨ Sin Repetidas</button>
         <button onclick="filtrarCategoria('Mascotas')">Mascotas</button>
         <button onclick="filtrarCategoria('Salvajes')">Salvajes</button>
         <button onclick="filtrarCategoria('Marinos')">Marinos</button>
@@ -388,36 +389,34 @@ h1 {
 
 <script>
 // ==========================================
-// POOL CON ASIGNACIÓN DE COLOR ÚNICA POR ANIMAL
+// POOL REORGANIZADO, LIMPIO Y CORREGIDO
 // ==========================================
 const animales = [
-    // MASCOTAS
-    {url:"https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500", categoria:"Mascotas", color:"#e74c3c"},     // Rojo Vivo
-    {url:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=500", categoria:"Mascotas", color:"#3498db"},     // Azul Cielo
-    {url:"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?q=80&w=500", categoria:"Mascotas", color:"#9b59b6"},     // Morado Amatista
-    {url:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=500", categoria:"Mascotas", color:"#e67e22"},     // Naranja Esmeralda
-    {url:"https://images.unsplash.com/photo-1535268647977-a403b69fc756?q=80&w=500", categoria:"Mascotas", color:"#16a085"},     // Verde Azulado Turquesa
+    // MASCOTAS (¡Los gatitos movidos aquí!)
+    {url:"https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500", categoria:"Mascotas", color:"#e74c3c"}, 
+    {url:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=500", categoria:"Mascotas", color:"#3498db"}, 
+    {url:"https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?q=80&w=500", categoria:"Mascotas", color:"#9b59b6"}, 
+    {url:"https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=500", categoria:"Mascotas", color:"#e67e22"}, 
+    {url:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?q=80&w=500", categoria:"Mascotas", color:"#ff4757"}, // Gatito tierno corregido a Mascota
+    {url:"https://images.unsplash.com/photo-1472491235688-bdc81a63246e?q=80&w=500", categoria:"Mascotas", color:"#747d8c"}, // Gato nieve corregido a Mascota
 
     // SALVAJES
-    {url:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=500", categoria:"Salvajes", color:"#2c3e50"},     // Gris Oscuro Naval
-    {url:"https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd?q=80&w=500", categoria:"Salvajes", color:"#d35400"},     // Óxido Oscuro
-    {url:"https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?q=80&w=500", categoria:"Salvajes", color:"#ff4757"},     // Rosa Coral Fuerte
-    {url:"https://images.unsplash.com/photo-1472491235688-bdc81a63246e?q=80&w=500", categoria:"Salvajes", color:"#747d8c"},     // Gris Acero
-    {url:"https://images.unsplash.com/photo-1574063413132-355dbfd83e82?q=80&w=500", categoria:"Salvajes", color:"#57606f"},     // Carbón
+    {url:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=500", categoria:"Salvajes", color:"#2c3e50"}, 
+    {url:"https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd?q=80&w=500", categoria:"Salvajes", color:"#d35400"}, 
+    {url:"https://images.unsplash.com/photo-1574063413132-355dbfd83e82?q=80&w=500", categoria:"Salvajes", color:"#57606f"}, 
+    {url:"https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=500", categoria:"Salvajes", color:"#16a085"}, // Añadido Guepardo estable
 
     // MARINOS
-    {url:"https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=500", categoria:"Marinos",  color:"#1e90ff"},     // Azul Eléctrico
-    {url:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=500", categoria:"Marinos",  color:"#6a1b9a"},     // Púrpura Profundo
-    {url:"https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=500", categoria:"Marinos",  color:"#00ced1"},     // Azul Turquesa Claro
-    {url:"https://images.unsplash.com/photo-1568430462989-44163eb1752f?q=80&w=500", categoria:"Marinos",  color:"#ff6b81"},     // Sandia Pastel
-    {url:"https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?q=80&w=500", categoria:"Marinos",  color:"#2f3542"},     // Negro Suave
+    {url:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=500", categoria:"Marinos",  color:"#6a1b9a"}, 
+    {url:"https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=500", categoria:"Marinos",  color:"#00ced1"}, 
+    {url:"https://images.unsplash.com/photo-1568430462989-44163eb1752f?q=80&w=500", categoria:"Marinos",  color:"#ff6b81"}, 
 
     // AVES
-    {url:"https://images.unsplash.com/photo-1452570053594-1b985d6ea890?q=80&w=500", categoria:"Aves",     color:"#ff4500"},     // Rojo Anaranjado
-    {url:"https://images.unsplash.com/photo-1555169062-013468b47731?q=80&w=500", categoria:"Aves",     color:"#008080"},     // Verde Azulado Profundo
-    {url:"https://images.unsplash.com/photo-1516233758813-a38d024919c5?q=80&w=500", categoria:"Aves",     color:"#8e44ad"},     // Violeta
-    {url:"https://images.unsplash.com/photo-1480044965905-02098d419e96?q=80&w=500", categoria:"Aves",     color:"#a52a2a"},     // Café Marrón
-    {url:"https://images.unsplash.com/photo-1506220926022-cc2c17377c86?q=80&w=500", categoria:"Aves",     color:"#ff007f"}      // Rosa Fucsia Brillante
+    {url:"https://images.unsplash.com/photo-1452570053594-1b985d6ea890?q=80&w=500", categoria:"Aves",     color:"#ff4500"}, 
+    {url:"https://images.unsplash.com/photo-1555169062-013468b47731?q=80&w=500", categoria:"Aves",     color:"#008080"}, 
+    {url:"https://images.unsplash.com/photo-1516233758813-a38d024919c5?q=80&w=500", categoria:"Aves",     color:"#8e44ad"}, 
+    {url:"https://images.unsplash.com/photo-1480044965905-02098d419e96?q=80&w=500", categoria:"Aves",     color:"#a52a2a"}, 
+    {url:"https://images.unsplash.com/photo-1506220926022-cc2c17377c86?q=80&w=500", categoria:"Aves",     color:"#ff007f"} 
 ];
 
 let monedas = 0;
@@ -425,10 +424,12 @@ let tiempoCaja = 3600;
 let puedeAbrir = true;
 let tiempoFinal = null;
 let idIntervalo = null;
-let imagenSeleccionada = null;
+let idImagenSeleccionada = null; // Guardamos el ID único de la tarjeta en vez de la URL
 let elementoSeleccionado = null;
-let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-let coleccionGuardada = JSON.parse(localStorage.getItem("coleccion")) || [];
+
+// AHORA LAS IMÁGENES TIENEN UN ID ÚNICO PROPIO E INDEPENDIENTE
+let favoritos = JSON.parse(localStorage.getItem("favoritos_ids")) || [];
+let coleccionGuardada = JSON.parse(localStorage.getItem("coleccion_v2")) || [];
 
 const monedasTexto = document.getElementById("monedas");
 const tiempoTexto = document.getElementById("tiempo");
@@ -438,28 +439,25 @@ const tiendaOfertas = document.getElementById("tiendaOfertas");
 const musica = document.getElementById("musica");
 
 const ofertas = [
-    {precio:10, reduccion:8},
     {precio:50, reduccion:300},   
     {precio:100, reduccion:600},  
     {precio:200, reduccion:1200}, 
     {precio:400, reduccion:1800}  
 ];
 
-// BUSCA EL COLOR ASIGNADO A LA URL DESDE EL INVENTARIO O EL POOL
 function obtenerColorDeImagen(url) {
     const animalEncontrado = animales.find(a => a.url === url);
-    // Si es un enlace antiguo guardado que no está en el pool, le da un color por defecto (azul metálico) para que no falle
     return animalEncontrado ? animalEncontrado.color : "#4b6584";
 }
 
-function aplicarEstiloBorde(elemento, url) {
+function aplicarEstiloBorde(elemento, url, idUnico) {
     const colorAsignado = obtenerColorDeImagen(url);
     elemento.style.borderColor = colorAsignado;
     elemento.style.borderWidth = "4px";
     elemento.style.borderStyle = "solid";
     elemento.style.color = colorAsignado; 
 
-    if (favoritos.includes(url)) {
+    if (idUnico && favoritos.includes(idUnico)) {
         elemento.classList.add("favorita-glow");
     } else {
         elemento.classList.remove("favorita-glow");
@@ -486,12 +484,15 @@ function abrirCaja(){
         const random = animales[Math.floor(Math.random()*animales.length)];
         animalImg.src = random.url;
         
-        aplicarEstiloBorde(animalImg, random.url);
+        aplicarEstiloBorde(animalImg, random.url, null);
 
         monedas += 50;
         actualizarMonedas();
 
-        coleccionGuardada.push({ url: random.url, categoria: random.categoria });
+        // Generamos un ID único temporal basado en milisegundos para independizar repetidos
+        const idUnico = "anim_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+        coleccionGuardada.push({ id: idUnico, url: random.url, categoria: random.categoria });
+        
         guardarDatos();
         renderizarColeccion();
 
@@ -503,30 +504,59 @@ function abrirCaja(){
 function renderizarColeccion(){
     coleccionGrid.innerHTML = "";
     
+    // Set auxiliar para filtrar repetidas visuales si la pestaña activa lo pide
+    const urlsVistas = new Set();
+
     coleccionGuardada.forEach(item => {
+        // Si el filtro "SinRepetidas" está activo en los estilos internos, omitimos renderizar si la URL ya se usó
+        if (coleccionGrid.dataset.filtroActual === "SinRepetidas" && urlsVistas.has(item.url)) {
+            return; 
+        }
+        urlsVistas.add(item.url);
+
         const img = document.createElement("img");
         img.src = item.url;
         img.dataset.categoria = item.categoria;
+        img.dataset.idUnico = item.id;
 
-        aplicarEstiloBorde(img, item.url);
+        aplicarEstiloBorde(img, item.url, item.id);
 
         img.onclick = function(){
-            abrirMenuImagen(item.url, img);
+            abrirMenuImagen(item.url, item.id, img);
         };
 
         img.onerror = function(){
             img.remove();
-            coleccionGuardada = coleccionGuardada.filter(i => i.url !== item.url);
-            favoritos = favorites.filter(fav => fav !== item.url);
+            coleccionGuardada = coleccionGuardada.filter(i => i.id !== item.id);
+            favoritos = favoritos.filter(fav => fav !== item.id);
             monedas += 25;
             actualizarMonedas();
             guardarDatos();
         };
 
-        if(favoritos.includes(item.url)){
+        if(favoritos.includes(item.id)){
             coleccionGrid.prepend(img);
         } else {
             coleccionGrid.appendChild(img);
+        }
+    });
+}
+
+function filtrarCategoria(categoria){
+    coleccionGrid.dataset.filtroActual = categoria;
+    
+    if(categoria === "SinRepetidas") {
+        renderizarColeccion(); // Re-renderiza ocultando duplicados
+        return;
+    }
+
+    renderizarColeccion(); // Render normal para re-establecer
+    const imagenes = coleccionGrid.querySelectorAll("img");
+    imagenes.forEach(img => {
+        if(categoria === "Todos" || img.dataset.categoria === categoria){
+            img.style.display = "block";
+        } else {
+            img.style.display = "none";
         }
     });
 }
@@ -586,19 +616,19 @@ function recompensaDiaria(){
 
 function guardarDatos(){
     localStorage.setItem("monedas", monedas);
-    localStorage.setItem("coleccion", JSON.stringify(coleccionGuardada));
+    localStorage.setItem("coleccion_v2", JSON.stringify(coleccionGuardada));
     localStorage.setItem("tiempoCaja", tiempoCaja);
-    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    localStorage.setItem("favoritos_ids", JSON.stringify(favoritos));
 }
 
-function abrirMenuImagen(src,elemento){
-    imagenSeleccionada = src;
+function abrirMenuImagen(src, idUnico, elemento){
+    idImagenSeleccionada = idUnico;
     elementoSeleccionado = elemento;
     document.getElementById("menuImagen").style.display = "block";
     
     const imgGrande = document.getElementById("imagenGrande");
     imgGrande.src = src;
-    aplicarEstiloBorde(imgGrande, src);
+    aplicarEstiloBorde(imgGrande, src, idUnico);
 }
 
 function cerrarMenu(){
@@ -606,36 +636,30 @@ function cerrarMenu(){
 }
 
 function verCompleta(){
-    window.open(imagenSeleccionada);
+    const imgGrande = document.getElementById("imagenGrande");
+    window.open(imgGrande.src);
 }
 
 function toggleFavorito(){
-    if(favoritos.includes(imagenSeleccionada)){
-        favoritos = favoritos.filter(fav => fav !== imagenSeleccionada);
+    if(favoritos.includes(idImagenSeleccionada)){
+        favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
     } else {
-        favoritos.push(imagenSeleccionada);
+        favoritos.push(idImagenSeleccionada);
     }
     guardarDatos();
     renderizarColeccion();
     
     const imgGrande = document.getElementById("imagenGrande");
-    aplicarEstiloBorde(imgGrande, imagenSeleccionada);
+    aplicarEstiloBorde(imgGrande, imgGrande.src, idImagenSeleccionada);
 }
 
 function venderActual(){
     if(elementoSeleccionado){
-        const index = coleccionGuardada.findIndex(item => item.url === imagenSeleccionada);
-        if (index !== -1) {
-            coleccionGuardada.splice(index, 1);
-        }
+        coleccionGuardada = coleccionGuardada.filter(item => item.id !== idImagenSeleccionada);
+        favoritos = favoritos.filter(fav => fav !== idImagenSeleccionada);
 
         monedas += 25;
         actualizarMonedas();
-
-        const quedanCopias = coleccionGuardada.some(item => item.url === imagenSeleccionada);
-        if(!quedanCopias) {
-            favoritos = favoritos.filter(fav => fav !== imagenSeleccionada);
-        }
 
         guardarDatos();
         renderizarColeccion();
@@ -688,17 +712,6 @@ function comprarOferta(index){
     alert("¡Tiempo restado con éxito! 😎");
 }
 
-function filtrarCategoria(categoria){
-    const imagenes = coleccionGrid.querySelectorAll("img");
-    imagenes.forEach(img => {
-        if(categoria === "Todos" || img.dataset.categoria === categoria){
-            img.style.display = "block";
-        } else {
-            img.style.display = "none";
-        }
-    });
-}
-
 function toggleMusica(){
     if(musica.paused){
         musica.play().catch(e => console.log("Permiso de audio requerido"));
@@ -716,7 +729,7 @@ function cargarDatos(){
 
     actualizarMonedas();
     
-    aplicarEstiloBorde(animalImg, animalImg.src);
+    aplicarEstiloBorde(animalImg, animalImg.src, null);
     renderizarColeccion();
 
     const tiempoFinalGuardado = localStorage.getItem("tiempoFinal");
