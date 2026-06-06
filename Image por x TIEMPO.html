@@ -656,7 +656,10 @@ function renderizarColeccion(){
     });
 
     // 2. CONSTRUIR FILA LATERAL IZQUIERDA (ÁLBUM / RECUENTOS)
+    // Primero añadimos todos los animales y objetos GOOD oficiales del pool
     const todoElPool = [...animales, ...objetosGood];
+    const urlsDelPool = new Set(todoElPool.map(item => item.url.trim()));
+
     todoElPool.forEach(item => {
         const urlPoolLimpia = item.url.trim();
         const cantidadActual = mapeoCantidades[urlPoolLimpia] || 0;
@@ -668,10 +671,38 @@ function renderizarColeccion(){
         }
 
         divItem.innerHTML = `
-            <img src="${item.url}">
+            <img src="${item.url}" onerror="this.src='https://placehold.co/45x45?text=🚫'">
             <span class="contador-numero">${cantidadActual}</span>
         `;
         listaConteo.appendChild(divItem);
+    });
+
+    // DETECTAR IMÁGENES RARAS O NO CARGADAS EN TU INVENTARIO
+    // Si tienes una URL guardada que ya no está en el código base, ¡la mostramos como Rara!
+    const urlsRarasProcesadas = new Set();
+    
+    coleccionGuardada.forEach(item => {
+        if (!item || !item.url) return;
+        const urlLimpia = item.url.trim();
+
+        // Si no está en el pool oficial y no la hemos listado en la barra izquierda aún
+        if (!urlsDelPool.has(urlLimpia) && !urlsRarasProcesadas.has(urlLimpia)) {
+            urlsRarasProcesadas.add(urlLimpia);
+            const cantidadRara = mapeoCantidades[urlLimpia] || 0;
+
+            const divItemRaro = document.createElement("div");
+            divItemRaro.classList.add("item-conteo");
+            divItemRaro.style.border = "1px dashed #9b59b6"; // Borde morado estilo "Raro"
+            divItemRaro.style.background = "#f3e5f5";
+
+            // Usamos un placeholder con texto si la imagen está totalmente rota y no carga
+            divItemRaro.innerHTML = `
+                <img src="${item.url}" onerror="this.src='https://placehold.co/45x45?text=⭐'" title="Objeto Raro">
+                <span style="font-size: 11px; font-weight: bold; color: #8e44ad; margin-left: 4px;">Rara</span>
+                <span class="contador-numero" style="background: #8e44ad; color: white;">${cantidadRara}</span>
+            `;
+            listaConteo.appendChild(divItemRaro);
+        }
     });
 
     // 3. RENDERIZAR CUADRÍCULA DE LA DERECHA
@@ -685,8 +716,14 @@ function renderizarColeccion(){
 
         const img = document.createElement("img");
         img.src = item.url;
-        img.dataset.categoria = item.categoria;
+        img.dataset.categoria = item.categoria || "Rara";
         img.dataset.idUnico = item.id;
+
+        // Si la imagen está rota en la cuadrícula, le pone un icono visual para que puedas seleccionarla o venderla
+        img.onerror = function() {
+            this.src = "https://placehold.co/130x130?text=Imagen+Rara+🚫";
+            this.style.border = "4px dashed #9b59b6";
+        };
 
         aplicarEstiloBorde(img, item.url, item.id);
 
@@ -710,6 +747,7 @@ function renderizarColeccion(){
     });
 }
 
+   
 function toggleModoSeleccion() {
     modoSeleccionActivo = !modoSeleccionActivo;
     const btnModo = document.getElementById("btnModoSeleccion");
