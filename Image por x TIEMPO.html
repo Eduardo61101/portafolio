@@ -414,6 +414,10 @@ h1 {
     box-shadow: 0 10px 25px rgba(0,0,0,0.02);
     border: 3px solid var(--color-gold);
 }
+   footer{
+      backround-color: #333333
+      color: white
+   }
 </style>
 </head>
 <body>
@@ -982,7 +986,7 @@ function crearOfertas(){
     cardExagerada.style.border = "2px solid #ffd700";
     cardExagerada.innerHTML = `
         <h2 style="color:#ffaa00;">✨ COMPRA GOOD DIRECTA</h2>
-        <p style="font-size: 22px; font-weight:800; color:#e53e3e;">💰 5,000 MONEDAS</p>
+        <p style="font-size: 22px; font-weight:800; color:#e53e3e;">💰 5,00000 MONEDAS</p>
         <p>⚠️ Precio exageradamente costoso solo para maestros millonarios.</p>
         <button onclick="comprarGoodVip()" style="background: linear-gradient(45deg, #ffd700, #ffaa00);">OBTENER LEGENDARIA</button>
     `;
@@ -1017,12 +1021,12 @@ function comprarOferta(index){
 }
 
 function comprarGoodVip() {
-    if(monedas < 5000) {
-        alert("¡No te alcanza! Consigue 5,000 monedas trabajando duro. 😭");
+    if(monedas < 500000) {
+        alert("¡No te alcanza! Consigue 5,00000 monedas trabajando duro. 😭");
         return;
     }
 
-    monedas -= 5000;
+    monedas -= 500000;
     actualizarMonedas();
 
     const randomGood = objetosGood[Math.floor(Math.random() * objetosGood.length)];
